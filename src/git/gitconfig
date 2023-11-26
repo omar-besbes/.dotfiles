@@ -1,0 +1,10 @@
+[user]
+	name = Omar Besbes
+[init]
+	defaultBranch = development
+[commit]
+	gpgsign = true
+[gpg "ssh"]
+	allowedsingersfile = /home/omar/.ssh/allowed_signers
+[core]
+	autocrlf = input
