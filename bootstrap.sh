@@ -32,8 +32,10 @@ main() {
 
 	install_dependencies
 
- 	execute "setup_topics $DOTFILES_SOURCE_DIR"
+	# begin installing configs
+	setup_topics $DOTFILES_SOURCE_DIR
 
+	# update current terminal session 
 	source "$HOME/.bashrc"
 
 }
