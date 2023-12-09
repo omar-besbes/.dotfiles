@@ -23,7 +23,7 @@ install_dependencies() {
 	execute "PROFILE=/dev/null bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash'" "Installing nvm ..."
 
 	# install gcc, g++ & some other tools
-	execute "install_packages build-essential" "Installing essential tools ..."
+	execute "install_packages build-essential software-properties-common" "Installing essential tools ..."
 
 	# install shellcheck
 	execute "install_packages shellcheck" "Installing shecllcheck ..."
