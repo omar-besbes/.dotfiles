@@ -6,35 +6,26 @@
 
 ROOT_DIR="$(dirname "${BASH_SOURCE[0]}")/../../.."
 source "$ROOT_DIR/scripts/utils.sh"
+source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
 source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
 
-declare TOPIC_NAME="shell/prompt"
+declare TOPIC_NAME="shell"
 declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
 
 # ----------------------------------------------------------------------
 # | Dependencies                                                       |
 # ----------------------------------------------------------------------
 
-install_dependencies() {
+install_depnedencies() {
 
-	# Make sure to install the latest version of starship, if starship is not installed
-	local -r STARHIP_INSTALL_SCRIPT_URL="https://starship.rs/install.sh"
-	[ ! cmd_exists starship ] && curl -sS $STARHIP_INSTALL_SCRIPT_URL | sh
-
-}
-
-# ----------------------------------------------------------------------
-# | Symlinks                                                           |
-# ----------------------------------------------------------------------
-
-create_symlinks() {
-
-	local -a FILES_TO_SYMLINK=(
-		"starship.toml",
-	)	
-	local -r TARGET_DIR="$HOME/.config"
-
-	symlink_files $FILES_TO_SYMLINK $TOPIC_DIR $TOPIC_DIR
+	# insatll figlet
+	install_packages figlet
+	
+	# install figlet fonts
+	local -r FIGLET_FONTS_GITHUB_ORIGIN="https://github.com/xero/figlet-fonts.git"
+	local -r FIGLET_FONTS_DIR="figlet-fonts"
+	git clone $FIGLET_FONTS_GITHUB_ORIGIN $FIGLET_FONTS_DIR
+	cp "$FIGLET_FONTS_DIR/*.flf" "/usr/share/figlet"
 
 }
 
@@ -43,12 +34,8 @@ create_symlinks() {
 # ----------------------------------------------------------------------
 
 main() {
-
-	install_dependencies
-
-	create_symlinks
-
+	install_depnedencies
 }
 
-execute "main" "Setting up shell prompt ..."
+execute "main" "Setting up shell welcome screen ..."
 

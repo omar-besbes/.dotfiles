@@ -7,7 +7,12 @@ source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
 
 cd $DOTFILES_ROOT_DIR
 
+# ----------------------------------------------------------------------
+# | Dependencies                                                       |
+# ----------------------------------------------------------------------
+
 install_dependencies() {
+
 	# install curl
 	execute "install_packages curl" "Installing curl ..."
 
@@ -16,6 +21,7 @@ install_dependencies() {
 
 	# install nvm & node
 	execute "PROFILE=/dev/null bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash'" "Installing nvm ..."
+
 }
 
 # ----------------------------------------------------------------------
@@ -27,6 +33,8 @@ main() {
 	install_dependencies
 
  	execute "setup_topics $DOTFILES_SOURCE_DIR"
+
+	source "$HOME/.bashrc"
 
 }
 

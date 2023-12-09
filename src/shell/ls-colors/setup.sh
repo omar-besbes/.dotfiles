@@ -1,19 +1,23 @@
 #!/bin/bash
 
-# source scripts
+# ----------------------------------------------------------------------
+# | Init                                                               |
+# ----------------------------------------------------------------------
+
 ROOT_DIR="$(dirname "${BASH_SOURCE[0]}")/../../.."
 source "$ROOT_DIR/scripts/utils.sh"
 
-# Install dependencies
-install_packages curl jq
+# ----------------------------------------------------------------------
+# | Dependencies                                                       |
+# ----------------------------------------------------------------------
 
-# Make sure to install the latest version of vivid, if vivid is not installed
-declare -r VIVID_GITHUB_REPO="https://github.com/sharkdp/vivid"
-declare -r VIVID_GITHUB_LATEST_RELEASE_URL="https://api.github.com/repos/sharkdp/vivid/releases/latest"
-declare -r ARCH="amd64"
-declare -r ASSET_EXTENSION=".deb"
+install_dependencies() {
 
-download_vivid() {
+	local -r VIVID_GITHUB_REPO="https://github.com/sharkdp/vivid"
+	local -r VIVID_GITHUB_LATEST_RELEASE_URL="https://api.github.com/repos/sharkdp/vivid/releases/latest"
+	
+	# make sure curl & jq are installed
+	install_packages curl jq
 
 	# Get the latest release information
 	local -r RELEASE_INFO=$(curl -s $VIVID_GITHUB_LATEST_RELEASE_URL)
@@ -30,5 +34,14 @@ download_vivid() {
 
 }
 
-[ ! cmd_exists vivid ] && execute "download_vivid" "Downloading vivid ..."
+# ----------------------------------------------------------------------
+# | Dependencies                                                       |
+# ----------------------------------------------------------------------
+
+main() {
+	# Make sure to install the latest version of vivid, if vivid is not installed
+	[ ! cmd_exists vivid ] && install_dependencies
+}
+
+execute "main" "Setting up shell colors ..."
 

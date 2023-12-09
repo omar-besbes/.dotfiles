@@ -1,5 +1,11 @@
 #!/bin/bash
 
+
+# ----------------------------------------------------------------------
+# | Init                                                               |
+# ----------------------------------------------------------------------
+
+
 [ ! -v GITHUB_ORIGIN ]					&& declare -r GITHUB_ORIGIN="https://github.com"
 [ ! -v DOTFILES_GITHUB_REPOSITORY ]	&& declare -r DOTFILES_GITHUB_REPOSITORY="omar-besbes/dotfiles"
 [ ! -v DOTFILES_ORIGIN ]				&& declare -r DOTFILES_ORIGIN="git@github.com:$GITHUB_REPOSITORY.git"
@@ -23,9 +29,7 @@
 
 
 install_packages() {
-	
-	execute "sudo $PACKAGE_MANAGER install -y $@"
-
+	sudo $PACKAGE_MANAGER install -y $@
 }
 
 
@@ -141,10 +145,12 @@ execute() {
 
 
 print_in_color() {
+
     printf "%b" \
         "$(tput setaf "$2" 2> /dev/null)" \
         "$1" \
         "$(tput sgr0 2> /dev/null)"
+
 }
 
 
@@ -174,9 +180,11 @@ print_error() {
 
 
 print_error_stream() {
+
     while read -r line; do
         print_error "↳ ERROR: $line"
     done
+
 }
 
 
