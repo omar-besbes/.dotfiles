@@ -4,6 +4,7 @@
 ROOT_DIR=$(dirname "${BASH_SOURCE[0]}")
 source "$ROOT_DIR/scripts/utils.sh"
 source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
+source "$DOTFILES_SCRIPTS_DIR/sync_files.sh"
 
 cd $DOTFILES_ROOT_DIR
 
@@ -44,6 +45,8 @@ main() {
 	ask_for_sudo
 
 	install_dependencies
+
+	sync_dotfiles	
 
 	# begin installing configs
 	setup_topics $DOTFILES_SOURCE_DIR
