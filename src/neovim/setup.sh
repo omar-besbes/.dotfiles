@@ -36,10 +36,11 @@ install_dependencies() {
 
 create_symlinks() {
 	
-	local -r NEOVIM_CONFIG_DIR="$HOME/.config/nvim"
+	local -r CONFIG_DIR="$HOME/.config"
+	local -r NEOVIM_CONFIG_DIR="$CONFIG_DIR/nvim"
 	rm -rf $NEOVIM_CONFIG_DIR
-	mkdir -p $NEOVIM_CONFIG_DIR
-	ln -fsT "$TOPIC_DIR/config" $NEOVIM_CONFIG_DIR
+	mkdir -p $CONFIG_DIR
+	ln -fs "$TOPIC_DIR/nvim" $CONFIG_DIR
 
 }
 
