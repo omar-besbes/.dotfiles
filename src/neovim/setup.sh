@@ -19,7 +19,7 @@ install_dependencies() {
 
 	# install fuse to execute appimage files
 	sudo add-apt-repository universe
-	install_packages libfuse2
+	install_packages libfuse2 fuse
 
 	local -r NEOVIM_BIN="nvim.appimage"
 	local -r NEOVIM_APPIMAGE_URL="https://github.com/neovim/neovim/releases/latest/download/$NEOVIM_BIN"
@@ -37,6 +37,7 @@ install_dependencies() {
 create_symlinks() {
 	
 	rm -rf "$HOME/.config/nvim"
+	mkdir -p "$HOME/.config/nvim"
 	ln -fs "$TOPIC_DIR/config" "$HOME/.config/nvim"
 
 }

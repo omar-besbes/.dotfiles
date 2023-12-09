@@ -5,7 +5,7 @@ sync_dotfiles() {
 	git fetch
 	git pull
 	git submodule sync --recursive
-	git submodule update --recursive
+	git submodule update --init --recursive
 
 }
 
