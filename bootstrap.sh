@@ -17,7 +17,8 @@ install_dependencies() {
 	execute "install_packages curl" "Installing curl ..."
 
 	# install rustup & cargo
-	execute "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh" "Installing rustup ..."
+	execute "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y" "Installing rustup ..."
+	rustup completions bash > "$HOME/.bash_completion.d/rustup"
 
 	# install nvm & node
 	execute "PROFILE=/dev/null bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash'" "Installing nvm ..."
