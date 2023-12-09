@@ -5,20 +5,12 @@ symlink_files() {
 	local -a FILES_TO_SYMLINK=$1
 	local -r SOURCE_DIR=$2
 	local -r TARGET_DIR=$3
-	# Check if a function to get target file name was passed and
-	# use the identity function if not.
-	if [ -n "$4" ]; then
-		local -r GET_TARGET_FILE="$4"
-	else
-		GET_TARGET_FILE() {
-			echo "$1"
-		}
-	fi
+	local -r GET_TARGET_FILE="$4"
 
 	for i in "${FILES_TO_SYMLINK[@]}"; do
 
 		sourceFile="$SOURCE_DIR/$i"
-		targetFile="$TARGET_DIR/$(GET_TARGET_FILE $i)"
+		targetFile="$TARGET_DIR/$(GET_TARGET_FILE $i 2>/dev/null || echo $i)"
 
       if [ ! -e "$targetFile" ]; then
 			ln -fs $sourceFile $targetFile

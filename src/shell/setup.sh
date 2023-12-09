@@ -19,10 +19,10 @@ declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
 create_symlinks() {
 
 	local -a FILES_TO_SYMLINK=(
-		"bash_logout",
-		"bash_profile",
-		"bashrc",
-		"inputrc",
+		"bash_logout"
+		"bash_profile"
+		"bashrc"
+		"inputrc"
 	)	
 	local -r TARGET_DIR=$HOME
 
@@ -47,5 +47,5 @@ main() {
 
 }
 
-execute "main" "Setting up shell ..."
+main
 

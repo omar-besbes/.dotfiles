@@ -23,11 +23,14 @@ install_dependencies() {
 	local -r RELEASE_INFO=$(curl -s $VIVID_GITHUB_LATEST_RELEASE_URL)
 
 	# Extract the asset URL for the specified architecture and extension
-	local -r ASSET_URL=$(echo "$RELEASE_INFO" | jq -r ".assets[] | select(.name | contains(\"$ARCH\") and contains(\"$ASSET_EXTENSION\")) | .browser_download_url")
+	local -r ASSET_URL=$(echo "$RELEASE_INFO" | jq -r ".assets[] | select(.name | contains(\"$ARCH\") and contains(\"$ASSET_EXTENSION\") and (contains(\"musl\") | not)) | .browser_download_url")
+	local -r VIVID_BIN=$(basename $ASSET_URL)
 
-	# Download the asset using curl
+	# Download the asset using curl and install it
 	if [ -n "$ASSET_URL" ]; then
-		curl -LJO "$ASSET_URL"
+		curl -LJO $ASSET_URL
+		install_packages $VIVID_BIN
+		rm $VIVID_BIN
 	else
 		print_error "No matching release asset found for $ARCH and $ASSET_EXTENSION. Please, download vivid manually from here: $VIVID_GITHUB_REPO."
 	fi
@@ -40,7 +43,7 @@ install_dependencies() {
 
 main() {
 	# Make sure to install the latest version of vivid, if vivid is not installed
-	[ ! cmd_exists vivid ] && install_dependencies
+	[ ! $(cmd_exists vivid) ] && install_dependencies
 }
 
 execute "main" "Setting up shell colors ..."

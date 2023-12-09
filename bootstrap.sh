@@ -29,7 +29,7 @@ install_dependencies() {
 	execute "install_packages build-essential software-properties-common" "Installing essential tools ..."
 
 	# install shellcheck
-	execute "install_packages shellcheck" "Installing shecllcheck ..."
+	execute "install_packages shellcheck" "Installing shellcheck ..."
 
 	# install xclip
 	execute "install_packages xclip" "Installing xclip ..."
@@ -46,7 +46,7 @@ main() {
 
 	install_dependencies
 
-	sync_dotfiles	
+	execute "sync_dotfiles" "Synchronizing files with remote ..."
 
 	# begin installing configs
 	setup_topics $DOTFILES_SOURCE_DIR
