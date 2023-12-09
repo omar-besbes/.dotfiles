@@ -22,7 +22,7 @@ install_dependencies() {
 
 	curl -LO $NEOVIM_APPIMAGE_URL
 	chmod u+x $NEOVIM_BIN
-	mv $NEOVIM_BIN /usr/local/bin
+	sudo mv $NEOVIM_BIN /usr/local/bin
 
 }
 
