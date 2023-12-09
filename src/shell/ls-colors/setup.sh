@@ -4,6 +4,9 @@
 ROOT_DIR="$(dirname "${BASH_SOURCE[0]}")/../../.."
 source "$ROOT_DIR/scripts/utils.sh"
 
+# Install dependencies
+install_packages curl jq
+
 # Make sure to install the latest version of vivid, if vivid is not installed
 declare -r VIVID_GITHUB_REPO="https://github.com/sharkdp/vivid"
 declare -r VIVID_GITHUB_LATEST_RELEASE_URL="https://api.github.com/repos/sharkdp/vivid/releases/latest"
@@ -27,9 +30,5 @@ download_vivid() {
 
 }
 
-if [ ! cmd_exists starship ]; then
-
-	execute "download_vivid" "Downloading vivid ..."
-
-fi
+[ ! cmd_exists vivid ] && execute "download_vivid" "Downloading vivid ..."
 
