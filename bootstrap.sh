@@ -40,6 +40,8 @@ install_dependencies() {
 
 main() {
 
+	ask_for_sudo
+
 	install_dependencies
 
 	# begin installing configs
