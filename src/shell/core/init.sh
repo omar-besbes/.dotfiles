@@ -5,7 +5,7 @@ ROOT_DIR="$(dirname "${BASH_SOURCE[0]}")/../../.."
 source "$ROOT_DIR/scripts/utils.sh"
 source "$DOTFILES_SCRIPTS_DIR/load_topics.sh"
 
-declare TOPIC_NAME="shell/default"
+declare TOPIC_NAME="shell/core"
 declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
 
 # Add bash aliases, options & exports
