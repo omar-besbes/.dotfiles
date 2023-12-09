@@ -18,6 +18,7 @@ install_dependencies() {
 
 	# install rustup & cargo
 	execute "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y" "Installing rustup ..."
+	mkdir -p "$HOME/.bash_completion.d"
 	rustup completions bash > "$HOME/.bash_completion.d/rustup"
 
 	# install nvm & node
