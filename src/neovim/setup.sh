@@ -47,7 +47,11 @@ create_symlinks() {
 # ----------------------------------------------------------------------
 
 main() {
+	
 	install_dependencies
+
+	create_symlinks
+
 }
 
 execute "main" "Setting up neovim ..."
