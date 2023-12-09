@@ -17,12 +17,16 @@ declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
 
 install_dependencies() {
 
+	# install fuse to execute appimage files
+	sudo add-apt-repository universe
+	install_packages libfuse2
+
 	local -r NEOVIM_BIN="nvim.appimage"
 	local -r NEOVIM_APPIMAGE_URL="https://github.com/neovim/neovim/releases/latest/download/$NEOVIM_BIN"
 
 	curl -LO $NEOVIM_APPIMAGE_URL
 	chmod u+x $NEOVIM_BIN
-	sudo mv $NEOVIM_BIN /usr/local/bin
+	sudo mv $NEOVIM_BIN /usr/local/bin/nvim
 
 }
 
