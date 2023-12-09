@@ -38,7 +38,7 @@ create_symlinks() {
 	
 	rm -rf "$HOME/.config/nvim"
 	mkdir -p "$HOME/.config/nvim"
-	ln -fs "$TOPIC_DIR/config" "$HOME/.config/nvim"
+	ln -fsT "$TOPIC_DIR/config" "$HOME/.config/nvim"
 
 }
 
