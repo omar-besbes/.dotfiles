@@ -48,6 +48,5 @@ main() {
 
 }
 
-#main
-create_symlinks
+main
 
