@@ -31,7 +31,7 @@ create_symlinks() {
 		echo ".$(printf "%s" "$1" | sed "s/.*\/\(.*\)/\1/g")"
 	}
 
-	symlink_files $FILES_TO_SYMLINK $TOPIC_DIR $TARGET_DIR get_target_file 
+	symlink_files FILES_TO_SYMLINK[@] $TOPIC_DIR $TARGET_DIR get_target_file 
 
 }
 
@@ -48,5 +48,6 @@ main() {
 
 }
 
-main
+#main
+create_symlinks
 

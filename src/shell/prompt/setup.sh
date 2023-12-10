@@ -35,7 +35,7 @@ create_symlinks() {
 	)	
 	local -r TARGET_DIR="$HOME/.config"
 
-	symlink_files $FILES_TO_SYMLINK $TOPIC_DIR $TOPIC_DIR
+	symlink_files FILES_TO_SYMLINK[@] $TOPIC_DIR $TOPIC_DIR
 
 }
 
