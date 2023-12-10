@@ -15,7 +15,7 @@ symlink_files() {
       if [ ! -e "$TARGET_FILE" ]; then
 
 			ln -fs $SOURCE_FILE $TARGET_FILE
-			echo "$TARGET_FILE → $SOURCE_FILE"
+			print_success "$TARGET_FILE → $SOURCE_FILE"
 
       fi
 		
