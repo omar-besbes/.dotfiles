@@ -1,7 +1,11 @@
 #!/bin/bash
 
-# source scripts
-ROOT_DIR=$(dirname "${BASH_SOURCE[0]}")
+# ----------------------------------------------------------------------
+# | Init                                                               |
+# ----------------------------------------------------------------------
+
+DIR=$(dirname "${BASH_SOURCE[0]}")
+ROOT_DIR=$DIR
 source "$ROOT_DIR/scripts/utils.sh"
 source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
 source "$DOTFILES_SCRIPTS_DIR/sync_files.sh"
@@ -57,3 +61,4 @@ main() {
 }
 
 main
+

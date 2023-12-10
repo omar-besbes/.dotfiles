@@ -14,7 +14,8 @@ case $- in
       *) return;;
 esac
 
-ROOT_DIR="$(dirname $(readlink -f "${BASH_SOURCE[0]}"))/../.."
+DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+ROOT_DIR="$(realpath "$DIR/../..")"
 source "$ROOT_DIR/scripts/utils.sh"
 source "$DOTFILES_SCRIPTS_DIR/load_topics.sh"
 
