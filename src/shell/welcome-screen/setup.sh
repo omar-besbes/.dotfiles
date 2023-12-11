@@ -26,7 +26,7 @@ install_depnedencies() {
 	local -r FIGLET_FONTS_GITHUB_ORIGIN="https://github.com/xero/figlet-fonts.git"
 	local -r FIGLET_FONTS_DIR="figlet-fonts"
 	git clone $FIGLET_FONTS_GITHUB_ORIGIN $FIGLET_FONTS_DIR
-	cp "$FIGLET_FONTS_DIR/*.flf" "/usr/share/figlet"
+	sudo cp "$FIGLET_FONTS_DIR/*.flf" "/usr/share/figlet"
 	rm -rf $FIGLET_FONTS_DIR
 
 }

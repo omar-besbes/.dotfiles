@@ -20,7 +20,7 @@ install_dependencies() {
 
 	# Make sure to install the latest version of starship, if starship is not installed
 	local -r STARHIP_INSTALL_SCRIPT_URL="https://starship.rs/install.sh"
-	[ ! cmd_exists starship ] && curl -sS $STARHIP_INSTALL_SCRIPT_URL | sh
+	[ ! $(cmd_exists starship) ] && curl -sS $STARHIP_INSTALL_SCRIPT_URL | sh
 
 }
 
@@ -31,11 +31,11 @@ install_dependencies() {
 create_symlinks() {
 
 	local -a FILES_TO_SYMLINK=(
-		"starship.toml",
+		"starship.toml"
 	)	
 	local -r TARGET_DIR="$HOME/.config"
 
-	symlink_files FILES_TO_SYMLINK[@] $TOPIC_DIR $TOPIC_DIR
+	symlink_files FILES_TO_SYMLINK[@] $TOPIC_DIR $TARGET_DIR
 
 }
 
