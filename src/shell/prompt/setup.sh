@@ -20,7 +20,7 @@ install_dependencies() {
 
 	# Make sure to install the latest version of starship, if starship is not installed
 	local -r STARHIP_INSTALL_SCRIPT_URL="https://starship.rs/install.sh"
-	[ ! $(cmd_exists starship) ] && curl -sS $STARHIP_INSTALL_SCRIPT_URL | sh
+	[ ! $(cmd_exists starship) ] && curl -sS $STARHIP_INSTALL_SCRIPT_URL | sh -s -- -y
 
 }
 
