@@ -86,8 +86,8 @@ execute() {
     local -r MSG="${2:-$1}"
     local -r TMP_FILE="$(mktemp /tmp/XXXXX)"
 
-    local exitCode=0
-    local cmdsPID=""
+    local exit_code=0
+    local cmds_PID=""
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -105,30 +105,30 @@ execute() {
         &> /dev/null \
         2> "$TMP_FILE" &
 
-    cmdsPID=$!
+    cmds_PID=$!
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     # Show a spinner if the commands
     # require more time to complete.
 
-    show_spinner "$cmdsPID" "$CMDS" "$MSG"
+    show_spinner "$cmds_PID" "$CMDS" "$MSG"
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     # Wait for the commands to no longer be executing
     # in the background, and then get their exit code.
 
-    wait "$cmdsPID" &> /dev/null
-    exitCode=$?
+    wait "$cmds_PID" &> /dev/null
+    exit_code=$?
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     # Print output based on what happened.
 
-    print_result $exitCode "$MSG"
+    print_result $exit_code "$MSG"
 
-    if [ $exitCode -ne 0 ]; then
+    if [ $exit_code -ne 0 ]; then
         print_error_stream < "$TMP_FILE"
     fi
 
@@ -136,7 +136,7 @@ execute() {
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    return $exitCode
+    return $exit_code
 
 }
 
@@ -215,40 +215,32 @@ print_result() {
 
 show_spinner() {
 
-    local -r FRAMES='/-\|'
+    local -r FRAMES='⠇⠋⠙⠸⠴⠦'
 
     # shellcheck disable=SC2034
-    local -r NUMBER_OR_FRAMES=${#FRAMES}
+    local -r NUMBER_OF_FRAMES=${#FRAMES}
 
     local -r CMDS="$2"
     local -r MSG="$3"
     local -r PID="$1"
 
     local i=0
-    local frameText=""
+    local frame_text=""
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    # Note: In order for the Travis CI site to display
-    # things correctly, it needs special treatment, hence,
-    # the "is Travis CI?" checks.
+    # Provide more space so that the text hopefully
+    # doesn't reach the bottom line of the terminal window.
+    #
+    # This is a workaround for escape sequences not tracking
+    # the buffer position (accounting for scrolling).
+    #
+    # See also: https://unix.stackexchange.com/a/278888
 
-    if [ "$TRAVIS" != "true" ]; then
+    printf "\n\n\n"
+    tput cuu 3
 
-        # Provide more space so that the text hopefully
-        # doesn't reach the bottom line of the terminal window.
-        #
-        # This is a workaround for escape sequences not tracking
-        # the buffer position (accounting for scrolling).
-        #
-        # See also: https://unix.stackexchange.com/a/278888
-
-        printf "\n\n\n"
-        tput cuu 3
-
-        tput sc
-
-    fi
+    tput sc
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -256,17 +248,13 @@ show_spinner() {
 
     while kill -0 "$PID" &>/dev/null; do
 
-        frameText="   [${FRAMES:i++%NUMBER_OR_FRAMES:1}] $MSG"
-
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        frame_text="   [${FRAMES:i++%NUMBER_OF_FRAMES:1}] $MSG"
 
         # Print frame text.
 
-        if [ "$TRAVIS" != "true" ]; then
-            printf "%s\n" "$frameText"
-        else
-            printf "%s" "$frameText"
-        fi
+        printf "%s\n" "$frame_text"
+
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         sleep 0.2
 
@@ -274,11 +262,7 @@ show_spinner() {
 
         # Clear frame text.
 
-        if [ "$TRAVIS" != "true" ]; then
-            tput rc
-        else
-            printf "\r"
-        fi
+		  tput rc
 
     done
 
