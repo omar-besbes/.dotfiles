@@ -4,13 +4,13 @@
 # | Init                                                               |
 # ----------------------------------------------------------------------
 
-DIR="$(dirname "${BASH_SOURCE[0]}")"
-ROOT_DIR="$(realpath "$DIR/../..")"
-source "$ROOT_DIR/scripts/utils.sh"
-source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
-
+declare DIR="$(dirname "${BASH_SOURCE[0]}")"
+declare ROOT_DIR="$(realpath "$DIR/../..")"
 declare TOPIC_NAME="terminal-emulator"
 declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
+
+source "$ROOT_DIR/scripts/utils.sh"
+source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
 
 # ----------------------------------------------------------------------
 # | Choose emulator                                                    |

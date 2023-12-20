@@ -4,14 +4,14 @@
 # | Init                                                               |
 # ----------------------------------------------------------------------
 
-DIR="$(dirname "${BASH_SOURCE[0]}")"
-ROOT_DIR="$(realpath "$DIR/../../..")"
+declare DIR="$(dirname "${BASH_SOURCE[0]}")"
+declare ROOT_DIR="$(realpath "$DIR/../../..")"
+declare TOPIC_NAME="shell"
+declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
+
 source "$ROOT_DIR/scripts/utils.sh"
 source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
 source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
-
-declare TOPIC_NAME="shell"
-declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
 
 # ----------------------------------------------------------------------
 # | Dependencies                                                       |
@@ -36,7 +36,11 @@ install_depnedencies() {
 # ----------------------------------------------------------------------
 
 main() {
+	
+	ask_for_sudo
+
 	install_depnedencies
+
 }
 
 execute "main" "Setting up shell welcome screen ..."

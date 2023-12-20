@@ -4,8 +4,9 @@
 # | Init                                                               |
 # ----------------------------------------------------------------------
 
-DIR="$(dirname "${BASH_SOURCE[0]}")"
-ROOT_DIR="$(realpath "$DIR/../../..")"
+declare DIR="$(dirname "${BASH_SOURCE[0]}")"
+declare ROOT_DIR="$(realpath "$DIR/../../..")"
+
 source "$ROOT_DIR/scripts/utils.sh"
 
 # ----------------------------------------------------------------------
@@ -43,8 +44,12 @@ install_dependencies() {
 # ----------------------------------------------------------------------
 
 main() {
+
+	ask_for_sudo
+
 	# Make sure to install the latest version of vivid, if vivid is not installed
 	[ ! $(cmd_exists vivid) ] && install_dependencies
+
 }
 
 execute "main" "Setting up shell colors ..."
