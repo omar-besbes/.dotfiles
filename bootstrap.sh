@@ -13,6 +13,40 @@ source "$DOTFILES_SCRIPTS_DIR/sync_files.sh"
 cd $DOTFILES_ROOT_DIR
 
 # ----------------------------------------------------------------------
+# | Fonts                                                              |
+# ----------------------------------------------------------------------
+
+install_fonts() {
+	
+	local -r FONT_DIR="$HOME/.local/share/fonts/truetype"
+	local -r NERD_FONTS_GITHUB_ORIGIN="https://github.com/ryanoasis/nerd-fonts"
+	local -r NERD_FONTS_LATEST_RELEASE_URL="https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest"
+	
+	# Ensure the font directory exists
+	mkdir -p ${FONT_DIR}
+	
+	# Get the latest version from GitHub releases
+	local -r LATEST_VERSION=$(curl -s $NERD_FONTS_LATEST_RELEASE_URL | grep -oP '"tag_name": "\K(.*)(?=")')
+
+	# Function to download and install a font
+	install_font() {
+		local font_name=$1
+		wget -q "${NERD_FONTS_GITHUB_ORIGIN}/releases/download/${LATEST_VERSION}/${font_name}.zip" -P ${FONT_DIR}
+		unzip -q "${FONT_DIR}/${font_name}.zip" -d ${FONT_DIR}
+		rm -f "${FONT_DIR}/${font_name}.zip"
+	}
+
+	# Download and install Nerd Fonts
+	install_font Hack
+	install_font JetBrainsMono
+	install_font RobotoMono
+
+	# Refresh the font cache
+	fc-cache -fv
+
+}
+
+# ----------------------------------------------------------------------
 # | Dependencies                                                       |
 # ----------------------------------------------------------------------
 
@@ -39,6 +73,12 @@ install_dependencies() {
 	# install xclip
 	execute "install_packages xclip" "Installing xclip ..."
 
+	# isntall necessary compression and extraction tools
+	execute "install_packages bzip2 gzip zip xz-utils tar" "Installing extraction/compression tools ..."
+
+	# install fonts utils
+	execute "install_packages fontconfig" "Installing font utilities ..."
+
 }
 
 # ----------------------------------------------------------------------
@@ -50,6 +90,8 @@ main() {
 	ask_for_sudo
 
 	install_dependencies
+
+	execute "install_fonts" "Installing fonts ..."
 
 	execute "sync_dotfiles" "Synchronizing files with remote ..."
 

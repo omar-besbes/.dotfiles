@@ -31,7 +31,7 @@ DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 
 
 install_packages() {
-	sudo $PACKAGE_MANAGER install -y "$@"
+	sudo apt-get install -y "$@"
 }
 
 
