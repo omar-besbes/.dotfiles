@@ -15,6 +15,9 @@ source "$ROOT_DIR/scripts/utils.sh"
 
 install_dependencies() {
 
+	# only begin installation if one of the dependencies are not met
+	cmd_exists vivid && return
+
 	local -r VIVID_GITHUB_REPO="https://github.com/sharkdp/vivid"
 	local -r VIVID_GITHUB_LATEST_RELEASE_URL="https://api.github.com/repos/sharkdp/vivid/releases/latest"
 	
@@ -48,7 +51,7 @@ main() {
 	ask_for_sudo
 
 	# Make sure to install the latest version of vivid, if vivid is not installed
-	[ ! $(cmd_exists vivid) ] && install_dependencies
+	install_dependencies
 
 }
 

@@ -18,9 +18,12 @@ source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
 
 install_dependencies() {
 
+	# only begin installation if one of the dependencies are not met
+	cmd_exists starship && return
+
 	# Make sure to install the latest version of starship, if starship is not installed
 	local -r STARHIP_INSTALL_SCRIPT_URL="https://starship.rs/install.sh"
-	[ ! $(cmd_exists starship) ] && curl -sS $STARHIP_INSTALL_SCRIPT_URL | sh -s -- -y
+	curl -sS $STARHIP_INSTALL_SCRIPT_URL | sh -s -- -y
 
 }
 

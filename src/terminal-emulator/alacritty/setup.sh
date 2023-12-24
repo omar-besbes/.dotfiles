@@ -18,6 +18,9 @@ source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
 
 install_dependencies() {
 
+	# only begin installation if one of the dependencies are not met
+	cmd_exists alacritty && return
+
 	# install alacritty
 	local -r ALACRITTY_GITHUB_ORIGIN="https://github.com/alacritty/alacritty.git"
 	local -r ALACRITTY_DIR="alacritty"
@@ -70,7 +73,7 @@ install_dependencies() {
 create_symlinks() {
 
 	local -a FILES_TO_SYMLINK=(
-		"alacritty.yml",
+		"alacritty.yml"
 	)	
 	local -r TARGET_DIR="$HOME/.config/alacritty"
 

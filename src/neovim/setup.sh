@@ -18,6 +18,9 @@ source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
 
 install_dependencies() {
 
+	# only begin installation if one of the dependencies are not met
+	cmd_exists nvim && return
+
 	# install fuse to execute appimage files
 	sudo add-apt-repository universe
 	install_packages libfuse2 fuse

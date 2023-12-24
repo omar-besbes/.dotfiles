@@ -4,8 +4,9 @@
 # | Init                                                               |
 # ----------------------------------------------------------------------
 
-DIR=$(dirname "${BASH_SOURCE[0]}")
-ROOT_DIR=$DIR
+declare DIR=$(dirname "${BASH_SOURCE[0]}")
+declare ROOT_DIR=$DIR
+
 source "$ROOT_DIR/scripts/utils.sh"
 source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
 source "$DOTFILES_SCRIPTS_DIR/sync_files.sh"
@@ -56,16 +57,16 @@ install_dependencies() {
 	execute "install_packages curl" "Installing curl ..."
 
 	# install rustup & cargo
-	execute "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y" "Installing rustup ..."
-	source "$HOME/.cargo/env"
-	mkdir -p "$HOME/.bash_completion.d"
-	rustup completions bash > "$HOME/.bash_completion.d/rustup"
+	if [ ! $(cmd_exists rustup) ]; then
+		execute "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y" "Installing rustup ..."
+		source "$HOME/.cargo/env"
+		mkdir -p "$HOME/.bash_completion.d"
+		rustup completions bash > "$HOME/.bash_completion.d/rustup"
+	fi
 
 	# install nvm & node
-	execute "PROFILE=/dev/null bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash'" "Installing nvm ..."
-
-	# install gcc, g++ & some other tools
-	execute "install_packages build-essential software-properties-common" "Installing essential tools ..."
+	[ ! $(cmd_exists nvm) ] && \
+		execute "PROFILE=/dev/null bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash'" "Installing nvm ..."
 
 	# install shellcheck
 	execute "install_packages shellcheck" "Installing shellcheck ..."
@@ -76,8 +77,8 @@ install_dependencies() {
 	# isntall necessary compression and extraction tools
 	execute "install_packages bzip2 gzip zip xz-utils tar" "Installing extraction/compression tools ..."
 
-	# install fonts utils
-	execute "install_packages fontconfig" "Installing font utilities ..."
+	# install gcc, g++ & some other tools
+	execute "install_packages fontconfig build-essential software-properties-common" "Installing essential tools ..."
 
 }
 

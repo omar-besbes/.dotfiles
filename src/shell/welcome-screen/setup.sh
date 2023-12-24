@@ -19,6 +19,9 @@ source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
 
 install_depnedencies() {
 
+	# only begin installation if one of the dependencies are not met
+	cmd_exists figlet && return
+
 	# insatll figlet
 	install_packages figlet
 	
