@@ -4,14 +4,14 @@
 # | Init                                                               |
 # ----------------------------------------------------------------------
 
-declare DIR=$(dirname "${BASH_SOURCE[0]}")
+declare DIR="$(dirname "${BASH_SOURCE[0]}")"
 declare ROOT_DIR=$DIR
 
 source "$ROOT_DIR/scripts/utils.sh"
 source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
 source "$DOTFILES_SCRIPTS_DIR/sync_files.sh"
 
-cd $DOTFILES_ROOT_DIR
+cd "$DOTFILES_ROOT_DIR" || exit 1
 
 # ----------------------------------------------------------------------
 # | Fonts                                                              |

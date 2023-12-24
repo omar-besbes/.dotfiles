@@ -216,8 +216,6 @@ print_result() {
 show_spinner() {
 
     local -r FRAMES='⠇⠋⠙⠸⠴⠦'
-
-    # shellcheck disable=SC2034
     local -r NUMBER_OF_FRAMES=${#FRAMES}
 
     local -r CMDS="$2"
@@ -235,16 +233,28 @@ show_spinner() {
     # This is a workaround for escape sequences not tracking
     # the buffer position (accounting for scrolling).
     #
+	 # Only used in interactive shells.
+	 #
     # See also: https://unix.stackexchange.com/a/278888
 
-    printf "\n\n\n"
-    tput cuu 3
-
-    tput sc
+	 if [ -t 0 ]; then
+        printf "\n\n\n"
+        tput cuu 3
+        tput sc
+	 fi
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    # Display spinner while the commands are being executed.
+	 # Display a message without spinner animation 
+	 # in non-interactive shells.
+
+	 if [ ! -t 0 ]; then
+		  printf "%s\n" "   [⠶] $MSG"
+		  return
+    fi
+
+    # Display spinner while the commands are being executed 
+	 # in an interactive shell.
 
     while kill -0 "$PID" &>/dev/null; do
 
