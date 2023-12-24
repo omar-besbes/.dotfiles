@@ -33,9 +33,9 @@ install_dependencies() {
 
 	# Download the asset using curl and install it
 	if [ -n "$ASSET_URL" ]; then
-		curl -LJO $ASSET_URL
-		install_packages $VIVID_BIN
-		rm $VIVID_BIN
+		curl -LJO "$ASSET_URL"
+		install_packages "./$VIVID_BIN"
+		rm "$VIVID_BIN"
 	else
 		print_error "No matching release asset found for $ARCH and $ASSET_EXTENSION. Please, download vivid manually from here: $VIVID_GITHUB_REPO."
 	fi
