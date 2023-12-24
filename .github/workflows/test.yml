@@ -20,5 +20,5 @@ jobs:
         run: ./test/setup.sh
 
       - name: Run tests
-        run: ./test/test.sh
+        run: docker exec dotfiles test/test.sh
 
