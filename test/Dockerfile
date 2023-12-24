@@ -20,6 +20,5 @@ COPY  . ${ROOT_DIR}/.dotfiles
 WORKDIR	${ROOT_DIR}/.dotfiles
 
 # Run the bootstrap script and then bash if started interactively
-CMD ["bash", "-c", "./bootstrap.sh && (test -t 0 && exec bash || tail -f /dev/null)"]
-#CMD	["./bootstrap.sh", "&&", "/bin/bash"]
+CMD	["./bootstrap.sh", "&&", "./test/test.sh"]
 
