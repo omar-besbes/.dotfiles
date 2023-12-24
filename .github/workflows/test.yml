@@ -1,0 +1,24 @@
+name: Test Dotfiles
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  test-dotfiles:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup test environment
+        run: ./test/setup.sh
+
+      - name: Run tests
+        run: ./test/test.sh
+
