@@ -1,7 +1,11 @@
 #!/bin/bash
 
+# Init
+declare DIR="$(dirname "${BASH_SOURCE[0]}")"
+declare DOCKERFILE_PATH="$DIR/Dockerfile"
+
 # Build docker image
-docker build -t dotfiles-test .
+docker build -t dotfiles-test -f $DOCKERFILE_PATH .
 
 # Run docker 
 docker run -it \
