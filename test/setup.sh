@@ -30,7 +30,7 @@ build_docker_image() {
 
 	local -r option=$1
 	local -r dockerfile_path=$2
-	local -r image_name="dotfiles-test-$option"
+	local -r image_name="dotfiles-test--$option"
 
 	docker build -t "$image_name" -f "$dockerfile_path" .
 
@@ -40,19 +40,18 @@ create_docker_container() {
 
 	local -r option=$1
 	local -r container_name="dotfiles-$option"
-	local -r image_name="dotfiles-test-$option"
-	
-	# Check if the script is running interactively
-	local -r is_interactive=$( [ -t 0 ] && echo '-it' )
+	local -r image_name="dotfiles-test--$option"
 
 	# Create docker container according to the option / interactiveness
-	docker run \
-		--name "$container_name" \
-		--cap-add SYS_ADMIN \
-		--device /dev/fuse:/dev/fuse \
-		--security-opt apparmor:unconfined \
-		"$is_interactive" \
-		"$image_name"
+	local docker_command="docker run $([ -t 0 ] && echo '-it')
+		--name $container_name
+		--cap-add SYS_ADMIN
+		--device /dev/fuse:/dev/fuse
+		--security-opt apparmor:unconfined
+		$image_name
+	"
+
+	eval $docker_command
 
 }
 
