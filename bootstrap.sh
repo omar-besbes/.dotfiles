@@ -22,15 +22,15 @@
 mkdir -p "$DOTFILES_ROOT_DIR"
 cd	"$DOTFILES_ROOT_DIR" || exit 1
 
-declare -r CURRENT_BRANCH=$(git branch --show-current &> /dev/null || echo "main")
+declare -r CURRENT_BRANCH=$(git branch --show-current 2> /dev/null || echo "main")
 declare -r DOTFILES_GITHUB_RAW_CONTENT_ORIGIN="https://raw.githubusercontent.com/omar-besbes/.dotfiles/$CURRENT_BRANCH"
 
 source "$DOTFILES_ROOT_DIR/scripts/utils.sh"				&> /dev/null \
-	|| source "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/utils.sh"
+	|| source <(curl -s "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/utils.sh")
 source "$DOTFILES_ROOT_DIR/scripts/setup_topics.sh"	&> /dev/null \
-	|| source "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/setup_topics.sh"
+	|| source <(curl -s "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/setup_topics.sh")
 source "$DOTFILES_ROOT_DIR/scripts/sync_files.sh"		&> /dev/null \
-	|| source "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/sync_files.sh"
+	|| source <(curl -s "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/sync_files.sh")
 
 # ----------------------------------------------------------------------
 # | Fonts                                                              |
