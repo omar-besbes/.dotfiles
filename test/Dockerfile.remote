@@ -1,0 +1,13 @@
+# Use the latest netinst image of debian
+FROM	debian:stable-slim
+
+# Install necessary dependencies
+RUN	apt-get update && \
+		apt-get install -y \
+			sudo \
+			curl \
+			fuse
+
+# Run the bootstrap script and then the test script 
+CMD /bin/bash -c 'source <(curl -# https://raw.githubusercontent.com/omar-besbes/.dotfiles/main/bootstrap.sh)' && source ~/.bashrc
+
