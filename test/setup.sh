@@ -30,7 +30,7 @@ build_docker_image() {
 
 	local -r option=$1
 	local -r dockerfile_path=$2
-	local -r image_name="dotfiles-test$option"
+	local -r image_name="dotfiles-test-$option"
 
 	docker build -t "$image_name" -f "$dockerfile_path" .
 
@@ -39,8 +39,8 @@ build_docker_image() {
 create_docker_container() {
 
 	local -r option=$1
-	local -r container_name="dotfiles$option"
-	local -r image_name="dotfiles-test$option"
+	local -r container_name="dotfiles-$option"
+	local -r image_name="dotfiles-test-$option"
 	
 	# Check if the script is running interactively
 	local -r is_interactive=$( [ -t 0 ] && echo '-it' )
@@ -70,13 +70,13 @@ main() {
 	fi
 
 	# Parse the argument
-	local option=$1
+	local option="${1//-/}"
 	case "$option" in
-		--local)
+		local)
 			build_docker_image "$option" "$DOCKERFILE_LOCAL_PATH"
 			create_docker_container "$option"
 			;;
-		--remote)
+		remote)
 			build_docker_image "$option" "$DOCKERFILE_REMOTE_PATH"
 			create_docker_container "$option"
 			;;
