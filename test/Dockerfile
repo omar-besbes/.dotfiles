@@ -7,18 +7,18 @@ RUN	apt-get update && \
 			sudo \
 			git \
 			kmod \
+			curl \
 			fuse
 
 # Set root home directory
 ENV	ROOT_DIR="/root"
 
-# Get latest stable version of dotfiles
-ENV	DOTFILES_GITHUB_ORIGIN="https://github.com/omar-besbes/.dotfiles.git"
+# Get current version of dotfiles
 COPY  . ${ROOT_DIR}/.dotfiles
 
 # Set the working directory to root's home directory
 WORKDIR	${ROOT_DIR}/.dotfiles
 
 # Run the bootstrap script and then bash if started interactively
-CMD	["./bootstrap.sh", "&&", "./test/test.sh"]
+CMD ["/bin/bash", "-c", "./bootstrap.sh && ./test/test.sh"]
 

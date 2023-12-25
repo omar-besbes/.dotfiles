@@ -4,14 +4,33 @@
 # | Init                                                               |
 # ----------------------------------------------------------------------
 
-declare DIR="$(dirname "${BASH_SOURCE[0]}")"
-declare ROOT_DIR=$DIR
+#
+# WARNING
+# =======
+#
+# This section was written in this way to make sure that it can be run 
+# remotely or locally with the same behaviour.
+#
+# Please do not change anything here unless you know very well well
+# what you are doing.
+#
+# =======
+#
 
-source "$ROOT_DIR/scripts/utils.sh"
-source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
-source "$DOTFILES_SCRIPTS_DIR/sync_files.sh"
+[ ! -v DOTFILES_ROOT_DIR ]	&& declare -r DOTFILES_ROOT_DIR="$HOME/.dotfiles"
 
-cd "$DOTFILES_ROOT_DIR" || exit 1
+mkdir -p "$DOTFILES_ROOT_DIR"
+cd	"$DOTFILES_ROOT_DIR" || exit 1
+
+declare -r CURRENT_BRANCH=$(git branch --show-current &> /dev/null || echo "main")
+declare -r DOTFILES_GITHUB_RAW_CONTENT_ORIGIN="https://raw.githubusercontent.com/omar-besbes/.dotfiles/$CURRENT_BRANCH"
+
+source "$DOTFILES_ROOT_DIR/scripts/utils.sh"				&> /dev/null \
+	|| source "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/utils.sh"
+source "$DOTFILES_ROOT_DIR/scripts/setup_topics.sh"	&> /dev/null \
+	|| source "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/setup_topics.sh"
+source "$DOTFILES_ROOT_DIR/scripts/sync_files.sh"		&> /dev/null \
+	|| source "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/sync_files.sh"
 
 # ----------------------------------------------------------------------
 # | Fonts                                                              |
@@ -22,6 +41,7 @@ install_fonts() {
 	local -r FONT_DIR="$HOME/.local/share/fonts/truetype"
 	local -r NERD_FONTS_GITHUB_ORIGIN="https://github.com/ryanoasis/nerd-fonts"
 	local -r NERD_FONTS_LATEST_RELEASE_URL="https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest"
+	local -a FONTS_TO_INSTALL=("Hack" "JetBrainsMono" "RobotoMono")
 	
 	# Ensure the font directory exists
 	mkdir -p ${FONT_DIR}
@@ -38,9 +58,9 @@ install_fonts() {
 	}
 
 	# Download and install Nerd Fonts
-	install_font Hack
-	install_font JetBrainsMono
-	install_font RobotoMono
+	for i in ${FONTS_TO_INSTALL[@]}; do
+		install_font i
+	done
 
 	# Refresh the font cache
 	fc-cache -fv
@@ -90,17 +110,16 @@ main() {
 
 	ask_for_sudo
 
+	execute "install_packages git" "Installing git ..."
+
+	execute "sync_dotfiles" "Synchronizing files with remote ..."
+
 	install_dependencies
 
 	execute "install_fonts" "Installing fonts ..."
 
-	execute "sync_dotfiles" "Synchronizing files with remote ..."
-
 	# begin installing configs
 	setup_topics $DOTFILES_SOURCE_DIR
-
-	# update current terminal session 
-	source "$HOME/.bashrc"
 
 }
 
