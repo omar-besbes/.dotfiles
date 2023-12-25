@@ -28,9 +28,7 @@ It mainly targets debain-based distros. It is designed to be extensible, simple 
 
 Run this:
 ```sh
-git clone -b main https://github.com/omar-besbes/.dotfiles.git ~/.dotfiles
-cd ~/.dotfiles
-./bootstrap
+bash -c 'curl -o- https://raw.githubusercontent.com/omar-besbes/.dotfiles/main/bootstrap.sh | bash' && source ~/.bashrc
 ```
 
 

@@ -6,12 +6,8 @@
 # ----------------------------------------------------------------------
 
 
-DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+declare DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 
-[ ! -v GITHUB_ORIGIN ]					&& declare -r GITHUB_ORIGIN="https://github.com"
-[ ! -v DOTFILES_GITHUB_REPOSITORY ]	&& declare -r DOTFILES_GITHUB_REPOSITORY="omar-besbes/dotfiles"
-[ ! -v DOTFILES_ORIGIN ]				&& declare -r DOTFILES_ORIGIN="git@github.com:$GITHUB_REPOSITORY.git"
-[ ! -v DOTFILES_GITHUB_ORIGIN ]		&& declare -r DOTFILES_GITHUB_ORIGIN="$GITHUB_ORIGIN/$DOTFILES_GITHUB_REPOSITORY"
 [ ! -v DOTFILES_ROOT_DIR_NAME ]		&& declare -r DOTFILES_ROOT_DIR_NAME=".dotfiles"
 [ ! -v DOTFILES_ROOT_DIR ]				&& declare -r DOTFILES_ROOT_DIR="$(realpath "$DIR/..")"
 [ ! -v DOTFILES_SOURCE_DIR_NAME ]	&& declare -r DOTFILES_SOURCE_DIR_NAME="src"
