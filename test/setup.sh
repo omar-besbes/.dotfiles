@@ -32,8 +32,15 @@ build_docker_image() {
 	local -r dockerfile_path=$2
 	local -r image_name="dotfiles-test--$option"
 
-	docker build -t "$image_name" -f "$dockerfile_path" .
+	local docker_command="
+		docker build
+			--build-arg CURRENT_BRANCH=$(git branch --show-current)
+			-t $image_name
+			-f $dockerfile_path
+			.
+	"
 
+	eval $docker_command
 }
 
 create_docker_container() {
@@ -43,12 +50,13 @@ create_docker_container() {
 	local -r image_name="dotfiles-test--$option"
 
 	# Create docker container according to the option / interactiveness
-	local docker_command="docker run $([ -t 0 ] && echo '-it')
-		--name $container_name
-		--cap-add SYS_ADMIN
-		--device /dev/fuse:/dev/fuse
-		--security-opt apparmor:unconfined
-		$image_name
+	local docker_command="
+		docker run $([ -t 0 ] && echo '-it')
+			--name $container_name
+			--cap-add SYS_ADMIN
+			--device /dev/fuse:/dev/fuse
+			--security-opt apparmor:unconfined
+			$image_name
 	"
 
 	eval $docker_command

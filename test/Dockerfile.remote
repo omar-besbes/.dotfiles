@@ -1,5 +1,22 @@
+# 
+# WARNING
+# =======
+# 
+# Please, be aware that this Dockerfile is only supposed to be run using Github Actions.
+# 
+# Running "dotfiles" remotely requires all changes to be available in remote,
+# which is not the case when testing locally.
+# You will most likely end up running this Dockerfile against
+# an old version of `bootstrap.sh` and thus an old version of "dotfiles".
+#
+# =======
+# 
+
 # Use the latest netinst image of debian
 FROM	debian:stable-slim
+
+# Dockerfile Args
+ARG CURRENT_BRANCH
 
 # Install necessary dependencies
 RUN	apt-get update && \
@@ -9,5 +26,6 @@ RUN	apt-get update && \
 			fuse
 
 # Run the bootstrap script and then the test script 
-CMD /bin/bash -c 'source <(curl -# https://raw.githubusercontent.com/omar-besbes/.dotfiles/main/bootstrap.sh)' && source ~/.bashrc
+ENV CURRENT_BRANCH=$CURRENT_BRANCH
+CMD /bin/bash -c "source <(curl -# https://raw.githubusercontent.com/omar-besbes/.dotfiles/${CURRENT_BRANCH}/bootstrap.sh)" && source ~/.bashrc
 

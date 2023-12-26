@@ -112,7 +112,8 @@ main() {
 
 	execute "install_packages git" "Installing git ..."
 
-	execute "sync_dotfiles" "Synchronizing files with remote ..."
+	sync_dotfiles
+	#execute "sync_dotfiles" "Synchronizing files with remote ..."
 
 	install_dependencies
 

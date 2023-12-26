@@ -21,7 +21,7 @@ sync_dotfiles() {
 			mkdir "$DOTFILES_ROOT_DIR/backups/.dotfiles" && \
 			find "$DOTFILES_ROOT_DIR" -maxdepth 1 -mindepth 1 -not -name "backups"
 			find "$DOTFILES_ROOT_DIR" -maxdepth 1 -mindepth 1 -not -name "backups" -exec mv -t "$ROOT_DIR/backups/.dotfiles" {} +
-		
+
 		# clone repository recursively
 		git clone -b main "$DOTFILES_GITHUB_ORIGIN" "$DOTFILES_ROOT_DIR" 
 		git submodule sync --recursive
