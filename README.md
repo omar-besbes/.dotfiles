@@ -28,7 +28,7 @@ It mainly targets debain-based distros. It is designed to be extensible, simple 
 
 Run this:
 ```sh
-bash -c 'source <(curl -# https://raw.githubusercontent.com/omar-besbes/.dotfiles/main/bootstrap.sh)' && source ~/.bashrc
+bash -c 'source <(curl -# https://raw.githubusercontent.com/omar-besbes/.dotfiles/main/bootstrap.sh)' && . ~/.bashrc
 ```
 
 

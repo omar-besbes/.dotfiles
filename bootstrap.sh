@@ -22,8 +22,10 @@
 mkdir -p "$DOTFILES_ROOT_DIR"
 cd	"$DOTFILES_ROOT_DIR" || exit 1
 
-declare -r CURRENT_BRANCH=$(git branch --show-current 2> /dev/null || echo "main")
-declare -r DOTFILES_GITHUB_RAW_CONTENT_ORIGIN="https://raw.githubusercontent.com/omar-besbes/.dotfiles/$CURRENT_BRANCH"
+[ ! -v CURRENT_BRANCH ] \
+	&& declare -r CURRENT_BRANCH=$(git branch --show-current 2> /dev/null || echo "main")
+[ ! -v DOTFILES_GITHUB_RAW_CONTENT_ORIGIN ] \
+	&& declare -r DOTFILES_GITHUB_RAW_CONTENT_ORIGIN="https://raw.githubusercontent.com/omar-besbes/.dotfiles/$CURRENT_BRANCH"
 
 source "$DOTFILES_ROOT_DIR/scripts/utils.sh"				&> /dev/null \
 	|| source <(curl -s "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/utils.sh")
@@ -112,8 +114,7 @@ main() {
 
 	execute "install_packages git" "Installing git ..."
 
-	sync_dotfiles
-	#execute "sync_dotfiles" "Synchronizing files with remote ..."
+	execute "sync_dotfiles" "Synchronizing files with remote ..."
 
 	install_dependencies
 

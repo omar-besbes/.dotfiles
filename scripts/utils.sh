@@ -245,7 +245,7 @@ show_spinner() {
 	 # in non-interactive shells.
 
 	 if [ ! -t 0 ]; then
-		  printf "%s\n" "   [⠶] $MSG"
+		  printf "%s\n" "   [ℹ️] $MSG"
 		  return
     fi
 

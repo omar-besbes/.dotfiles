@@ -22,10 +22,13 @@ jobs:
   test-dotfiles--remote:
     runs-on: ubuntu-latest
 
+    env:
+      CURRENT_BRANCH: ${{ github.head_ref || github.ref_name }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup test environment remotely and run tests
-        run: ./test/setup.sh --remote
+        run: ./test/setup.sh --remote $CURRENT_BRANCH
 

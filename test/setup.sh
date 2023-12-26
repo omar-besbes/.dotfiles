@@ -31,10 +31,11 @@ build_docker_image() {
 	local -r option=$1
 	local -r dockerfile_path=$2
 	local -r image_name="dotfiles-test--$option"
+	local -r current_branch=${3:-$(git branch --show-current)}
 
 	local docker_command="
 		docker build
-			--build-arg CURRENT_BRANCH=$(git branch --show-current)
+			--build-arg CURRENT_BRANCH=$current_branch
 			-t $image_name
 			-f $dockerfile_path
 			.
@@ -71,20 +72,21 @@ main() {
 
 	cd "$ROOT_DIR" || exit 1
 
-	# Check the number of arguments
-	if [ "$#" -ne 1 ]; then
+	# Check the number of arguments (must be strictly supperior than 0)
+	if [ "$#" -le 0 ]; then
 	    show_help
 	fi
 
 	# Parse the argument
 	local option="${1//-/}"
+	local current_branch="$2"
 	case "$option" in
 		local)
-			build_docker_image "$option" "$DOCKERFILE_LOCAL_PATH"
+			build_docker_image "$option" "$DOCKERFILE_LOCAL_PATH" "$current_branch"
 			create_docker_container "$option"
 			;;
 		remote)
-			build_docker_image "$option" "$DOCKERFILE_REMOTE_PATH"
+			build_docker_image "$option" "$DOCKERFILE_REMOTE_PATH" "$current_branch"
 			create_docker_container "$option"
 			;;
 		*)

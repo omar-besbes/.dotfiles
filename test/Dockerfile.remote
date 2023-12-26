@@ -27,5 +27,5 @@ RUN	apt-get update && \
 
 # Run the bootstrap script and then the test script 
 ENV CURRENT_BRANCH=$CURRENT_BRANCH
-CMD /bin/bash -c "source <(curl -# https://raw.githubusercontent.com/omar-besbes/.dotfiles/${CURRENT_BRANCH}/bootstrap.sh)" && source ~/.bashrc
+CMD /bin/bash -c "CURRENT_BRANCH=${CURRENT_BRANCH} source <(curl -# https://raw.githubusercontent.com/omar-besbes/.dotfiles/${CURRENT_BRANCH}/bootstrap.sh)" && . ~/.bashrc
 
