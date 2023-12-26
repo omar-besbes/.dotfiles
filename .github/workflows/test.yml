@@ -9,7 +9,7 @@ on:
       - synchronize
 
 jobs:
-  test-dotfiles:
+  test-dotfiles--local:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,5 +17,18 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup test environment and run tests
-        run: ./test/setup.sh
+        run: ./test/setup.sh --local
+
+  test-dotfiles--remote:
+    runs-on: ubuntu-latest
+
+    env:
+      CURRENT_BRANCH: ${{ github.head_ref || github.ref_name }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup test environment remotely and run tests
+        run: ./test/setup.sh --remote $CURRENT_BRANCH
 

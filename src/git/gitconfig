@@ -7,4 +7,12 @@
 [gpg "ssh"]
 	allowedsingersfile = /home/omar/.ssh/allowed_signers
 [core]
+	editor = /usr/local/bin/nvim
 	autocrlf = input
+	ignorecase = false
+[push]
+	default = current
+[alias]
+	unstage = reset HEAD --
+	uncommit = reset --soft HEAD~
+

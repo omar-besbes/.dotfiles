@@ -1,7 +1,7 @@
 #!/bin/bash
 
 [ ! -v DOTFILES_ROOT_DIR ]			&& declare -r DOTFILES_ROOT_DIR="$HOME/.dotfiles"
-[ ! -v DOTFILES_GITHUB_ORIGIN ]	&& declare -r DOTFILES_GITHUB_ORIGIN="https://github.com/omar-besbes/dotfiles"
+[ ! -v DOTFILES_GITHUB_ORIGIN ]	&& declare -r DOTFILES_GITHUB_ORIGIN="https://github.com/omar-besbes/.dotfiles"
 
 print_info() {
 	echo -e "\e[34m$1\e[0m"
@@ -23,7 +23,7 @@ sync_dotfiles() {
 			find "$DOTFILES_ROOT_DIR" -maxdepth 1 -mindepth 1 -not -name "backups" -exec mv -t "$ROOT_DIR/backups/.dotfiles" {} +
 		
 		# clone repository recursively
-		git clone -b main "$DOTFILES_GITHUB_ORIGIN" "$ROOT_DIR" 
+		git clone -b main "$DOTFILES_GITHUB_ORIGIN" "$DOTFILES_ROOT_DIR" 
 		git submodule sync --recursive
 		git submodule update --init --recursive
 	else
