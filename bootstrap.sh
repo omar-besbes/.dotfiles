@@ -42,26 +42,24 @@ install_fonts() {
 	
 	local -r FONT_DIR="$HOME/.local/share/fonts/truetype"
 	local -r NERD_FONTS_GITHUB_ORIGIN="https://github.com/ryanoasis/nerd-fonts"
-	local -r NERD_FONTS_LATEST_RELEASE_URL="https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest"
-	local -a FONTS_TO_INSTALL=("Hack" "JetBrainsMono" "RobotoMono")
+	local -a FONTS_TO_INSTALL=("Hack" "JetBrainsMono" "RobotoMono" "NerdFontsSymbolsOnly")
 	
 	# Ensure the font directory exists
-	mkdir -p ${FONT_DIR}
-	
-	# Get the latest version from GitHub releases
-	local -r LATEST_VERSION=$(curl -s $NERD_FONTS_LATEST_RELEASE_URL | grep -oP '"tag_name": "\K(.*)(?=")')
+	mkdir -p "$FONT_DIR"
 
 	# Function to download and install a font
 	install_font() {
 		local font_name=$1
-		wget -q "${NERD_FONTS_GITHUB_ORIGIN}/releases/download/${LATEST_VERSION}/${font_name}.zip" -P ${FONT_DIR}
-		unzip -q "${FONT_DIR}/${font_name}.zip" -d ${FONT_DIR}
-		rm -f "${FONT_DIR}/${font_name}.zip"
+		if ! fc-list | grep -q "$font_name"; then
+			curl -LJO# "$NERD_FONTS_GITHUB_ORIGIN/releases/latest/download/${font_name}.zip"
+			unzip -qo "$font_name.zip" -d "$FONT_DIR/$font_name"
+			rm -f "$font_name.zip"
+		fi
 	}
 
 	# Download and install Nerd Fonts
 	for i in ${FONTS_TO_INSTALL[@]}; do
-		install_font i
+		install_font "$i"
 	done
 
 	# Refresh the font cache
