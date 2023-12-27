@@ -123,8 +123,14 @@ The `/backups` directory gets created when necessary. Any files in `~/` that wou
 ## Todo
 
 
+- [x] Git
+- [x] Shell
+- [x] Text editor
+- [x] Prompt
+- [x] Terminal emulator
 - [x] Automated tests
 - [x] Remote install
+- [x] Fonts
 - [ ] Move all config files in `/backups` before setup (only a small part is moved)
 - [ ] Uninstall script
 - [ ] Github & Gitlab SSH keys auto generation
