@@ -8,14 +8,11 @@ services:
     command: >
       /bin/bash -c "
       cp -r $$DOTFILES_MOUNT_POINT $$HOME
-      && ls $$HOME -lha
-      && ls /root -lha
-      && chown -R $(whoami):$(whoami) $(pwd) 
-      && ./bootstrap.sh 
-      && . ~/.bashrc
-      && ./test/test.sh
+      && chown -R $(whoami):$(whoami) $$HOME$$DOTFILES_MOUNT_POINT 
+      && $$HOME$$DOTFILES_MOUNT_POINT/bootstrap.sh 
+      && . $$HOME/.bashrc
+      && $$HOME$$DOTFILES_MOUNT_POINT/test/test.sh
       "
-    working_dir: ${HOME}/.dotfiles
     environment:
       DOTFILES_MOUNT_POINT: ${DOTFILES_MOUNT_POINT:-/.dotfiles}
     volumes:
@@ -33,7 +30,7 @@ services:
     command: >
       /bin/bash -c "
       source <(curl -# $$RAW_CONTENT_URL/bootstrap.sh)
-      && . ~/.bashrc
+      && . $$HOME/.bashrc
       && ./test/test.sh
       "
     environment:
