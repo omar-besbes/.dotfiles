@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  local:
+    build:
+      context: ..
+      dockerfile: test/Dockerfile
+    command: >
+      /bin/bash -c "
+      cp -r $$DOTFILES_MOUNT_POINT $$HOME
+      && ls $$HOME -lha
+      && ls /root -lha
+      && chown -R $(whoami):$(whoami) $(pwd) 
+      && ./bootstrap.sh 
+      && . ~/.bashrc
+      && ./test/test.sh
+      "
+    working_dir: ${HOME}/.dotfiles
+    environment:
+      DOTFILES_MOUNT_POINT: ${DOTFILES_MOUNT_POINT:-/.dotfiles}
+    volumes:
+      - ..:${DOTFILES_MOUNT_POINT:-/.dotfiles}
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse:/dev/fuse
+    security_opt:
+      - apparmor:unconfined
+  remote:
+    build:
+      context: ..
+      dockerfile: test/Dockerfile
+    command: >
+      /bin/bash -c "
+      source <(curl -# $$RAW_CONTENT_URL/bootstrap.sh)
+      && . ~/.bashrc
+      && ./test/test.sh
+      "
+    environment:
+      RAW_CONTENT_URL: ${RAW_CONTENT_URL} 
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse:/dev/fuse
+    security_opt:
+      - apparmor:unconfined
+
