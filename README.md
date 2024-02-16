@@ -111,10 +111,10 @@ This directory is added to the path.
 
 ### Tests (test/)
 The `/test` directory contains tests.
-* setup.sh - Sets up a special container with all the dotfiles ready to go and runs `test.sh` inside
 * test.sh - Contains tests to be run inside the container 
-* Dockerfile.local - Contains instructions to build a docker image with dotfiles already installed inside
-* Dockerfile.remote - Contains instructions to build a docker image similar to a new user environment and runs the same command in `README.md`.
+* docker-compose.yml - Contains a description of the test environments. 
+There are 2 test environments: one that clones the repository and another that runs the install command in `README.md`
+* Dockerfile - Contains instructions to build a docker image of the test environment
 
 ### Backups (backups/)
 The `/backups` directory gets created when necessary. Any files in `~/` that would have been overwritten during installation get backed up there.
