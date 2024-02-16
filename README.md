@@ -26,6 +26,8 @@ It mainly targets debain-based distros. It is designed to be extensible, simple 
 ## Setup
 
 
+Only `bash`, `apt`, `sudo` and `curl` are required. The script will install everything else by itself.
+
 Run this:
 ```sh
 bash -c 'source <(curl -# https://raw.githubusercontent.com/omar-besbes/.dotfiles/main/bootstrap.sh)' && . ~/.bashrc
@@ -41,7 +43,10 @@ When bootstrap is run, it does a few things:
 3. Various basic packages are installed if not found (e.g. curl, rustup, nvm).
 4. Fonts are installed (Hack, JetBrainsMono, RobotoMono).
 5. Setup each topic in `src` directory.
-7. Update current shell session to get all the good stuff :).
+
+> [!NOTE]
+> Update current shell session by running `. ~/.bashrc` to get all the good stuff :). <br>
+> This is done automatically during setup.
 
 
 ## Contents
@@ -108,10 +113,39 @@ This directory is added to the path.
 The `/test` directory contains tests.
 * setup.sh - Sets up a special container with all the dotfiles ready to go and runs `test.sh` inside
 * test.sh - Contains tests to be run inside the container 
-* Dockerfile - Contains instructions to build a docker image with dotfiles installed inside
+* Dockerfile.local - Contains instructions to build a docker image with dotfiles already installed inside
+* Dockerfile.remote - Contains instructions to build a docker image similar to a new user environment and runs the same command in `README.md`.
 
 ### Backups (backups/)
 The `/backups` directory gets created when necessary. Any files in `~/` that would have been overwritten during installation get backed up there.
+
+
+## Todo
+
+
+- [x] Git
+- [x] Shell
+- [x] Text editor
+- [x] Prompt
+- [x] Terminal emulator
+- [x] Automated tests
+- [x] Remote install
+- [x] Fonts
+- [ ] Move all config files in `/backups` before setup (only a small part is moved)
+- [ ] Uninstall script
+- [ ] Github & Gitlab SSH keys auto generation
+- [ ] Mail client
+- [ ] Window manger + display manager
+- [ ] Other shells compatibility (only bash supported for now)
+
+
+## Inspiration
+
+
+This project was heavily inspired by rkalis' [dotfiles](https://github.com/rkalis/dotfiles) 
+and by cătălin's [dotfiles](https://github.com/alrra/dotfiles).
+
+Many thanks to the [dotfiles community](https://dotfiles.github.io/).
 
 
 ## Bugs
