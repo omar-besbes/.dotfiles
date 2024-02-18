@@ -20,6 +20,8 @@ declare -a COMMANDS_TO_VERIFY=(
 	"figlet"
 	"alacritty"
 	"git"
+	"docker"
+	"kubectl"
 )
 
 check_commands_existence() {

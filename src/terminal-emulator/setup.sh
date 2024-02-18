@@ -28,5 +28,3 @@ main() {
 	choose_emulator
 }
 
-execute "main" "Setting up terminal emulator ..."
-
