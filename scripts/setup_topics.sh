@@ -9,7 +9,7 @@ setup_topics() {
 
 	for i in ${TOPICS_TO_SETUP[@]}; do
 
-		source "$i/$TOPIC_SETUP_FILE"
+		execute "source $i/$TOPIC_SETUP_FILE && main" "Setting up $(basename $i) ..."
 
 	done
 

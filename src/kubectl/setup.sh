@@ -6,32 +6,34 @@
 
 declare DIR="$(dirname "${BASH_SOURCE[0]}")"
 declare ROOT_DIR="$(realpath "$DIR/../..")"
-declare TOPIC_NAME="shell"
+declare TOPIC_NAME="kubectl"
 declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
 
 source "$ROOT_DIR/scripts/utils.sh"
-source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
-source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
 
 # ----------------------------------------------------------------------
-# | Symlinks                                                           |
+# | Install new version                                                |
 # ----------------------------------------------------------------------
 
-create_symlinks() {
+install_dependencies() {
+	
+	cmd_exists kubectl && return;
 
-	local -a FILES_TO_SYMLINK=(
-		"bash_logout"
-		"bash_profile"
-		"bashrc"
-		"inputrc"
-	)	
-	local -r TARGET_DIR=$HOME
+	# Add kubectl's official GPG key:
+	sudo apt-get update
+	sudo install -m 0755 -d /etc/apt/keyrings
+	curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | \
+		sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
-	get_target_file() {
-		echo ".$(printf "%s" "$1" | sed "s/.*\/\(.*\)/\1/g")"
-	}
+	# Add the repository to Apt sources:
+	echo \
+		"deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
+		https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /" | \
+		sudo tee /etc/apt/sources.list.d/kubernetes.list
+	sudo apt-get update
 
-	symlink_files FILES_TO_SYMLINK[@] $TOPIC_DIR $TARGET_DIR get_target_file 
+	# Install packages
+	sudo apt-get install -y kubectl
 
 }
 
@@ -40,13 +42,10 @@ create_symlinks() {
 # ----------------------------------------------------------------------
 
 main() {
-
+	
 	ask_for_sudo
 
-	create_symlinks
-
-	# Setup bash sub-topics
-	setup_topics $TOPIC_DIR
+	install_dependencies
 
 }
 

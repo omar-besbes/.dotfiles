@@ -28,7 +28,7 @@ install_dependencies() {
 	local -r NEOVIM_BIN="nvim.appimage"
 	local -r NEOVIM_APPIMAGE_URL="https://github.com/neovim/neovim/releases/latest/download/$NEOVIM_BIN"
 
-	curl -LO $NEOVIM_APPIMAGE_URL
+	curl -fSLO $NEOVIM_APPIMAGE_URL
 	chmod u+x $NEOVIM_BIN
 	sudo mv $NEOVIM_BIN /usr/local/bin/nvim
 
@@ -61,6 +61,4 @@ main() {
 	create_symlinks
 
 }
-
-execute "main" "Setting up neovim ..."
 

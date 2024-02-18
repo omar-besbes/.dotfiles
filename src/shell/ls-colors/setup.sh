@@ -25,7 +25,7 @@ install_dependencies() {
 	install_packages curl jq
 
 	# Get the latest release information
-	local -r RELEASE_INFO=$(curl -s $VIVID_GITHUB_LATEST_RELEASE_URL)
+	local -r RELEASE_INFO=$(curl -fsSL $VIVID_GITHUB_LATEST_RELEASE_URL)
 
 	# Extract the asset URL for the specified architecture and extension
 	local -r ASSET_URL=$(echo "$RELEASE_INFO" | jq -r ".assets[] | select(.name | contains(\"$ARCH\") and contains(\"$ASSET_EXTENSION\") and (contains(\"musl\") | not)) | .browser_download_url")
@@ -33,7 +33,7 @@ install_dependencies() {
 
 	# Download the asset using curl and install it
 	if [ -n "$ASSET_URL" ]; then
-		curl -LJO "$ASSET_URL"
+		curl -fSLJO "$ASSET_URL"
 		install_packages "./$VIVID_BIN"
 		rm "$VIVID_BIN"
 	else

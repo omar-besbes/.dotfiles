@@ -30,7 +30,7 @@ Only `bash`, `apt`, `sudo` and `curl` are required. The script will install ever
 
 Run this:
 ```sh
-bash -c 'source <(curl -# https://raw.githubusercontent.com/omar-besbes/.dotfiles/main/bootstrap.sh)' && . ~/.bashrc
+bash -c 'source <(curl -fSL# https://raw.githubusercontent.com/omar-besbes/.dotfiles/main/bootstrap.sh)' && . ~/.bashrc
 ```
 
 

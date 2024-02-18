@@ -29,7 +29,7 @@ services:
       dockerfile: test/Dockerfile
     command: >
       /bin/bash -c "
-      source <(curl -# $$RAW_CONTENT_URL/bootstrap.sh)
+      source <(curl -fSL# $$RAW_CONTENT_URL/bootstrap.sh)
       && . $$HOME/.bashrc
       && ./test/test.sh
       "
