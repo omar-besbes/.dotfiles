@@ -27,5 +27,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
+          context: test
           tags: omarbesbes/dotfiles:latest
 
