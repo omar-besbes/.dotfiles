@@ -4,3 +4,8 @@ if [[ -f ~/.bashrc ]]; then
   source "$HOME/.bashrc"
 fi
 
+# Add private SSH keys of github/gilab to the SSH authentication agent on startup
+[ -f "~/.ssh/github_auth" ] && ssh-add ~/.ssh/github_auth
+[ -f "~/.ssh/github" ] && ssh-add ~/.ssh/github
+[ -f "~/.ssh/gitlab_auth" ] && ssh-add ~/.ssh/gitlab_auth
+[ -f "~/.ssh/gitlab" ] && ssh-add ~/.ssh/gitlab
