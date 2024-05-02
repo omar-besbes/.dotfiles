@@ -17,22 +17,22 @@
 # =======
 #
 
-[ ! -v DOTFILES_ROOT_DIR ]	&& declare -r DOTFILES_ROOT_DIR="$HOME/.dotfiles"
+[ ! -v DOTFILES_ROOT_DIR ] && declare -r DOTFILES_ROOT_DIR="$HOME/.dotfiles"
 
 mkdir -p "$DOTFILES_ROOT_DIR"
-cd	"$DOTFILES_ROOT_DIR" || exit 1
+cd "$DOTFILES_ROOT_DIR" || exit 1
 
 [ ! -v CURRENT_BRANCH ] \
 	&& declare -r CURRENT_BRANCH=$(git branch --show-current 2> /dev/null || echo "main")
 [ ! -v DOTFILES_GITHUB_RAW_CONTENT_ORIGIN ] \
 	&& declare -r DOTFILES_GITHUB_RAW_CONTENT_ORIGIN="https://raw.githubusercontent.com/omar-besbes/.dotfiles/$CURRENT_BRANCH"
 
-source "$DOTFILES_ROOT_DIR/scripts/utils.sh"				&> /dev/null \
-	|| source <(curl -fsSL "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/utils.sh")
-source "$DOTFILES_ROOT_DIR/scripts/setup_topics.sh"	&> /dev/null \
-	|| source <(curl -fsSL "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/setup_topics.sh")
-source "$DOTFILES_ROOT_DIR/scripts/sync_files.sh"		&> /dev/null \
-	|| source <(curl -fsSL "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/sync_files.sh")
+source "$DOTFILES_ROOT_DIR/scripts/utils.sh" &>/dev/null ||
+	source <(curl -fsSL "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/utils.sh")
+source "$DOTFILES_ROOT_DIR/scripts/setup_topics.sh" &>/dev/null ||
+	source <(curl -fsSL "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/setup_topics.sh")
+source "$DOTFILES_ROOT_DIR/scripts/sync_files.sh" &>/dev/null ||
+	source <(curl -fsSL "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/sync_files.sh")
 
 # ----------------------------------------------------------------------
 # | Global Dependencies                                                |
@@ -40,8 +40,11 @@ source "$DOTFILES_ROOT_DIR/scripts/sync_files.sh"		&> /dev/null \
 
 install_dependencies() {
 
+	# install git
+	execute "sudo apt-get install -y git" "Installing git ..."
+
 	# install curl
-	execute "install_packages curl" "Installing curl ..."
+	execute "sudo apt-get install -y curl" "Installing curl ..."
 
 	# install rustup & cargo
 	if ! cmd_exists rustup; then
@@ -56,16 +59,16 @@ install_dependencies() {
 		execute "PROFILE=/dev/null bash -c 'curl -fSL -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash'" "Installing nvm ..."
 
 	# install shellcheck
-	execute "install_packages shellcheck" "Installing shellcheck ..."
+	execute "sudo apt-get install -y shellcheck" "Installing shellcheck ..."
 
 	# install xclip
-	execute "install_packages xclip" "Installing xclip ..."
+	execute "sudo apt-get install -y xclip" "Installing xclip ..."
 
 	# isntall necessary compression and extraction tools
-	execute "install_packages bzip2 gzip zip xz-utils tar" "Installing extraction/compression tools ..."
+	execute "sudo apt-get install -y bzip2 gzip zip xz-utils tar" "Installing extraction/compression tools ..."
 
 	# install gcc, g++ & some other tools
-	execute "install_packages ca-certificates fontconfig build-essential software-properties-common" "Installing essential tools ..."
+	execute "sudo apt-get install -y ca-certificates fontconfig build-essential software-properties-common" "Installing essential tools ..."
 
 }
 
@@ -77,11 +80,9 @@ main() {
 
 	ask_for_sudo
 
-	execute "install_packages git" "Installing git ..."
+	install_dependencies
 
 	execute "sync_dotfiles" "Synchronizing files with remote ..."
-
-	install_dependencies
 
 	# begin installing configs
 	setup_topics $DOTFILES_SOURCE_DIR
@@ -89,4 +90,3 @@ main() {
 }
 
 main
-

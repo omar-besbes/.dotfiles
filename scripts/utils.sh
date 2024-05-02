@@ -1,41 +1,31 @@
 #!/bin/bash
 
-
 # ----------------------------------------------------------------------
 # | Init                                                               |
 # ----------------------------------------------------------------------
 
-
 declare DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 
-[ ! -v DOTFILES_ROOT_DIR_NAME ]		&& declare -r DOTFILES_ROOT_DIR_NAME=".dotfiles"
-[ ! -v DOTFILES_ROOT_DIR ]				&& declare -r DOTFILES_ROOT_DIR="$(realpath "$DIR/..")"
-[ ! -v DOTFILES_SOURCE_DIR_NAME ]	&& declare -r DOTFILES_SOURCE_DIR_NAME="src"
-[ ! -v DOTFILES_SOURCE_DIR ]			&& declare -r DOTFILES_SOURCE_DIR="$DOTFILES_ROOT_DIR/$DOTFILES_SOURCE_DIR_NAME"
-[ ! -v DOTFILES_SCRIPTS_DIR_NAME ]	&& declare -r DOTFILES_SCRIPTS_DIR_NAME="scripts"
-[ ! -v DOTFILES_SCRIPTS_DIR ]			&& declare -r DOTFILES_SCRIPTS_DIR="$DOTFILES_ROOT_DIR/$DOTFILES_SCRIPTS_DIR_NAME"
-
+[ ! -v DOTFILES_ROOT_DIR_NAME ] && declare -r DOTFILES_ROOT_DIR_NAME=".dotfiles"
+[ ! -v DOTFILES_ROOT_DIR ] && declare -r DOTFILES_ROOT_DIR="$(realpath "$DIR/..")"
+[ ! -v DOTFILES_SOURCE_DIR_NAME ] && declare -r DOTFILES_SOURCE_DIR_NAME="src"
+[ ! -v DOTFILES_SOURCE_DIR ] && declare -r DOTFILES_SOURCE_DIR="$DOTFILES_ROOT_DIR/$DOTFILES_SOURCE_DIR_NAME"
+[ ! -v DOTFILES_SCRIPTS_DIR_NAME ] && declare -r DOTFILES_SCRIPTS_DIR_NAME="scripts"
+[ ! -v DOTFILES_SCRIPTS_DIR ] && declare -r DOTFILES_SCRIPTS_DIR="$DOTFILES_ROOT_DIR/$DOTFILES_SCRIPTS_DIR_NAME"
 
 # ----------------------------------------------------------------------
 # | Misc                                                               |
 # ----------------------------------------------------------------------
 
-
-[ ! -v ARCH ]					&& declare -r ARCH="amd64"
+[ ! -v ARCH ] && declare -r ARCH="amd64"
 [ ! -v PACKAGE_EXTENSION ] && declare -r PACKAGE_EXTENSION=".deb"
-[ ! -v PACKAGE_MANAGER ]	&& declare -r PACKAGE_MANAGER="apt"
-
-
-install_packages() {
-	sudo apt-get install -y "$@"
-}
-
+[ ! -v PACKAGE_MANAGER ] && declare -r PACKAGE_MANAGER="apt"
 
 ask_for_sudo() {
 
     # Ask for the administrator password upfront.
 
-    sudo -v &> /dev/null
+    sudo -v &>/dev/null
 
     # Update existing `sudo` time stamp
     # until this script has finished.
@@ -46,23 +36,20 @@ ask_for_sudo() {
         sudo -n true
         sleep 60
         kill -0 "$$" || exit
-    done &> /dev/null &
+    done &>/dev/null &
 
 }
-
 
 cmd_exists() {
-    command -v "$1" &> /dev/null
+    command -v "$1" &>/dev/null
 }
-
 
 set_trap() {
 
-    trap -p "$1" | grep "$2" &> /dev/null \
-        || trap '$2' "$1"
+    trap -p "$1" | grep "$2" &>/dev/null ||
+        trap '$2' "$1"
 
 }
-
 
 kill_all_subprocesses() {
 
@@ -70,11 +57,10 @@ kill_all_subprocesses() {
 
     for i in $(jobs -p); do
         kill "$i"
-        wait "$i" &> /dev/null
+        wait "$i" &>/dev/null
     done
 
 }
-
 
 execute() {
 
@@ -98,8 +84,8 @@ execute() {
     # shellcheck disable=SC2261
 
     eval "$CMDS" \
-        &> /dev/null \
-        2> "$TMP_FILE" &
+        &>/dev/null \
+        2>"$TMP_FILE" &
 
     cmds_PID=$!
 
@@ -115,7 +101,7 @@ execute() {
     # Wait for the commands to no longer be executing
     # in the background, and then get their exit code.
 
-    wait "$cmds_PID" &> /dev/null
+    wait "$cmds_PID" &>/dev/null
     exit_code=$?
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -125,7 +111,7 @@ execute() {
     print_result $exit_code "$MSG"
 
     if [ $exit_code -ne 0 ]; then
-        print_error_stream < "$TMP_FILE"
+        print_error_stream <"$TMP_FILE"
     fi
 
     rm -rf "$TMP_FILE"
@@ -136,46 +122,38 @@ execute() {
 
 }
 
-
 # ----------------------------------------------------------------------
 # | Input & Output                                                     |
 # ----------------------------------------------------------------------
 
-
 print_in_color() {
 
     printf "%b" \
-        "$(tput setaf "$2" 2> /dev/null)" \
+        "$(tput setaf "$2" 2>/dev/null)" \
         "$1" \
-        "$(tput sgr0 2> /dev/null)"
+        "$(tput sgr0 2>/dev/null)"
 
 }
-
 
 print_in_green() {
     print_in_color "$1" 2
 }
 
-
 print_in_purple() {
     print_in_color "$1" 5
 }
-
 
 print_in_red() {
     print_in_color "$1" 1
 }
 
-
 print_in_yellow() {
     print_in_color "$1" 3
 }
 
-
 print_error() {
     print_in_red "   [✖] $1 $2\n"
 }
-
 
 print_error_stream() {
 
@@ -185,16 +163,13 @@ print_error_stream() {
 
 }
 
-
 print_success() {
     print_in_green "   [✔] $1\n"
 }
 
-
 print_warning() {
     print_in_yellow "   [!] $1\n"
 }
-
 
 print_result() {
 
@@ -207,7 +182,6 @@ print_result() {
     return "$1"
 
 }
-
 
 show_spinner() {
 
@@ -229,28 +203,28 @@ show_spinner() {
     # This is a workaround for escape sequences not tracking
     # the buffer position (accounting for scrolling).
     #
-	 # Only used in interactive shells.
-	 #
+    # Only used in interactive shells.
+    #
     # See also: https://unix.stackexchange.com/a/278888
 
-	 if [ -t 0 ]; then
+    if [ -t 0 ]; then
         printf "\n\n\n"
         tput cuu 3
         tput sc
-	 fi
+    fi
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-	 # Display a message without spinner animation 
-	 # in non-interactive shells.
+    # Display a message without spinner animation
+    # in non-interactive shells.
 
-	 if [ ! -t 0 ]; then
-		  printf "%s\n" "   [ℹ️] $MSG"
-		  return
+    if [ ! -t 0 ]; then
+        printf "%s\n" "   [ℹ️] $MSG"
+        return
     fi
 
-    # Display spinner while the commands are being executed 
-	 # in an interactive shell.
+    # Display spinner while the commands are being executed
+    # in an interactive shell.
 
     while kill -0 "$PID" &>/dev/null; do
 
@@ -268,9 +242,8 @@ show_spinner() {
 
         # Clear frame text.
 
-		  tput rc
+        tput rc
 
     done
 
 }
-

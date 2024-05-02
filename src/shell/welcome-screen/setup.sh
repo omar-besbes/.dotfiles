@@ -23,8 +23,8 @@ install_depnedencies() {
 	cmd_exists figlet && return
 
 	# insatll figlet
-	install_packages figlet
-	
+	sudo apt-get install -y figlet
+
 	# install figlet fonts
 	local -r FIGLET_FONTS_GITHUB_ORIGIN="https://github.com/xero/figlet-fonts.git"
 	local -r FIGLET_FONTS_DIR="figlet-fonts"
@@ -39,7 +39,7 @@ install_depnedencies() {
 # ----------------------------------------------------------------------
 
 main() {
-	
+
 	ask_for_sudo
 
 	install_depnedencies
@@ -47,4 +47,3 @@ main() {
 }
 
 execute "main" "Setting up shell welcome screen ..."
-
