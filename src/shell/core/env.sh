@@ -16,8 +16,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Added by Toolbox App
-export PATH="$PATH:/home/omar/.local/share/JetBrains/Toolbox/scripts"
+# proto
+export PROTO_HOME="$HOME/.proto"
+export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH"
 
 # Rust package manager (cargo)
 source "$HOME/.cargo/env"

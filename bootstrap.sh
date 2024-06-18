@@ -8,7 +8,7 @@
 # WARNING
 # =======
 #
-# This section was written in this way to make sure that it can be run 
+# This section was written in this way to make sure that it can be run
 # remotely or locally with the same behaviour.
 #
 # Please do not change anything here unless you know very well well
@@ -46,17 +46,8 @@ install_dependencies() {
 	# install curl
 	execute "sudo apt-get install -y curl" "Installing curl ..."
 
-	# install rustup & cargo
-	if ! cmd_exists rustup; then
-		execute "curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs | sh -s -- --no-modify-path -y" "Installing rustup ..."
-		source "$HOME/.cargo/env"
-		mkdir -p "$HOME/.bash_completion.d"
-		rustup completions bash > "$HOME/.bash_completion.d/rustup"
-	fi
-
-	# install nvm & node
-	! cmd_exists nvm && \
-		execute "PROFILE=/dev/null bash -c 'curl -fSL -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash'" "Installing nvm ..."
+	# install proto
+	execute "curl -fsSL https://moonrepo.dev/install/proto.sh | bash --yes --no-profile"
 
 	# install shellcheck
 	execute "sudo apt-get install -y shellcheck" "Installing shellcheck ..."
