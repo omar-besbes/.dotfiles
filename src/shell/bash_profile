@@ -9,10 +9,3 @@ fi
 [ -f "~/.ssh/github" ] && ssh-add ~/.ssh/github
 [ -f "~/.ssh/gitlab_auth" ] && ssh-add ~/.ssh/gitlab_auth
 [ -f "~/.ssh/gitlab" ] && ssh-add ~/.ssh/gitlab
-
-# go
-export GOBIN="$HOME/go/bin"
-export PATH="$GOBIN:$PATH"
-# go
-export GOBIN="$HOME/go/bin"
-export PATH="$GOBIN:$PATH"
