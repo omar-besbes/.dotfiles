@@ -47,7 +47,7 @@ install_dependencies() {
 	execute "sudo apt-get install -y curl" "Installing curl ..."
 
 	# install proto
-	execute "cmd_exists proto || (curl -fsSL https://moonrepo.dev/install/proto.sh | bash --yes --no-profile)" "Installing proto ..."
+	execute "cmd_exists proto || (curl -fsSL https://moonrepo.dev/install/proto.sh | bash -s -- --yes --no-modify-profile --no-modify-path)" "Installing proto ..."
 	execute	"proto completions > ~/.bash_completion.d/proto.sh" "Proto completions ..."
 
 	# install runtimes
