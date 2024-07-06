@@ -26,8 +26,6 @@ install_dependencies() {
 	local -r ALACRITTY_DIR="alacritty"
 	git clone $ALACRITTY_GITHUB_ORIGIN $ALACRITTY_DIR
 	cd $ALACRITTY_DIR
-	rustup override set stable
-	rustup update stable
 	sudo apt-get install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 	cargo build --release
 

@@ -11,7 +11,7 @@
 # This section was written in this way to make sure that it can be run
 # remotely or locally with the same behaviour.
 #
-# Please do not change anything here unless you know very well well
+# Please do not change anything here unless you know very well
 # what you are doing.
 #
 # =======
@@ -47,7 +47,14 @@ install_dependencies() {
 	execute "sudo apt-get install -y curl" "Installing curl ..."
 
 	# install proto
-	execute "curl -fsSL https://moonrepo.dev/install/proto.sh | bash --yes --no-profile"
+	execute "cmd_exists proto || (curl -fsSL https://moonrepo.dev/install/proto.sh | bash --yes --no-profile)" "Installing proto ..."
+	execute	"proto completions > ~/.bash_completion.d/proto.sh" "Proto completions ..."
+
+	# install runtimes
+	execute "proto install node lts" 		"Installing node ..."
+	execute "proto install rust stable"		"Installing rust ..."
+	execute "proto install go latest"		"Installing go ..."
+	execute "proto install python latest"	"Installing python ..."
 
 	# install shellcheck
 	execute "sudo apt-get install -y shellcheck" "Installing shellcheck ..."
