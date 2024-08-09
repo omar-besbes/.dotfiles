@@ -43,18 +43,11 @@ install_dependencies() {
 	# install git
 	execute "sudo apt-get install -y git" "Installing git ..."
 
-	# install curl
-	execute "sudo apt-get install -y curl" "Installing curl ..."
+	# isntall necessary compression and extraction tools
+	execute "sudo apt-get install -y bzip2 gzip zip xz-utils tar" "Installing extraction/compression tools ..."
 
-	# install proto
-	execute "cmd_exists proto || (curl -fsSL https://moonrepo.dev/install/proto.sh | bash -s -- --yes --no-modify-profile --no-modify-path)" "Installing proto ..."
-	execute	"proto completions > ~/.bash_completion.d/proto.sh" "Proto completions ..."
-
-	# install runtimes
-	execute "proto install node lts" 		"Installing node ..."
-	execute "proto install rust stable"		"Installing rust ..."
-	execute "proto install go latest"		"Installing go ..."
-	execute "proto install python latest"	"Installing python ..."
+	# install gcc, g++ & some other tools
+	execute "sudo apt-get install -y ca-certificates fontconfig build-essential software-properties-common" "Installing essential tools ..."
 
 	# install shellcheck
 	execute "sudo apt-get install -y shellcheck" "Installing shellcheck ..."
@@ -62,11 +55,8 @@ install_dependencies() {
 	# install xclip
 	execute "sudo apt-get install -y xclip" "Installing xclip ..."
 
-	# isntall necessary compression and extraction tools
-	execute "sudo apt-get install -y bzip2 gzip zip xz-utils tar" "Installing extraction/compression tools ..."
-
-	# install gcc, g++ & some other tools
-	execute "sudo apt-get install -y ca-certificates fontconfig build-essential software-properties-common" "Installing essential tools ..."
+	# install proto
+	execute "source proto/$TOPIC_SETUP_FILE && main" "Setting up proto ..."
 
 }
 

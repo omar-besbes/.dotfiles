@@ -1,0 +1,18 @@
+go = "latest"
+gum = "0.13.0"
+moon = "latest"
+node = "lts"
+npm = "latest"
+pnpm = "latest"
+python = "latest"
+rust = "stable"
+terraform = "latest"
+kubectl = "latest"
+helm = "latest"
+
+[plugins]
+gum = "https://raw.githubusercontent.com/Phault/proto-toml-plugins/main/gum/plugin.toml"
+terraform = "https://raw.githubusercontent.com/theomessin/proto-toml-plugins/master/terraform.toml"
+moon = "https://raw.githubusercontent.com/moonrepo/moon/master/proto-plugin.toml"
+kubectl = "https://raw.githubusercontent.com/stk0vrfl0w/proto-toml-plugins/main/plugins/kubectl.toml"
+helm = "https://raw.githubusercontent.com/stk0vrfl0w/proto-toml-plugins/main/plugins/helm.toml"
