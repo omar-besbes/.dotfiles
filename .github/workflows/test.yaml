@@ -1,0 +1,30 @@
+name: Test dotfiles
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [local, remote]
+
+    env:
+      COMPOSE_FILE: "test/docker-compose.yaml"
+      RAW_CONTENT_URL: "https://raw.githubusercontent.com/${{ github.repository }}/${{ github.head_ref || github.ref_name }}"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build docker image of test environment
+        run: docker compose build ${{ matrix.image }}
+
+      - name: Run tests inside the docker container
+        run: docker compose up --abort-on-container-failure ${{ matrix.image }}
