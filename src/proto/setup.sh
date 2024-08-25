@@ -28,7 +28,7 @@ install_dependencies() {
     proto completions > ~/.bash_completion.d/proto.sh
 
     # install packages
-    proto install --include-global
+    proto install --config-mode global
 
 }
 
