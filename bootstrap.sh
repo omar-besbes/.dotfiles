@@ -56,7 +56,7 @@ install_dependencies() {
 	execute "sudo apt-get install -y xclip" "Installing xclip ..."
 
 	# install proto
-	execute "source proto/$TOPIC_SETUP_FILE && main" "Setting up proto ..."
+	execute "source src/proto/$TOPIC_SETUP_FILE && main" "Setting up proto ..."
 
 }
 
