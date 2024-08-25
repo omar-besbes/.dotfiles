@@ -7,16 +7,10 @@ services:
       dockerfile: test/Dockerfile
     command: >
       /bin/bash -c "
-      cp -r $$DOTFILES_MOUNT_POINT $$HOME
-      && chown -R $(whoami):$(whoami) $$HOME$$DOTFILES_MOUNT_POINT 
-      && $$HOME$$DOTFILES_MOUNT_POINT/bootstrap.sh 
+      $$HOME/.dotfiles/bootstrap.sh
       && . $$HOME/.bashrc
-      && $$HOME$$DOTFILES_MOUNT_POINT/test/test.sh
+      && $$HOME/.dotfiles/test/test.sh
       "
-    environment:
-      DOTFILES_MOUNT_POINT: ${DOTFILES_MOUNT_POINT:-/.dotfiles}
-    volumes:
-      - ..:${DOTFILES_MOUNT_POINT:-/.dotfiles}
     cap_add:
       - SYS_ADMIN
     devices:
