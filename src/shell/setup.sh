@@ -20,10 +20,10 @@ source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
 create_symlinks() {
 
 	local -a FILES_TO_SYMLINK=(
-		"bash_logout"
-		"bash_profile"
-		"bashrc"
-		"inputrc"
+		"$TOPIC_DIR/bash_logout"
+		"$TOPIC_DIR/bash_profile"
+		"$TOPIC_DIR/bashrc"
+		"$TOPIC_DIR/inputrc"
 	)
 	local -r TARGET_PATHS=(
 		"$HOME/.bash_logout"

@@ -70,7 +70,7 @@ install_dependencies() {
 
 create_symlinks() {
 
-	local -a FILES_TO_SYMLINK=("alacritty.yml")
+	local -a FILES_TO_SYMLINK=("$TOPIC_DIR/alacritty.yml")
 	local -a TARGET_PATHS=("$HOME/.config/alacritty/alacritty.yml")
 	symlink_files FILES_TO_SYMLINK[@] TARGET_PATHS[@]
 
