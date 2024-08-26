@@ -24,14 +24,14 @@ create_symlinks() {
 		"bash_profile"
 		"bashrc"
 		"inputrc"
-	)	
-	local -r TARGET_DIR=$HOME
-
-	get_target_file() {
-		echo ".$(printf "%s" "$1" | sed "s/.*\/\(.*\)/\1/g")"
-	}
-
-	symlink_files FILES_TO_SYMLINK[@] $TOPIC_DIR $TARGET_DIR get_target_file 
+	)
+	local -r TARGET_PATHS=(
+		"$HOME/.bash_logout"
+		"$HOME/.bash_profile"
+		"$HOME/.bashrc"
+		"$HOME/.inputrc"
+	)
+	symlink_files FILES_TO_SYMLINK[@] TARGET_PATHS[@]
 
 }
 
@@ -49,4 +49,3 @@ main() {
 	setup_topics $TOPIC_DIR
 
 }
-

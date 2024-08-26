@@ -10,6 +10,7 @@ declare TOPIC_NAME="proto"
 declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
 
 source "$ROOT_DIR/scripts/utils.sh"
+source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
 
 # ----------------------------------------------------------------------
 # | Dependencies                                                       |
@@ -39,10 +40,13 @@ install_dependencies() {
 create_symlinks() {
 
     export PROTO_HOME="$HOME/.proto"
-	export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH"
+    export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH"
 
-	mkdir -p $PROTO_HOME
-	ln -fs "$TOPIC_DIR/.prototools" "$PROTO_HOME/.prototools"
+    mkdir -p $PROTO_HOME
+
+    local -a FILES_TO_SYMLINK=("$TOPIC_DIR/.prototools")
+    local -a TARGET_PATHS=("$PROTO_HOME/.prototools")
+    symlink_files FILES_TO_SYMLINK[@] TARGET_PATHS[@]
 
 }
 
@@ -52,11 +56,11 @@ create_symlinks() {
 
 main() {
 
-	ask_for_sudo
+    ask_for_sudo
 
     create_symlinks
 
-	install_dependencies
+    install_dependencies
 
 }
 
