@@ -40,7 +40,7 @@ install_dependencies() {
 create_symlinks() {
 
     export PROTO_HOME="$HOME/.proto"
-    export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH"
+    export PATH="$PATH:$PROTO_HOME/shims:$PROTO_HOME/bin"
 
     mkdir -p $PROTO_HOME
 
