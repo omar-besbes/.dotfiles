@@ -1,0 +1,18 @@
+go = "1.22"
+gum = "0.13"
+moon = "1.27"
+node = "22"
+npm = "10"
+pnpm = "9"
+python = "3.11"
+rust = "1.80"
+terraform = "1.9"
+kubectl = "1.30"
+helm = "3.15"
+
+[plugins]
+gum = "https://raw.githubusercontent.com/Phault/proto-toml-plugins/main/gum/plugin.toml"
+terraform = "https://raw.githubusercontent.com/theomessin/proto-toml-plugins/master/terraform.toml"
+moon = "https://raw.githubusercontent.com/moonrepo/moon/master/proto-plugin.toml"
+kubectl = "https://raw.githubusercontent.com/stk0vrfl0w/proto-toml-plugins/main/plugins/kubectl.toml"
+helm = "https://raw.githubusercontent.com/stk0vrfl0w/proto-toml-plugins/main/plugins/helm.toml"

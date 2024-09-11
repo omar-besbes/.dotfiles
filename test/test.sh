@@ -21,6 +21,7 @@ declare -a COMMANDS_TO_VERIFY=(
 	"git"
 	"docker"
 	"kubectl"
+	"proto"
 )
 
 check_commands_existence() {

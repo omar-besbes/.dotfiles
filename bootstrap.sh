@@ -8,10 +8,10 @@
 # WARNING
 # =======
 #
-# This section was written in this way to make sure that it can be run 
+# This section was written in this way to make sure that it can be run
 # remotely or locally with the same behaviour.
 #
-# Please do not change anything here unless you know very well well
+# Please do not change anything here unless you know very well
 # what you are doing.
 #
 # =======
@@ -43,20 +43,11 @@ install_dependencies() {
 	# install git
 	execute "sudo apt-get install -y git" "Installing git ..."
 
-	# install curl
-	execute "sudo apt-get install -y curl" "Installing curl ..."
+	# isntall necessary compression and extraction tools
+	execute "sudo apt-get install -y bzip2 gzip zip xz-utils tar" "Installing extraction/compression tools ..."
 
-	# install rustup & cargo
-	if ! cmd_exists rustup; then
-		execute "curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs | sh -s -- --no-modify-path -y" "Installing rustup ..."
-		source "$HOME/.cargo/env"
-		mkdir -p "$HOME/.bash_completion.d"
-		rustup completions bash > "$HOME/.bash_completion.d/rustup"
-	fi
-
-	# install nvm & node
-	! cmd_exists nvm && \
-		execute "PROFILE=/dev/null bash -c 'curl -fSL -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash'" "Installing nvm ..."
+	# install gcc, g++ & some other tools
+	execute "sudo apt-get install -y ca-certificates fontconfig build-essential software-properties-common" "Installing essential tools ..."
 
 	# install shellcheck
 	execute "sudo apt-get install -y shellcheck" "Installing shellcheck ..."
@@ -64,11 +55,8 @@ install_dependencies() {
 	# install xclip
 	execute "sudo apt-get install -y xclip" "Installing xclip ..."
 
-	# isntall necessary compression and extraction tools
-	execute "sudo apt-get install -y bzip2 gzip zip xz-utils tar" "Installing extraction/compression tools ..."
-
-	# install gcc, g++ & some other tools
-	execute "sudo apt-get install -y ca-certificates fontconfig build-essential software-properties-common" "Installing essential tools ..."
+	# install proto
+	execute "source src/proto/$TOPIC_SETUP_FILE && main" "Setting up proto ..."
 
 }
 
