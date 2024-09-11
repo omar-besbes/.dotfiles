@@ -5,32 +5,29 @@
 # ----------------------------------------------------------------------
 
 declare DIR="$(dirname "${BASH_SOURCE[0]}")"
-declare ROOT_DIR="$(realpath "$DIR/../../..")"
-declare TOPIC_NAME="shell"
+declare ROOT_DIR="$(realpath "$DIR/../..")"
+declare TOPIC_NAME="git"
 declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
 
 source "$ROOT_DIR/scripts/utils.sh"
-source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
 source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
 
 # ----------------------------------------------------------------------
-# | Dependencies                                                       |
+# | Symlinks                                                           |
 # ----------------------------------------------------------------------
 
-install_depnedencies() {
+create_symlinks() {
 
-	# only begin installation if one of the dependencies are not met
-	cmd_exists figlet && return
+	local -a FILES_TO_SYMLINK=(
+		"gitconfig"
+	)	
+	local -r TARGET_DIR=$HOME
 
-	# insatll figlet
-	sudo apt-get install -y figlet
+	get_target_file() {
+		echo ".$(printf "%s" "$1" | sed "s/.*\/\(.*\)/\1/g")"
+	}
 
-	# install figlet fonts
-	local -r FIGLET_FONTS_GITHUB_ORIGIN="https://github.com/xero/figlet-fonts.git"
-	local -r FIGLET_FONTS_DIR="figlet-fonts"
-	git clone $FIGLET_FONTS_GITHUB_ORIGIN $FIGLET_FONTS_DIR
-	sudo cp "$FIGLET_FONTS_DIR"/*.flf "/usr/share/figlet"
-	rm -rf $FIGLET_FONTS_DIR
+	symlink_files FILES_TO_SYMLINK[@] $TOPIC_DIR $TARGET_DIR get_target_file 
 
 }
 
@@ -42,8 +39,7 @@ main() {
 
 	ask_for_sudo
 
-	install_depnedencies
+	create_symlinks
 
 }
 
-execute "main" "Setting up shell welcome screen ..."

@@ -1,18 +1,43 @@
 [user]
 	name = Omar Besbes
+	email = 86571415+omar-besbes@users.noreply.github.com
+	signingKey = ~/.ssh/github_sign.pub
 [init]
 	defaultBranch = development
 [commit]
 	gpgsign = true
+[gpg]
+	format = ssh
 [gpg "ssh"]
-	allowedsingersfile = /home/omar/.ssh/allowed_signers
+	allowedsingersfile = ~/.ssh/allowed_signers
 [core]
-	editor = /usr/local/bin/nvim
 	autocrlf = input
 	ignorecase = false
 [push]
 	default = current
+[pretty]
+	slog = format:%C(yellow)%h %Cred(%ad) %Cblue[%an] %Cgreen%d %Creset%s
 [alias]
-	unstage = reset HEAD --
+	s = status
+	st = status
+	ck = checkout
+	new = checkout -b
+	rv = remote -v
+	cm = commit -m
+	unstage = restore --staged
 	uncommit = reset --soft HEAD~
+	root = rev-parse --show-toplevel
+	last  = log -1
+	amend = commit --amend
+	filelog = log -u
+	fl = log -u
+
+	aliases = "!git config -l | grep alias | cut -f 2- -d '.'"
+	incoming = log HEAD..@{upstream}
+	outgoing = log @{upstream}..HEAD
+	structure = log --oneline --simplify-by-decoration --graph --all
+	l = log --pretty=slog --date=relative --graph
+	ll = log --pretty=slog --numstat --date=short
+	cfg = "!git --no-pager config -l"
+	br = branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:red)(%(committerdate:relative)) %(color:blue)[%(authorname)]' --sort=-committerdate
 
