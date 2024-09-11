@@ -33,12 +33,9 @@ install_dependencies() {
 
 create_symlinks() {
 
-	local -a FILES_TO_SYMLINK=(
-		"starship.toml"
-	)	
-	local -r TARGET_DIR="$HOME/.config"
-
-	symlink_files FILES_TO_SYMLINK[@] $TOPIC_DIR $TARGET_DIR
+	local -a FILES_TO_SYMLINK=("$TOPIC_DIR/starship.toml")
+	local -a TARGET_PATHS=("$HOME/.config/starship.toml")
+	symlink_files FILES_TO_SYMLINK[@] TARGET_PATHS[@]
 
 }
 
@@ -57,4 +54,3 @@ main() {
 }
 
 execute "main" "Setting up shell prompt ..."
-

@@ -26,8 +26,6 @@ install_dependencies() {
 	local -r ALACRITTY_DIR="alacritty"
 	git clone $ALACRITTY_GITHUB_ORIGIN $ALACRITTY_DIR
 	cd $ALACRITTY_DIR
-	rustup override set stable
-	rustup update stable
 	sudo apt-get install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 	cargo build --release
 
@@ -72,12 +70,9 @@ install_dependencies() {
 
 create_symlinks() {
 
-	local -a FILES_TO_SYMLINK=(
-		"alacritty.yml"
-	)
-	local -r TARGET_DIR="$HOME/.config/alacritty"
-
-	symlink_files FILES_TO_SYMLINK[@] $TOPIC_DIR $TARGET_DIR
+	local -a FILES_TO_SYMLINK=("$TOPIC_DIR/alacritty.yml")
+	local -a TARGET_PATHS=("$HOME/.config/alacritty/alacritty.yml")
+	symlink_files FILES_TO_SYMLINK[@] TARGET_PATHS[@]
 
 }
 

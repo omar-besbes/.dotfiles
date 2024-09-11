@@ -20,18 +20,18 @@ source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
 create_symlinks() {
 
 	local -a FILES_TO_SYMLINK=(
-		"bash_logout"
-		"bash_profile"
-		"bashrc"
-		"inputrc"
-	)	
-	local -r TARGET_DIR=$HOME
-
-	get_target_file() {
-		echo ".$(printf "%s" "$1" | sed "s/.*\/\(.*\)/\1/g")"
-	}
-
-	symlink_files FILES_TO_SYMLINK[@] $TOPIC_DIR $TARGET_DIR get_target_file 
+		"$TOPIC_DIR/bash_logout"
+		"$TOPIC_DIR/bash_profile"
+		"$TOPIC_DIR/bashrc"
+		"$TOPIC_DIR/inputrc"
+	)
+	local -r TARGET_PATHS=(
+		"$HOME/.bash_logout"
+		"$HOME/.bash_profile"
+		"$HOME/.bashrc"
+		"$HOME/.inputrc"
+	)
+	symlink_files FILES_TO_SYMLINK[@] TARGET_PATHS[@]
 
 }
 
@@ -49,4 +49,3 @@ main() {
 	setup_topics $TOPIC_DIR
 
 }
-
