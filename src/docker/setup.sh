@@ -44,6 +44,8 @@ install_dependencies() {
 	newgrp docker
 
 	# Configure docker to start on boot
+	sudo systemctl enable docker.service
+	sudo systemctl enable containerd.service
 
 }
 
