@@ -17,7 +17,6 @@ declare -a COMMANDS_TO_VERIFY=(
 	"nvim"
 	"starship"
 	"vivid"
-	"figlet"
 	"alacritty"
 	"git"
 	"docker"
