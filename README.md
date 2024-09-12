@@ -17,13 +17,18 @@ It mainly targets debain-based distros. It is designed to be extensible, simple 
 - Colored ls with vivid
 - Fast and colored prompt with starship
 - Updated git global defaults
+- Chromium the open-source browser with the best of Chrome minus the proprietary bits
 - Well-organized and easy to customize
 - The installation and setup is
-  [tested on a real Ubuntu machine](https://github.com/omar-besbes/.dotfiles/actions)
-  using [a GitHub Action](./.github/workflows/test.yml)
+  [tested on a debian container](https://github.com/omar-besbes/.dotfiles/actions)
 
 
 ## Setup
+
+
+> [!WARNING]
+> This setup was only tested on `debian`. <br>
+> The installation of `chromium` is expected to fail on `ubuntu`.
 
 
 Only `bash`, `apt`, `sudo` and `curl` are required. The script will install everything else by itself.
@@ -60,21 +65,42 @@ A topic is basically a folder with configuration for a piece of software that mu
 Each topic is responsible for setting up itself and should not depend on other topics.
 All other folders inside `src` without `setup.sh` are ignored and are not considered topics.
 
+### Browser (src/browser/)
+* setup.sh - Calls chromium's `setup.sh`.
+* brave/
+  * setup.sh - Installs [brave](https://brave.com).
+* chromium/
+  * setup.sh - Installs [chromium](https://www.chromium.org).
+* opera/
+  * setup.sh - Installs [opera](https://opera.com).
+
+### Docker (src/docker/)
+* setup.sh - Installs [Docker](https://docker.com).
+
+### Fonts (src/fonts/)
+* setup.sh - Installs the following [Nerd Fonts](https://www.nerdfonts.com): `Hack`, `JetBrainsMono`, `RobotoMono`, `NerdFontsSymbolsOnly`.
+
 ### Git (src/git/)
-* setup.sh - Symlinks all git files to `~`
-* gitconfig - Sets several global Git variables (.gitconfig)
+* setup.sh - Symlinks all git files to `~`.
+* gitconfig - Sets several global Git variables (.gitconfig).
+
+### Helm (src/helm/)
+* setup.sh - Installs [helm](https://helm.sh).
+
+### Kubectl (src/kubectl/)
+* setup.sh - Installs [kubectl](https://kubernetes.io).
 
 ### Neovim (src/neovim/)
-* setup.sh - Symlinks `~/.config/nvim` to `src/neovim/nvim`
+* setup.sh - Symlinks `~/.config/nvim` to `src/neovim/nvim`.
 * nvim/ - My neovim config as a git submodule. Checkout the
   [repository](https://github.com/omar-besbes/nvim-config).
 
 ### Shell (src/shell/)
 * setup.sh - Symlinks all fish files to their corresponding location in `~` and calls all sub-`setup.sh`.
-* bash_logout - Cleans up on shell logout (.bash_logout)
-* bash_profile - Contains bash configuration on shell login (.bash_profile)
-* bashrc - Contains bash configuration on shell startup (.bashrc) 
-* inputrc - Contains GNU Readline configuration of command-line editing feature (.inputrc)
+* bash_logout - Cleans up on shell logout (.bash_logout).
+* bash_profile - Contains bash configuration on shell login (.bash_profile).
+* bashrc - Contains bash configuration on shell startup (.bashrc).
+* inputrc - Contains GNU Readline configuration of command-line editing feature (.inputrc).
 * core/
   * init.sh - Sources all `.sh` files in the directory.
   * aliases.sh - Contains common aliases that I use daily.
@@ -90,31 +116,28 @@ All other folders inside `src` without `setup.sh` are ignored and are not consid
 * ls-colors/
   * init.sh - Sets the `LS_COLORS` environment variable on shell startup using vivid.
   * setup.sh - Installs [vivid](https://github.com/sharkdp/vivid).
-* welcome-screen/
-  * init.sh - Displays a nice message on shell startup.
-  * setup.sh - Installs [figlet](https://github.com/cmatsuoka/figlet) and [figlet fonts](https://github.com/xero/figlet-fonts).
 
 ### Terminal emulator (src/terminal-emulator/)
-* setup.sh - Calls alacritty's `setup.sh`
+* setup.sh - Calls alacritty's `setup.sh`.
 * alacritty/
-  * setup.sh - Installs [alacritty](https://alacritty.org) and symlinks `~/.config/alacritty/alacritty.yml` to `alacritty.yml`.  
+  * setup.sh - Installs [alacritty](https://alacritty.org) and symlinks `~/.config/alacritty/alacritty.yml` to `alacritty.yml`.
   * alacritty.yml - Contains alacritty config.
 
 ### Helper Scripts (scripts/)
 The `/scripts` directory contains executable shell scripts (including the dotfiles script) and symlinks to executable shell scripts.
 This directory is added to the path.
-* utils.sh - Contains helper functions for printing progress messages
-* load_topics.sh - Contains helper function for calling all `init.sh` scripts in a directory 
-* setup_topics.sh - Contains helper function for calling all `setup.sh` scripts in a directory
-* symlink_files.sh - Contains helper function for symlinking files
-* sync_files.sh - Contains helper function for synchronizing current dotfiles repository with remote
+* utils.sh - Contains helper functions for printing progress messages.
+* load_topics.sh - Contains helper function for calling all `init.sh` scripts in a directory.
+* setup_topics.sh - Contains helper function for calling all `setup.sh` scripts in a directory.
+* symlink_files.sh - Contains helper function for symlinking files.
+* sync_files.sh - Contains helper function for synchronizing current dotfiles repository with remote.
 
 ### Tests (test/)
 The `/test` directory contains tests.
-* test.sh - Contains tests to be run inside the container 
+* test.sh - Contains tests to be run inside the container.
 * docker-compose.yml - Contains a description of the test environments. 
-There are 2 test environments: one that clones the repository and another that runs the install command in `README.md`
-* Dockerfile - Contains instructions to build a docker image of the test environment
+There are 2 test environments: one that clones the repository and another that runs the install command in `README.md`.
+* Dockerfile - Contains instructions to build a docker image of the test environment.
 
 ### Backups (backups/)
 The `/backups` directory gets created when necessary. Any files in `~/` that would have been overwritten during installation get backed up there.
@@ -131,6 +154,8 @@ The `/backups` directory gets created when necessary. Any files in `~/` that wou
 - [x] Automated tests
 - [x] Remote install
 - [x] Fonts
+- [x] Web browser
+- [ ] Automatic bookmarks import in browser
 - [ ] Move all config files in `/backups` before setup (only a small part is moved)
 - [ ] Uninstall script
 - [ ] Github & Gitlab SSH keys auto generation
