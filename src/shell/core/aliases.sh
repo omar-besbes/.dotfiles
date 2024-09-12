@@ -13,3 +13,4 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
+alias clipboard='xclip -selection clipboard'

@@ -17,11 +17,11 @@ declare -a COMMANDS_TO_VERIFY=(
 	"nvim"
 	"starship"
 	"vivid"
-	"figlet"
 	"alacritty"
 	"git"
 	"docker"
 	"kubectl"
+	"chromium"
 )
 
 check_commands_existence() {

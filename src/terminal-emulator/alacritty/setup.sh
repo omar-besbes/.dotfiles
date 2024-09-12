@@ -26,9 +26,7 @@ install_dependencies() {
 	local -r ALACRITTY_DIR="alacritty"
 	git clone $ALACRITTY_GITHUB_ORIGIN $ALACRITTY_DIR
 	cd $ALACRITTY_DIR
-	rustup override set stable
-	rustup update stable
-	install_packages cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
+	sudo apt-get install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 	cargo build --release
 
 	# verify if alacirtty is well installed
@@ -43,13 +41,13 @@ install_dependencies() {
 	sudo update-desktop-database
 
 	# man pages
-	install_packages gzip scdoc
+	sudo apt-get install -y gzip scdoc
 	sudo mkdir -p /usr/local/share/man/man1
 	sudo mkdir -p /usr/local/share/man/man5
-	scdoc < extra/man/alacritty.1.scd | gzip -c | sudo tee /usr/local/share/man/man1/alacritty.1.gz > /dev/null
-	scdoc < extra/man/alacritty-msg.1.scd | gzip -c | sudo tee /usr/local/share/man/man1/alacritty-msg.1.gz > /dev/null
-	scdoc < extra/man/alacritty.5.scd | gzip -c | sudo tee /usr/local/share/man/man5/alacritty.5.gz > /dev/null
-	scdoc < extra/man/alacritty-bindings.5.scd | gzip -c | sudo tee /usr/local/share/man/man5/alacritty-bindings.5.gz > /dev/null
+	scdoc <extra/man/alacritty.1.scd | gzip -c | sudo tee /usr/local/share/man/man1/alacritty.1.gz >/dev/null
+	scdoc <extra/man/alacritty-msg.1.scd | gzip -c | sudo tee /usr/local/share/man/man1/alacritty-msg.1.gz >/dev/null
+	scdoc <extra/man/alacritty.5.scd | gzip -c | sudo tee /usr/local/share/man/man5/alacritty.5.gz >/dev/null
+	scdoc <extra/man/alacritty-bindings.5.scd | gzip -c | sudo tee /usr/local/share/man/man5/alacritty-bindings.5.gz >/dev/null
 
 	# completions
 	cp -f extra/completions/alacritty.bash "$HOME/.bash_completion.d/alacritty"
@@ -72,12 +70,9 @@ install_dependencies() {
 
 create_symlinks() {
 
-	local -a FILES_TO_SYMLINK=(
-		"alacritty.yml"
-	)	
-	local -r TARGET_DIR="$HOME/.config/alacritty"
-
-	symlink_files FILES_TO_SYMLINK[@] $TOPIC_DIR $TARGET_DIR 
+	local -a FILES_TO_SYMLINK=("$TOPIC_DIR/alacritty.yml")
+	local -a TARGET_PATHS=("$HOME/.config/alacritty/alacritty.yml")
+	symlink_files FILES_TO_SYMLINK[@] TARGET_PATHS[@]
 
 }
 
@@ -86,7 +81,7 @@ create_symlinks() {
 # ----------------------------------------------------------------------
 
 main() {
-	
+
 	ask_for_sudo
 
 	install_dependencies
@@ -96,4 +91,3 @@ main() {
 }
 
 execute "main" "Setting up alacritty ..."
-

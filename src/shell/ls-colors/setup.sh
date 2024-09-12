@@ -20,9 +20,9 @@ install_dependencies() {
 
 	local -r VIVID_GITHUB_REPO="https://github.com/sharkdp/vivid"
 	local -r VIVID_GITHUB_LATEST_RELEASE_URL="https://api.github.com/repos/sharkdp/vivid/releases/latest"
-	
+
 	# make sure curl & jq are installed
-	install_packages curl jq
+	sudo apt-get install -y curl jq
 
 	# Get the latest release information
 	local -r RELEASE_INFO=$(curl -fsSL $VIVID_GITHUB_LATEST_RELEASE_URL)
@@ -34,7 +34,7 @@ install_dependencies() {
 	# Download the asset using curl and install it
 	if [ -n "$ASSET_URL" ]; then
 		curl -fSLJO "$ASSET_URL"
-		install_packages "./$VIVID_BIN"
+		sudo apt-get install -y "./$VIVID_BIN"
 		rm "$VIVID_BIN"
 	else
 		print_error "No matching release asset found for $ARCH and $ASSET_EXTENSION. Please, download vivid manually from here: $VIVID_GITHUB_REPO."
@@ -56,4 +56,3 @@ main() {
 }
 
 execute "main" "Setting up shell colors ..."
-

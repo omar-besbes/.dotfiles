@@ -6,34 +6,21 @@
 
 declare DIR="$(dirname "${BASH_SOURCE[0]}")"
 declare ROOT_DIR="$(realpath "$DIR/../..")"
-declare TOPIC_NAME="kubectl"
+declare TOPIC_NAME="git"
 declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
 
 source "$ROOT_DIR/scripts/utils.sh"
+source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
 
 # ----------------------------------------------------------------------
-# | Install new version                                                |
+# | Symlinks                                                           |
 # ----------------------------------------------------------------------
 
-install_dependencies() {
-	
-	cmd_exists kubectl && return;
+create_symlinks() {
 
-	# Add kubectl's official GPG key:
-	sudo apt-get update
-	sudo install -m 0755 -d /etc/apt/keyrings
-	curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | \
-		sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-
-	# Add the repository to Apt sources:
-	echo \
-		"deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
-		https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /" | \
-		sudo tee /etc/apt/sources.list.d/kubernetes.list
-	sudo apt-get update
-
-	# Install packages
-	sudo apt-get install -y kubectl
+	local -a FILES_TO_SYMLINK=("$TOPIC_DIR/gitconfig")	
+	local -r TARGET_PATHS=("$HOME/.gitconfig")
+	symlink_files FILES_TO_SYMLINK[@] TARGET_PATHS[@] 
 
 }
 
@@ -42,10 +29,10 @@ install_dependencies() {
 # ----------------------------------------------------------------------
 
 main() {
-	
+
 	ask_for_sudo
 
-	install_dependencies
+	create_symlinks
 
 }
 

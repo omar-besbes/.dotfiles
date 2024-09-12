@@ -1,0 +1,8 @@
+/.github
+/backup
+/bin
+.dockerignore
+.env
+/src/neovim/nvim
+/test
+!/test/test.sh

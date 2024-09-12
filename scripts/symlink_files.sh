@@ -1,25 +1,31 @@
 #!/bin/bash
 
 symlink_files() {
-	
-	local -a FILES_TO_SYMLINK=("${!1}")
-	local -r SOURCE_DIR="$2"
-	local -r TARGET_DIR="$3"
-	local -r GET_TARGET_FILE="$4"
 
-	for i in "${FILES_TO_SYMLINK[@]}"; do
+	local -a SOURCE_FILES=("${!1}")
+	local -a TARGET_FILES=("${!2}")
 
-		local SOURCE_FILE="$SOURCE_DIR/$i"
-		local TARGET_FILE="$TARGET_DIR/$($GET_TARGET_FILE $i 2>/dev/null || echo $i)"
+	local MIN_LENGTH=$((${#SOURCE_FILES[@]} < ${#TARGET_FILES[@]} ? ${#SOURCE_FILES[@]} : ${#TARGET_FILES[@]}))
 
-      if [ ! -e "$TARGET_FILE" ]; then
+	for ((i = 0; i < MIN_LENGTH; i++)); do
 
-			ln -fs $SOURCE_FILE $TARGET_FILE
-			print_success "$TARGET_FILE → $SOURCE_FILE"
+		local SOURCE_FILE="${SOURCE_FILES[$i]}"
+		local TARGET_FILE="${TARGET_FILES[$i]}"
 
-      fi
-		
-    done
+		if [ -e "$TARGET_FILE" ]; then
+
+			# Backup existing file
+			local BACKUP_FILE="$DOTFILES_BACKUP_DIR/${TARGET_FILE#$HOME/}"
+			mkdir -p $(dirname "$BACKUP_FILE")
+			mv "$TARGET_FILE" "$BACKUP_FILE"
+			print_success "Backed up $TARGET_FILE to $BACKUP_FILE"
+
+		fi
+
+		# Create symlink
+		ln -fs $SOURCE_FILE $TARGET_FILE
+		print_success "$TARGET_FILE → $SOURCE_FILE"
+
+	done
 
 }
-

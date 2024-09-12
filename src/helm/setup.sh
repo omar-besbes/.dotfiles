@@ -6,7 +6,7 @@
 
 declare DIR="$(dirname "${BASH_SOURCE[0]}")"
 declare ROOT_DIR="$(realpath "$DIR/../..")"
-declare TOPIC_NAME="kubectl"
+declare TOPIC_NAME="helm"
 declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
 
 source "$ROOT_DIR/scripts/utils.sh"
@@ -16,24 +16,23 @@ source "$ROOT_DIR/scripts/utils.sh"
 # ----------------------------------------------------------------------
 
 install_dependencies() {
-	
-	cmd_exists kubectl && return;
 
-	# Add kubectl's official GPG key:
-	sudo apt-get update
-	sudo install -m 0755 -d /etc/apt/keyrings
-	curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | \
-		sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    cmd_exists helm && return
 
-	# Add the repository to Apt sources:
-	echo \
-		"deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
-		https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /" | \
-		sudo tee /etc/apt/sources.list.d/kubernetes.list
-	sudo apt-get update
+    # Add kubectl's official GPG key:
+    curl https://baltocdn.com/helm/signing.asc |
+        sudo gpg --dearmor -o /usr/share/keyrings/helm.gpg
+    sudo apt-get install apt-transport-https --yes
 
-	# Install packages
-	sudo apt-get install -y kubectl
+    # Add the repository to Apt sources:
+    echo \
+        "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] \
+        https://baltocdn.com/helm/stable/debian/ all main" |
+        sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+    sudo apt-get update
+
+    # Install packages
+    sudo apt-get install -y helm
 
 }
 
@@ -42,10 +41,9 @@ install_dependencies() {
 # ----------------------------------------------------------------------
 
 main() {
-	
-	ask_for_sudo
 
-	install_dependencies
+    ask_for_sudo
+
+    install_dependencies
 
 }
-
