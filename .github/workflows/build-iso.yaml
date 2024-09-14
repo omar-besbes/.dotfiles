@@ -8,19 +8,37 @@ on:
   workflow_dispatch:
     inputs:
       iso_image_url:
-        description: 'URL of the Debian netinstall ISO'
+        description: 'URL of the Debian ISO'
         type: string
         required: false
+      arch:
+        description: 'Architecture of the ISO image to generate'
+        type: choice
+        options: [amd64]
+        required: true
+        default: amd64
+      type:
+        description: 'Type of the installation image'
+        type: choice
+        options: [netinst, dvd]
+        required: true
+        default: dvd
+      branch:
+        description: 'The branch of debian to use'
+        type: choice
+        options: [stable, testing, sid]
+        required: true
+        default: stable
 
 jobs:
-  desktop-debian-stable:
+  debian-desktop:
     runs-on: ubuntu-latest
     environment: build-iso-image
 
     env:
       ISO_IMAGE_URL: ${{ github.event.inputs.iso_image_url || vars.ISO_IMAGE_URL }}
-      REMASTERED_ISO_IMAGE: preseed-debian-netinst-amd64.iso
-      ORIGINAL_ISO_IMAGE: debian-netinst.iso
+      REMASTERED_ISO_IMAGE: preseed-debian-${{ github.event.inputs.branch }}-${{ github.event.inputs.type }}-${{ github.event.inputs.arch }}.iso
+      ORIGINAL_ISO_IMAGE: debian.iso
       PRESEED_FILE_TEMPLATE: preseed.txt.template
       PRESEED_FILE: preseed.txt
       ISO_FILES_DIR: isofiles
@@ -31,6 +49,7 @@ jobs:
         with:
           sparse-checkout: |
             ${{ env.PRESEED_FILE_TEMPLATE }}
+            ${{ env.ORIGINAL_ISO_IMAGE }}
           sparse-checkout-cone-mode: false
 
       - name: Install dependencies
@@ -38,15 +57,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gettext cpio isolinux xorriso
 
-      - name: Download Debian netinstall ISO
+      - name: Download Debian ISO
         run: |
-          curl -L ${{ env.ISO_IMAGE_URL }} -o ${{ env.ORIGINAL_ISO_IMAGE }}
+          if [ ! -f '${{ env.ORIGINAL_ISO_IMAGE }}' ]; then
+            curl -L ${{ env.ISO_IMAGE_URL }} -o ${{ env.ORIGINAL_ISO_IMAGE }}
+          fi
 
       - name: Extract ISO files
         run: |
           mkdir ${{ env.ISO_FILES_DIR }}
-          sudo xorriso -osirrox on -indev ${{ env.ORIGINAL_ISO_IMAGE }} -extract / /media/debian-netinst
-          cp -rT /media/debian-netinst ${{ env.ISO_FILES_DIR }}
+          sudo xorriso -osirrox on -indev ${{ env.ORIGINAL_ISO_IMAGE }} -extract / /media/debian
+          cp -rT /media/debian ${{ env.ISO_FILES_DIR }}
 
       - name: Generate preseed file
         env:
@@ -80,6 +101,8 @@ jobs:
           NEW_FILES: ${{ env.ISO_FILES_DIR }}
           NEW_ISO: ${{ env.REMASTERED_ISO_IMAGE }}
           MBR_TEMPLATE: /usr/lib/ISOLINUX/isohdpfx.bin
+          # Note: FS_NAME must be at most 32 characters long
+          FS_NAME: 'Debian ${{ github.event.inputs.branch }} preseed ${{ github.event.inputs.arch }}'
         run: |
           # Extract MBR template file to disk
           sudo dd if=${{ env.ORIGINAL_ISO }} bs=1 count=432 of=${{ env.MBR_TEMPLATE }}
@@ -87,7 +110,7 @@ jobs:
           # Create the new ISO image
           xorriso \
             -as mkisofs \
-            -r -V 'Debian amd64' \
+            -r -V '${{ env.FS_NAME }}' \
             -o ${{ env.NEW_ISO }} \
             -J -joliet-long -cache-inodes \
             -isohybrid-mbr ${{ env.MBR_TEMPLATE }} \
