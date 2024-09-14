@@ -17,7 +17,10 @@ source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
 # ----------------------------------------------------------------------
 
 choose_editor() {
-	source "$TOPIC_DIR/vscodium/$TOPIC_SETUP_FILE"
+
+	bash -c "source $TOPIC_DIR/neovim/$TOPIC_SETUP_FILE"
+	bash -c "source $TOPIC_DIR/vscodium/$TOPIC_SETUP_FILE"
+
 }
 
 # ----------------------------------------------------------------------

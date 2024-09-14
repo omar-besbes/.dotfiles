@@ -5,8 +5,8 @@
 # ----------------------------------------------------------------------
 
 declare DIR="$(dirname "${BASH_SOURCE[0]}")"
-declare ROOT_DIR="$(realpath "$DIR/../..")"
-declare TOPIC_NAME="neovim"
+declare ROOT_DIR="$(realpath "$DIR/../../..")"
+declare TOPIC_NAME="text-editor/neovim"
 declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
 
 source "$ROOT_DIR/scripts/utils.sh"
@@ -59,3 +59,5 @@ main() {
 	create_symlinks
 
 }
+
+execute "main" "Setting up neovim ..."
