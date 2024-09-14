@@ -21,10 +21,6 @@ install_dependencies() {
 	# only begin installation if one of the dependencies are not met
 	cmd_exists nvim && return
 
-	# install fuse to execute appimage files
-	sudo add-apt-repository universe
-	sudo apt-get install -y libfuse2 fuse
-
 	local -r NEOVIM_BIN="nvim.appimage"
 	local -r NEOVIM_APPIMAGE_URL="https://github.com/neovim/neovim/releases/latest/download/$NEOVIM_BIN"
 
