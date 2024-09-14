@@ -1,0 +1,105 @@
+name: Build Remastered ISO
+
+on:
+  workflow_dispatch:
+    inputs:
+      iso_image_url:
+        description: 'URL of the Debian netinstall ISO'
+        type: string
+        required: false
+
+jobs:
+  desktop-debian-stable:
+    runs-on: ubuntu-latest
+    environment: build-iso-image
+
+    env:
+      ISO_IMAGE_URL: ${{ github.event.inputs.iso_image_url || vars.ISO_IMAGE_URL }}
+      REMASTERED_ISO_IMAGE: preseed-debian-netinst-amd64.iso
+      ORIGINAL_ISO_IMAGE: debian-netinst.iso
+      PRESEED_FILE_TEMPLATE: preseed.txt.template
+      PRESEED_FILE: preseed.txt
+      ISO_FILES_DIR: isofiles
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            ${{ env.PRESEED_FILE_TEMPLATE }}
+          sparse-checkout-cone-mode: false
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cpio isolinux xorriso
+
+      - name: Download Debian netinstall ISO
+        run: |
+          curl -L ${{ env.ISO_IMAGE_URL }} -o ${{ env.ORIGINAL_ISO_IMAGE }}
+
+      - name: Extract ISO files
+        run: |
+          mkdir ${{ env.ISO_FILES_DIR }}
+          sudo xorriso -osirrox on -indev ${{ env.ORIGINAL_ISO_IMAGE }} -extract / /media/debian-netinst
+          cp -rT /media/debian-netinst ${{ env.ISO_FILES_DIR }}
+
+      - name: Generate preseed file
+        run: |
+          sed -e "s/\${ROOT_PASSWORD}/${{ secrets.ROOT_PASSWORD }}/g" \
+              -e "s/\${USER_FULLNAME}/${{ vars.USER_FULLNAME }}/g" \
+              -e "s/\${USERNAME}/${{ vars.USERNAME }}/g" \
+              -e "s/\${USER_PASSWORD}/${{ secrets.USER_PASSWORD }}/g" \
+              ${{ env.PRESEED_FILE_TEMPLATE }} > ${{ env.PRESEED_FILE }}
+
+      - name: Modify initrd and add preseed file
+        env:
+          INSTALL_DIR: ${{ env.ISO_FILES_DIR }}/install.amd
+        run: |
+          chmod +w -R ${{ env.INSTALL_DIR }}
+          gunzip ${{ env.INSTALL_DIR }}/initrd.gz
+          echo ${{ env.PRESEED_FILE }} | cpio -H newc -o -A -F ${{ env.INSTALL_DIR }}/initrd
+          gzip ${{ env.INSTALL_DIR }}/initrd
+          chmod -w -R ${{ env.INSTALL_DIR }}
+
+      - name: Regenerate md5sum.txt
+        working-directory: ${{ env.ISO_FILES_DIR }}
+        env:
+          CI: ""
+        run: |
+          chmod +w md5sum.txt
+          find -follow -type f ! -name md5sum.txt -print0 | xargs -0 md5sum > md5sum.txt
+          chmod -w md5sum.txt
+
+      - name: Create new bootable ISO
+        env:
+          ORIGINAL_ISO: ${{ env.ORIGINAL_ISO_IMAGE }}
+          NEW_FILES: ${{ env.ISO_FILES_DIR }}
+          NEW_ISO: ${{ env.REMASTERED_ISO_IMAGE }}
+          MBR_TEMPLATE: /usr/lib/ISOLINUX/isohdpfx.bin
+        run: |
+          # Extract MBR template file to disk
+          dd if=${{ env.ORIGINAL_ISO }} bs=1 count=432 of=${{ env.MBR_TEMPLATE }}
+
+          # Create the new ISO image
+          xorriso \
+            -as mkisofs \
+            -r -V 'Debian amd64' \
+            -o ${{ env.NEW_ISO }} \
+            -J -joliet-long -cache-inodes \
+            -isohybrid-mbr ${{ env.MBR_TEMPLATE }} \
+            -b isolinux/isolinux.bin \
+            -c isolinux/boot.cat \
+            -boot-load-size 4 -boot-info-table -no-emul-boot \
+            -eltorito-alt-boot \
+            -e boot/grub/efi.img \
+            -no-emul-boot -isohybrid-gpt-basdat -isohybrid-apm-hfsplus \
+            ${{ env.NEW_FILES }}
+
+      - name: Upload ISO artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: remastered-iso
+          path: ${{ env.REMASTERED_ISO_IMAGE }}
+          if-no-files-found: warn
+          retention-days: 7
