@@ -22,6 +22,7 @@ declare -a COMMANDS_TO_VERIFY=(
 	"docker"
 	"kubectl"
 	"chromium"
+	"code"
 )
 
 check_commands_existence() {
