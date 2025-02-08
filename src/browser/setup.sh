@@ -27,4 +27,3 @@ choose_browser() {
 main() {
 	choose_browser
 }
-

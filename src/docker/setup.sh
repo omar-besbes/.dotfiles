@@ -16,8 +16,8 @@ source "$ROOT_DIR/scripts/utils.sh"
 # ----------------------------------------------------------------------
 
 install_dependencies() {
-	
-	cmd_exists docker && return;
+
+	cmd_exists docker && return
 
 	local -r codename="$(. /etc/os-release && echo "$VERSION_CODENAME")"
 	local -r id="$(. /etc/os-release && echo "$ID")"
@@ -31,8 +31,8 @@ install_dependencies() {
 	# Add the repository to Apt sources:
 	echo \
 		"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
-		https://download.docker.com/linux/$id $codename stable" | \
-		sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+		https://download.docker.com/linux/$id $codename stable" |
+		sudo tee /etc/apt/sources.list.d/docker.list
 	sudo apt-get update
 
 	# Install packages
@@ -54,10 +54,9 @@ install_dependencies() {
 # ----------------------------------------------------------------------
 
 main() {
-	
+
 	ask_for_sudo
 
 	install_dependencies
 
 }
-

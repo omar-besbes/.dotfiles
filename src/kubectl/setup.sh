@@ -16,19 +16,20 @@ source "$ROOT_DIR/scripts/utils.sh"
 # ----------------------------------------------------------------------
 
 install_dependencies() {
-	
-	cmd_exists kubectl && return;
+
+	cmd_exists kubectl && return
 
 	# Add kubectl's official GPG key:
 	sudo apt-get update
 	sudo install -m 0755 -d /etc/apt/keyrings
-	curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | \
+	local -r VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt | cat | cut -f 1-2 -d '.')
+	curl -fsSL "https://pkgs.k8s.io/core:/stable:/$VERSION/deb/Release.key" |
 		sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
 	# Add the repository to Apt sources:
 	echo \
 		"deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
-		https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /" | \
+		https://pkgs.k8s.io/core:/stable:/$VERSION/deb/ /" |
 		sudo tee /etc/apt/sources.list.d/kubernetes.list
 	sudo apt-get update
 
@@ -42,10 +43,9 @@ install_dependencies() {
 # ----------------------------------------------------------------------
 
 main() {
-	
+
 	ask_for_sudo
 
 	install_dependencies
 
 }
-

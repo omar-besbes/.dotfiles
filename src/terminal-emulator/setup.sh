@@ -27,4 +27,3 @@ choose_emulator() {
 main() {
 	choose_emulator
 }
-

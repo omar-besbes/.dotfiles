@@ -22,6 +22,7 @@ declare -a COMMANDS_TO_VERIFY=(
 	"docker"
 	"kubectl"
 	"chromium"
+	"code"
 	"spotify"
 )
 
@@ -54,4 +55,3 @@ main() {
 }
 
 main
-
