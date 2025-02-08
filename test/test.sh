@@ -23,6 +23,7 @@ declare -a COMMANDS_TO_VERIFY=(
 	"kubectl"
 	"chromium"
 	"code"
+	"spotify"
 )
 
 check_commands_existence() {
