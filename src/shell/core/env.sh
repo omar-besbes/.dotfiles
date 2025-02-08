@@ -8,17 +8,21 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-# NVIDIA Drivers
-export PATH="/usr/local/cuda-12./bin${PATH:+:${PATH}}"
-
-# NVM
+# nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Added by Toolbox App
-export PATH="$PATH:/home/omar/.local/share/JetBrains/Toolbox/scripts"
-
-# Rust package manager (cargo)
+# cargo
 source "$HOME/.cargo/env"
+
+# pnpm
+export PNPM_HOME="/home/omar/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
+# deno
+source "$HOME/.deno/env"
 
