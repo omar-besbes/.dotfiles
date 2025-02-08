@@ -20,7 +20,6 @@
 [ ! -v DOTFILES_ROOT_DIR ] && declare -r DOTFILES_ROOT_DIR="$HOME/.dotfiles"
 
 mkdir -p "$DOTFILES_ROOT_DIR"
-mkdir -p "$DOTFILES_BASH_COMPLETIONS_DIR"
 cd "$DOTFILES_ROOT_DIR" || exit 1
 
 [ ! -v CURRENT_BRANCH ] &&
@@ -34,6 +33,8 @@ source "$DOTFILES_ROOT_DIR/scripts/setup_topics.sh" &>/dev/null ||
 	source <(curl -fsSL "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/setup_topics.sh")
 source "$DOTFILES_ROOT_DIR/scripts/sync_files.sh" &>/dev/null ||
 	source <(curl -fsSL "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/sync_files.sh")
+
+mkdir -p "$DOTFILES_BASH_COMPLETIONS_DIR"
 
 # ----------------------------------------------------------------------
 # | Global Dependencies                                                |
