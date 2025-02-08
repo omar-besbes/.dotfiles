@@ -21,7 +21,7 @@ install_dependencies() {
 	# only begin installation if one of the dependencies are not met
 	cmd_exists nvim && return
 
-	local -r NEOVIM_BIN="nvim.appimage"
+	local -r NEOVIM_BIN="nvim-linux-x86_64.appimage"
 	local -r NEOVIM_APPIMAGE_URL="https://github.com/neovim/neovim/releases/latest/download/$NEOVIM_BIN"
 
 	curl -fSLO $NEOVIM_APPIMAGE_URL
