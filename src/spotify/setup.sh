@@ -19,12 +19,17 @@ install_dependencies() {
 
     cmd_exists spotify-client && return
 
+    # TO BE UPDATED BEFORE 6 Feb 2026
+    KEY_URL="https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg"
+
     # Add Spotify's official GPG key:
-    curl -sS https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | 
-        sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
+    curl -sS https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg |
+        sudo gpg --dearmor --yes -o /etc/apt/keyrings/spotify.gpg
 
     # Add the repository to Apt sources:
-    echo "deb http://repository.spotify.com stable non-free" | 
+    echo \
+        "deb [signed-by=/etc/apt/keyrings/spotify.gpg] \
+        http://repository.spotify.com stable non-free" |
         sudo tee /etc/apt/sources.list.d/spotify.list
     sudo apt-get update
 
