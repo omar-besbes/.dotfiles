@@ -14,5 +14,3 @@ declare -r COMPLETION_FILES=$(find $DOTFILES_BASH_COMPLETIONS_DIR -type f)
 for i in ${COMPLETION_FILES[@]}; do
 	source $i
 done
-
-

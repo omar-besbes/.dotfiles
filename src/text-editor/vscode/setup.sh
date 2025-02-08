@@ -25,7 +25,7 @@ install_dependencies() {
   sudo apt-get update
   sudo install -m 0755 -d /etc/apt/keyrings
   curl -fsSL https://packages.microsoft.com/keys/microsoft.asc |
-    sudo gpg --dearmor -o /etc/apt/keyrings/packages.microsoft.gpg  
+    sudo gpg --dearmor -o /etc/apt/keyrings/packages.microsoft.gpg
 
   # Add the repository to Apt sources:
   echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] \

@@ -18,21 +18,22 @@ source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
 
 install_dependencies() {
 
-	# only begin installation if one of the dependencies are not met
-	cmd_exists codium && return
+  # only begin installation if one of the dependencies are not met
+  cmd_exists codium && return
 
-	# Add VSCodium's official GPG key:
-    curl -sS https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | 
-        sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/vscodium-archive-keyring.gpg
+  # Add VSCodium's official GPG key:
+  curl -sS https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg |
+    sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/vscodium-archive-keyring.gpg
 
-    # Add the repository to Apt sources:
-    echo "deb [ signed-by=/etc/apt/trusted.gpg.d/vscodium-archive-keyring.gpg ] \
-		https://download.vscodium.com/debs vscodium main" | \
-		sudo tee /etc/apt/sources.list.d/vscodium.list
-    sudo apt-get update
+  # Add the repository to Apt sources:
+  echo \
+    "deb [ signed-by=/etc/apt/trusted.gpg.d/vscodium-archive-keyring.gpg ] \
+		https://download.vscodium.com/debs vscodium main" |
+    sudo tee /etc/apt/sources.list.d/vscodium.list
+  sudo apt-get update
 
-    # Install packages
-    sudo apt-get install -y codium
+  # Install packages
+  sudo apt-get install -y codium
 
 }
 
@@ -42,9 +43,9 @@ install_dependencies() {
 
 main() {
 
-	ask_for_sudo
+  ask_for_sudo
 
-	install_dependencies
+  install_dependencies
 
 }
 
