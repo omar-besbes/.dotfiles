@@ -47,6 +47,9 @@ install_dependencies() {
 	# install curl
 	execute "sudo apt-get install -y curl" "Installing curl ..."
 
+	# isntall necessary compression and extraction tools
+	execute "sudo apt-get install -y bzip2 gzip zip xz-utils tar" "Installing extraction/compression tools ..."
+
 	# install rustup & cargo
 	if ! cmd_exists rustup; then
 		execute "curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs | sh -s -- --no-modify-path -y" "Installing rustup ..."
@@ -70,9 +73,6 @@ install_dependencies() {
 
 	# install xclip
 	execute "sudo apt-get install -y xclip" "Installing xclip ..."
-
-	# isntall necessary compression and extraction tools
-	execute "sudo apt-get install -y bzip2 gzip zip xz-utils tar" "Installing extraction/compression tools ..."
 
 	# install gcc, g++ & some other tools
 	execute "sudo apt-get install -y ca-certificates fontconfig build-essential software-properties-common" "Installing essential tools ..."
