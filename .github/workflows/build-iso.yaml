@@ -39,8 +39,8 @@ jobs:
       ISO_IMAGE_URL: ${{ github.event.inputs.iso_image_url || vars.ISO_IMAGE_URL }}
       REMASTERED_ISO_IMAGE: preseed-debian-${{ github.event.inputs.branch }}-${{ github.event.inputs.type }}-${{ github.event.inputs.arch }}.iso
       ORIGINAL_ISO_IMAGE: debian.iso
-      PRESEED_FILE_TEMPLATE: preseed.txt.template
-      PRESEED_FILE: preseed.txt
+      PRESEED_FILE_TEMPLATE: preseed.cfg.template
+      PRESEED_FILE: preseed.cfg
       ISO_FILES_DIR: isofiles
 
     steps:
@@ -71,10 +71,10 @@ jobs:
 
       - name: Generate preseed file
         env:
-          ROOT_PASSWORD: ${{ secrets.ROOT_PASSWORD }}
+          ROOT_PASSWORD_HASH: ${{ secrets.ROOT_PASSWORD_HASH }}
           USER_FULLNAME: ${{ vars.USER_FULLNAME }}
           USERNAME: ${{ vars.USERNAME }}
-          USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+          USER_PASSWORD_HASH: ${{ secrets.USER_PASSWORD_HASH }}
         run: |
           envsubst < ${{ env.PRESEED_FILE_TEMPLATE }} > ${{ env.PRESEED_FILE }}
 
