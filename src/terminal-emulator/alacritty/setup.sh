@@ -50,7 +50,7 @@ install_dependencies() {
 	scdoc <extra/man/alacritty-bindings.5.scd | gzip -c | sudo tee /usr/local/share/man/man5/alacritty-bindings.5.gz >/dev/null
 
 	# completions
-	cp -f extra/completions/alacritty.bash "$HOME/.bash_completion.d/alacritty"
+	cp -f extra/completions/alacritty.bash "$DOTFILES_BASH_COMPLETIONS_DIR/alacritty.sh"
 
 	# install alacritty themes
 	local -r ALACRITTY_THEMES_DIR="$HOME/.config/alacritty/themes"

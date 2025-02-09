@@ -19,7 +19,7 @@ source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
 install_dependencies() {
 
 	sudo apt-get update
-    sudo apt-get install -y chromium
+	sudo apt-get install -y chromium
 
 }
 

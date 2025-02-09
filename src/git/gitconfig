@@ -26,6 +26,7 @@
 	cm = commit -m
 	unstage = restore --staged
 	uncommit = reset --soft HEAD~
+   unstash = stash pop
 	root = rev-parse --show-toplevel
 	last  = log -1
 	amend = commit --amend

@@ -6,4 +6,3 @@ for theme in $(vivid themes); do
     tree .dotfiles
     echo
 done
-

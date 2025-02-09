@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   local:
@@ -28,11 +28,10 @@ services:
       && ./test/test.sh
       "
     environment:
-      RAW_CONTENT_URL: ${RAW_CONTENT_URL} 
+      RAW_CONTENT_URL: ${RAW_CONTENT_URL}
     cap_add:
       - SYS_ADMIN
     devices:
       - /dev/fuse:/dev/fuse
     security_opt:
       - apparmor:unconfined
-

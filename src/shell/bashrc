@@ -10,8 +10,8 @@
 
 # If not running interactively, don't do anything
 case $- in
-    *i*) ;;
-      *) return;;
+*i*) ;;
+*) return ;;
 esac
 
 DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
@@ -27,8 +27,7 @@ TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
 # ----------------------------------------------------------------------
 
 main() {
-	load_topics $TOPIC_DIR
+  load_topics $TOPIC_DIR
 }
 
 main
-
