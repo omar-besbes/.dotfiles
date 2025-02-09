@@ -6,7 +6,7 @@
 
 declare DIR="$(dirname "${BASH_SOURCE[0]}")"
 declare ROOT_DIR="$(realpath "$DIR/../..")"
-declare TOPIC_NAME="helm"
+declare TOPIC_NAME="spotify"
 declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
 
 source "$ROOT_DIR/scripts/utils.sh"
@@ -17,22 +17,24 @@ source "$ROOT_DIR/scripts/utils.sh"
 
 install_dependencies() {
 
-    cmd_exists helm && return
+    cmd_exists spotify-client && return
 
-    # Add kubectl's official GPG key:
-    curl https://baltocdn.com/helm/signing.asc |
-        sudo gpg --dearmor -o /etc/apt/keyrings/helm.gpg
-    sudo apt-get install apt-transport-https --yes
+    # TO BE UPDATED BEFORE 6 Feb 2026
+    KEY_URL="https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg"
+
+    # Add Spotify's official GPG key:
+    curl -sS https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg |
+        sudo gpg --dearmor --yes -o /etc/apt/keyrings/spotify.gpg
 
     # Add the repository to Apt sources:
     echo \
-        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/helm.gpg] \
-        https://baltocdn.com/helm/stable/debian/ all main" |
-        sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+        "deb [signed-by=/etc/apt/keyrings/spotify.gpg] \
+        http://repository.spotify.com stable non-free" |
+        sudo tee /etc/apt/sources.list.d/spotify.list
     sudo apt-get update
 
     # Install packages
-    sudo apt-get install -y helm
+    sudo apt-get install -y spotify-client
 
 }
 

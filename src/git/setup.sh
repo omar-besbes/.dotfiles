@@ -18,9 +18,9 @@ source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
 
 create_symlinks() {
 
-	local -a FILES_TO_SYMLINK=("$TOPIC_DIR/gitconfig")	
+	local -a FILES_TO_SYMLINK=("$TOPIC_DIR/gitconfig")
 	local -r TARGET_PATHS=("$HOME/.gitconfig")
-	symlink_files FILES_TO_SYMLINK[@] TARGET_PATHS[@] 
+	symlink_files FILES_TO_SYMLINK[@] TARGET_PATHS[@]
 
 }
 
@@ -35,4 +35,3 @@ main() {
 	create_symlinks
 
 }
-

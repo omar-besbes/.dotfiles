@@ -6,18 +6,22 @@
 
 declare DIR="$(dirname "${BASH_SOURCE[0]}")"
 declare ROOT_DIR="$(realpath "$DIR/../..")"
-declare TOPIC_NAME="browser"
+declare TOPIC_NAME="text-editor"
 declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
 
 source "$ROOT_DIR/scripts/utils.sh"
 source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
 
 # ----------------------------------------------------------------------
-# | Choose emulator                                                    |
+# | Choose text editor                                                 |
 # ----------------------------------------------------------------------
 
-choose_browser() {
-	source "$TOPIC_DIR/chromium/$TOPIC_SETUP_FILE"
+choose_editor() {
+
+	bash -c "source $TOPIC_DIR/neovim/$TOPIC_SETUP_FILE"
+	bash -c "source $TOPIC_DIR/vscode/$TOPIC_SETUP_FILE"
+	# bash -c "source $TOPIC_DIR/vscodium/$TOPIC_SETUP_FILE"
+
 }
 
 # ----------------------------------------------------------------------
@@ -25,5 +29,5 @@ choose_browser() {
 # ----------------------------------------------------------------------
 
 main() {
-	choose_browser
+	choose_editor
 }

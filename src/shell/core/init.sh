@@ -14,4 +14,3 @@ source "$TOPIC_DIR/aliases.sh"
 source "$TOPIC_DIR/default.sh"
 source "$TOPIC_DIR/env.sh"
 source "$TOPIC_DIR/options.sh"
-

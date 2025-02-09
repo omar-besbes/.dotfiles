@@ -5,8 +5,8 @@
 # ----------------------------------------------------------------------
 
 declare DIR="$(dirname "${BASH_SOURCE[0]}")"
-declare ROOT_DIR="$(realpath "$DIR/../..")"
-declare TOPIC_NAME="neovim"
+declare ROOT_DIR="$(realpath "$DIR/../../..")"
+declare TOPIC_NAME="text-editor/neovim"
 declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
 
 source "$ROOT_DIR/scripts/utils.sh"
@@ -21,11 +21,7 @@ install_dependencies() {
 	# only begin installation if one of the dependencies are not met
 	cmd_exists nvim && return
 
-	# install fuse to execute appimage files
-	sudo add-apt-repository universe
-	sudo apt-get install -y libfuse2 fuse
-
-	local -r NEOVIM_BIN="nvim.appimage"
+	local -r NEOVIM_BIN="nvim-linux-x86_64.appimage"
 	local -r NEOVIM_APPIMAGE_URL="https://github.com/neovim/neovim/releases/latest/download/$NEOVIM_BIN"
 
 	curl -fSLO $NEOVIM_APPIMAGE_URL
@@ -63,3 +59,5 @@ main() {
 	create_symlinks
 
 }
+
+execute "main" "Setting up neovim ..."

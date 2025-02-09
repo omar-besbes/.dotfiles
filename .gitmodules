@@ -1,3 +1,3 @@
-[submodule "src/neovim/nvim"]
-	path = src/neovim/nvim
+[submodule "src/text-editor/neovim/nvim"]
+	path = src/text-editor/neovim/nvim
 	url = https://github.com/omar-besbes/nvim-config.git

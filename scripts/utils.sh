@@ -14,6 +14,7 @@ declare DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 [ ! -v DOTFILES_SCRIPTS_DIR ] && declare -r DOTFILES_SCRIPTS_DIR="$DOTFILES_ROOT_DIR/$DOTFILES_SCRIPTS_DIR_NAME"
 [ ! -v DOTFILES_BACKUP_DIR_NAME ] && declare -r DOTFILES_BACKUP_DIR_NAME="backup"
 [ ! -v DOTFILES_BACKUP_DIR ] && declare -r DOTFILES_BACKUP_DIR="$DOTFILES_ROOT_DIR/$DOTFILES_BACKUP_DIR_NAME"
+[ ! -v DOTFILES_BASH_COMPLETIONS_DIR ] && declare -r DOTFILES_BASH_COMPLETIONS_DIR="$HOME/.local/share/bash-completion/completions"
 
 # ----------------------------------------------------------------------
 # | Misc                                                               |

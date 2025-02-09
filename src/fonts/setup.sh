@@ -16,11 +16,11 @@ source "$ROOT_DIR/scripts/utils.sh"
 # ----------------------------------------------------------------------
 
 install_nerd_fonts() {
-	
+
 	local -r FONT_DIR="$HOME/.local/share/fonts/truetype"
 	local -r NERD_FONTS_GITHUB_ORIGIN="https://github.com/ryanoasis/nerd-fonts"
 	local -a FONTS_TO_INSTALL=("Hack" "JetBrainsMono" "RobotoMono" "NerdFontsSymbolsOnly")
-	
+
 	# Ensure the font directory exists
 	mkdir -p "$FONT_DIR"
 
@@ -51,4 +51,3 @@ install_nerd_fonts() {
 main() {
 	install_nerd_fonts
 }
-

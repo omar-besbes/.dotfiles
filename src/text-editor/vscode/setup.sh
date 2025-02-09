@@ -6,7 +6,7 @@
 
 declare DIR="$(dirname "${BASH_SOURCE[0]}")"
 declare ROOT_DIR="$(realpath "$DIR/../../..")"
-declare TOPIC_NAME="browser/opera"
+declare TOPIC_NAME="text-editor/vscode"
 declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
 
 source "$ROOT_DIR/scripts/utils.sh"
@@ -18,20 +18,23 @@ source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
 
 install_dependencies() {
 
-	# Add Opera's official GPG key:
-	sudo install -m 0755 -d /etc/apt/keyrings
-	sudo curl -fsSL https://deb.opera.com/archive.key |
-		gpg --dearmor -o /usr/share/keyrings/opera-browser.gpg
+  # only begin installation if one of the dependencies are not met
+  cmd_exists code && return
 
-	# Add the repository to Apt sources:
-	echo \
-		"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/opera-browser.gpg] \
-		http://deb.opera.com/opera/ stable non-free" |
-		sudo tee /etc/apt/sources.list.d/opera-archive.list >/dev/null
-	sudo apt-get update
+  # Add VSCode's official GPG key:
+  sudo apt-get update
+  sudo install -m 0755 -d /etc/apt/keyrings
+  curl -fsSL https://packages.microsoft.com/keys/microsoft.asc |
+    sudo gpg --dearmor -o /etc/apt/keyrings/packages.microsoft.gpg
 
-	# Install package
-	sudo apt-get install -y opera-stable
+  # Add the repository to Apt sources:
+  echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] \
+    https://packages.microsoft.com/repos/code stable main" |
+    sudo tee /etc/apt/sources.list.d/vscode.list >/dev/null
+  sudo apt-get update
+
+  # Install packages
+  sudo apt-get install -y code
 
 }
 
@@ -41,10 +44,10 @@ install_dependencies() {
 
 main() {
 
-	ask_for_sudo
+  ask_for_sudo
 
-	install_dependencies
+  install_dependencies
 
 }
 
-execute "main" "Setting up brave ..."
+execute "main" "Setting up vscode ..."
