@@ -13,14 +13,14 @@ source "$ROOT_DIR/scripts/utils.sh"
 source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
 
 # ----------------------------------------------------------------------
-# | Choose text editor                                                 |
+# | Setup text editors                                                 |
 # ----------------------------------------------------------------------
 
-choose_editor() {
+setup_editors() {
 
-	bash -c "source $TOPIC_DIR/neovim/$TOPIC_SETUP_FILE"
-	bash -c "source $TOPIC_DIR/vscode/$TOPIC_SETUP_FILE"
-	# bash -c "source $TOPIC_DIR/vscodium/$TOPIC_SETUP_FILE"
+  bash -c "source $TOPIC_DIR/neovim/$TOPIC_SETUP_FILE"
+  bash -c "source $TOPIC_DIR/vscode/$TOPIC_SETUP_FILE"
+  # bash -c "source $TOPIC_DIR/vscodium/$TOPIC_SETUP_FILE"
 
 }
 
