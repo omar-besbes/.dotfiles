@@ -6,8 +6,8 @@ services:
     command: >
       /bin/bash -c "
       $$HOME/.dotfiles/bootstrap.sh
-      && . $$HOME/.bashrc
-      && $$HOME/.dotfiles/test/test.sh
+      && . $$HOME/.dotfiles/src/shell/core/env.sh
+      && . $$HOME/.dotfiles/test/test.sh
       "
     cap_add:
       - SYS_ADMIN
@@ -22,8 +22,8 @@ services:
     command: >
       /bin/bash -c "
       source <(curl -fSL# $$RAW_CONTENT_URL/bootstrap.sh)
-      && . $$HOME/.bashrc
-      && ./test/test.sh
+      && . $$HOME/.dotfiles/src/shell/core/env.sh
+      && . $$HOME/.dotfiles/test/test.sh
       "
     environment:
       RAW_CONTENT_URL: ${RAW_CONTENT_URL}
