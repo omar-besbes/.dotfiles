@@ -62,6 +62,7 @@ install_dependencies() {
 	# install deno
 	if ! cmd_exists deno; then
 		execute "curl -fsSL https://deno.land/install.sh | sh -s -- --no-modify-path -y" "Installing deno ..."
+		source "$HOME/.deno/env"
 		deno completions bash >"$DOTFILES_BASH_COMPLETIONS_DIR/deno.sh"
 	fi
 

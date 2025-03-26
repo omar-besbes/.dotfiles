@@ -45,6 +45,8 @@ install_dependencies() {
 create_symlinks() {
 
   local -r VSCODE_CONFIG_DIR="$HOME/.config/Code/User"
+  mkdir -p $VSCODE_CONFIG_DIR
+
   local -a FILES_TO_SYMLINK=(
     "$TOPIC_DIR/keybindings.json"
     "$TOPIC_DIR/settings.json"

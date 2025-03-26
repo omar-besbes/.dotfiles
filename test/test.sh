@@ -24,6 +24,9 @@ declare -a COMMANDS_TO_VERIFY=(
 	"chromium"
 	"code"
 	"spotify"
+  "deno"
+  "nvm"
+  "cargo"
 )
 
 check_commands_existence() {
