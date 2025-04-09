@@ -4,11 +4,9 @@
 # | Init                                                               |
 # ----------------------------------------------------------------------
 
-declare DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
-
 [ ! -v DOTFILES_GITHUB_ORIGIN ] && declare -r DOTFILES_GITHUB_ORIGIN="https://github.com/omar-besbes/.dotfiles"
 [ ! -v DOTFILES_ROOT_DIR_NAME ] && declare -r DOTFILES_ROOT_DIR_NAME=".dotfiles"
-[ ! -v DOTFILES_ROOT_DIR ] && declare -r DOTFILES_ROOT_DIR="$(realpath "$DIR/..")"
+[ ! -v DOTFILES_ROOT_DIR ] && declare -r DOTFILES_ROOT_DIR="$HOME/$DOTFILES_ROOT_DIR_NAME"
 [ ! -v DOTFILES_SOURCE_DIR_NAME ] && declare -r DOTFILES_SOURCE_DIR_NAME="src"
 [ ! -v DOTFILES_SOURCE_DIR ] && declare -r DOTFILES_SOURCE_DIR="$DOTFILES_ROOT_DIR/$DOTFILES_SOURCE_DIR_NAME"
 [ ! -v DOTFILES_SCRIPTS_DIR_NAME ] && declare -r DOTFILES_SCRIPTS_DIR_NAME="scripts"
