@@ -4,10 +4,9 @@
 declare DIR="$(dirname "${BASH_SOURCE[0]}")"
 declare ROOT_DIR="$(realpath "$DIR/../../..")"
 declare TOPIC_NAME="shell/core"
-declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
+declare TOPIC_DIR="$ROOT_DIR/src/$TOPIC_NAME"
 
-source "$ROOT_DIR/scripts/utils.sh"
-source "$DOTFILES_SCRIPTS_DIR/load_topics.sh"
+[ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
 
 # Add bash aliases, options & exports
 source "$TOPIC_DIR/aliases.sh"

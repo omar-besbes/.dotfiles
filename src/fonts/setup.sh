@@ -7,9 +7,9 @@
 declare DIR="$(dirname "${BASH_SOURCE[0]}")"
 declare ROOT_DIR="$(realpath "$DIR/../..")"
 declare TOPIC_NAME="fonts"
-declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
+declare TOPIC_DIR="$ROOT_DIR/src/$TOPIC_NAME"
 
-source "$ROOT_DIR/scripts/utils.sh"
+[ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
 
 # ----------------------------------------------------------------------
 # | Nerd Fonts                                                         |

@@ -16,8 +16,7 @@ esac
 
 DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 ROOT_DIR="$(realpath "$DIR/../..")"
-source "$ROOT_DIR/scripts/utils.sh"
-source "$DOTFILES_SCRIPTS_DIR/load_topics.sh"
+[ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
 
 TOPIC_NAME="shell"
 TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
