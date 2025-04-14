@@ -167,6 +167,7 @@ The `/backups` directory gets created when necessary. Any files in `~/` that wou
 - [x] Remote install
 - [x] Fonts
 - [x] Web browser
+- [x] CLI
 - [ ] Automatic bookmarks import in browser
 - [ ] Move all config files in `/backups` before setup (only a small part is moved)
 - [ ] Uninstall script
