@@ -14,19 +14,25 @@ case $- in
 *) return ;;
 esac
 
-DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
-ROOT_DIR="$(realpath "$DIR/../..")"
-[ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
-
-TOPIC_NAME="shell"
-TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
-
 # ----------------------------------------------------------------------
 # | Main                                                               |
 # ----------------------------------------------------------------------
 
 main() {
+
+  local DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+  local ROOT_DIR="$(realpath "$DIR/../..")"
+
+  [ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
+
+  local TOPIC_NAME="shell"
+  local TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
+
   load_topics $TOPIC_DIR
+
+  cleanup
+  unset -f cleanup
+
 }
 
 main
