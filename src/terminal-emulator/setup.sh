@@ -1,22 +1,11 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------
-# | Init                                                               |
-# ----------------------------------------------------------------------
-
-declare DIR="$(dirname "${BASH_SOURCE[0]}")"
-declare ROOT_DIR="$(realpath "$DIR/../..")"
-declare TOPIC_NAME="terminal-emulator"
-declare TOPIC_DIR="$ROOT_DIR/src/$TOPIC_NAME"
-
-[ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
-
-# ----------------------------------------------------------------------
 # | Choose emulator                                                    |
 # ----------------------------------------------------------------------
 
 choose_emulator() {
-	source "$TOPIC_DIR/alacritty/$TOPIC_SETUP_FILE"
+  source "$TOPIC_DIR/alacritty/$TOPIC_SETUP_FILE"
 }
 
 # ----------------------------------------------------------------------
@@ -24,5 +13,18 @@ choose_emulator() {
 # ----------------------------------------------------------------------
 
 main() {
-	choose_emulator
+
+  local DIR="$(dirname "${BASH_SOURCE[0]}")"
+  local ROOT_DIR="$(realpath "$DIR/../..")"
+  local TOPIC_NAME="terminal-emulator"
+  local TOPIC_DIR="$ROOT_DIR/src/$TOPIC_NAME"
+
+  [ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
+
+  ask_for_sudo
+
+  choose_emulator
+
+  set_default_terminal_emulator
+
 }

@@ -68,6 +68,23 @@ install_dependencies() {
 }
 
 # ----------------------------------------------------------------------
+# | Install CLI                                                        |
+# ----------------------------------------------------------------------
+
+install_cli() {
+
+  mkdir -p "$HOME/.local/bin"
+
+  cat <<'EOF' > "$HOME/.local/bin/dotfiles"
+#!/bin/bash
+$DOTFILES_ROOT_DIR/dotfiles.sh "$@"
+EOF
+
+  chmod +x "$HOME/.local/bin"
+
+}
+
+# ----------------------------------------------------------------------
 # | Main                                                               |
 # ----------------------------------------------------------------------
 
@@ -81,6 +98,8 @@ main() {
 
 	# begin installing configs
 	setup_topics $DOTFILES_SOURCE_DIR
+
+  install_cli
 
 }
 

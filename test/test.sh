@@ -7,7 +7,7 @@
 declare DIR=$(dirname "${BASH_SOURCE[0]}")
 declare ROOT_DIR="$(realpath "$DIR/..")"
 
-source "$ROOT_DIR/scripts/utils.sh"
+[ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
 
 # ----------------------------------------------------------------------
 # | Check Commands                                                     |

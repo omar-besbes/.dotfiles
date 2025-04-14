@@ -355,3 +355,31 @@ show_spinner() {
     done
 
 }
+
+prompt() {
+
+    local prompt_message="$1"
+    local default_value="$2"
+    local user_input
+
+    # ANSI escape codes for gray color and reset
+    local gray='\033[90m'
+    local reset='\033[0m'
+
+    # ANSI escape codes for bold and gray text
+    local bold='\033[1m'
+    local gray='\033[90m'
+    local reset='\033[0m'
+
+    # Construct the prompt with bold message and gray default value
+    local formatted_prompt="${bold}${prompt_message}${reset} ${gray}[${default_value}]${reset}: "
+
+    # Display the prompt and read user input
+    read -e -p "$(echo -e "$formatted_prompt")" user_input
+
+    # If the user presses Enter without typing anything, use the default value
+    user_input="${user_input:-$default_value}"
+
+    echo "$user_input"
+
+}

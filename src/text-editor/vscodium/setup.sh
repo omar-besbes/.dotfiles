@@ -1,17 +1,6 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------
-# | Init                                                               |
-# ----------------------------------------------------------------------
-
-declare DIR="$(dirname "${BASH_SOURCE[0]}")"
-declare ROOT_DIR="$(realpath "$DIR/../../..")"
-declare TOPIC_NAME="text-editor/vscodium"
-declare TOPIC_DIR="$ROOT_DIR/src/$TOPIC_NAME"
-
-[ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
-
-# ----------------------------------------------------------------------
 # | Dependencies                                                       |
 # ----------------------------------------------------------------------
 
@@ -41,6 +30,14 @@ install_dependencies() {
 # ----------------------------------------------------------------------
 
 main() {
+
+
+  local DIR="$(dirname "${BASH_SOURCE[0]}")"
+  local ROOT_DIR="$(realpath "$DIR/../../..")"
+  local TOPIC_NAME="text-editor/vscodium"
+  local TOPIC_DIR="$ROOT_DIR/src/$TOPIC_NAME"
+
+  [ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
 
   ask_for_sudo
 
