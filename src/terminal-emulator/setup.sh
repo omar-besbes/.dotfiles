@@ -9,6 +9,17 @@ choose_emulator() {
 }
 
 # ----------------------------------------------------------------------
+# | Set default terminal emulator                                      |
+# ----------------------------------------------------------------------
+
+set_default_terminal_emulator() {
+
+  sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator $(which alacritty) 50
+  sudo update-alternatives --auto x-terminal-emulator
+
+}
+
+# ----------------------------------------------------------------------
 # | Main                                                               |
 # ----------------------------------------------------------------------
 
