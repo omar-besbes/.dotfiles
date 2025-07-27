@@ -54,5 +54,3 @@ main() {
   create_symlinks
 
 }
-
-execute "main" "Setting up neovim ..."

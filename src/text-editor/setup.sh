@@ -6,9 +6,8 @@
 
 choose_editor() {
 
-  source "$TOPIC_DIR/neovim/$TOPIC_SETUP_FILE"
-  source "$TOPIC_DIR/vscode/$TOPIC_SETUP_FILE"
-  # source "$TOPIC_DIR/vscodium/$TOPIC_SETUP_FILE"
+  execute "source $TOPIC_DIR/neovim/$TOPIC_SETUP_FILE && main" "Setting up neovim ..."
+  execute "source $TOPIC_DIR/vscode/$TOPIC_SETUP_FILE && main" "Setting up vscode ..."
 
 }
 

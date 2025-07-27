@@ -4,15 +4,17 @@
 # | Init                                                               |
 # ----------------------------------------------------------------------
 
-[ ! -v DOTFILES_GITHUB_ORIGIN ] && declare -r DOTFILES_GITHUB_ORIGIN="https://github.com/omar-besbes/.dotfiles"
-[ ! -v DOTFILES_ROOT_DIR_NAME ] && declare -r DOTFILES_ROOT_DIR_NAME=".dotfiles"
-[ ! -v DOTFILES_ROOT_DIR ] && declare -r DOTFILES_ROOT_DIR="$HOME/$DOTFILES_ROOT_DIR_NAME"
-[ ! -v DOTFILES_SOURCE_DIR_NAME ] && declare -r DOTFILES_SOURCE_DIR_NAME="src"
-[ ! -v DOTFILES_SOURCE_DIR ] && declare -r DOTFILES_SOURCE_DIR="$DOTFILES_ROOT_DIR/$DOTFILES_SOURCE_DIR_NAME"
-[ ! -v DOTFILES_SCRIPTS_DIR_NAME ] && declare -r DOTFILES_SCRIPTS_DIR_NAME="scripts"
-[ ! -v DOTFILES_SCRIPTS_DIR ] && declare -r DOTFILES_SCRIPTS_DIR="$DOTFILES_ROOT_DIR/$DOTFILES_SCRIPTS_DIR_NAME"
-[ ! -v DOTFILES_BACKUP_DIR_NAME ] && declare -r DOTFILES_BACKUP_DIR_NAME="backup"
-[ ! -v DOTFILES_BACKUP_DIR ] && declare -r DOTFILES_BACKUP_DIR="$DOTFILES_ROOT_DIR/$DOTFILES_BACKUP_DIR_NAME"
+set -euo pipefail
+
+[ ! -v DOTFILES_GITHUB_ORIGIN ]        && declare -r DOTFILES_GITHUB_ORIGIN="https://github.com/omar-besbes/.dotfiles"
+[ ! -v DOTFILES_ROOT_DIR_NAME ]        && declare -r DOTFILES_ROOT_DIR_NAME=".dotfiles"
+[ ! -v DOTFILES_ROOT_DIR ]             && declare -r DOTFILES_ROOT_DIR="$HOME/$DOTFILES_ROOT_DIR_NAME"
+[ ! -v DOTFILES_SOURCE_DIR_NAME ]      && declare -r DOTFILES_SOURCE_DIR_NAME="src"
+[ ! -v DOTFILES_SOURCE_DIR ]           && declare -r DOTFILES_SOURCE_DIR="$DOTFILES_ROOT_DIR/$DOTFILES_SOURCE_DIR_NAME"
+[ ! -v DOTFILES_SCRIPTS_DIR_NAME ]     && declare -r DOTFILES_SCRIPTS_DIR_NAME="scripts"
+[ ! -v DOTFILES_SCRIPTS_DIR ]          && declare -r DOTFILES_SCRIPTS_DIR="$DOTFILES_ROOT_DIR/$DOTFILES_SCRIPTS_DIR_NAME"
+[ ! -v DOTFILES_BACKUP_DIR_NAME ]      && declare -r DOTFILES_BACKUP_DIR_NAME="backup"
+[ ! -v DOTFILES_BACKUP_DIR ]           && declare -r DOTFILES_BACKUP_DIR="$DOTFILES_ROOT_DIR/$DOTFILES_BACKUP_DIR_NAME"
 [ ! -v DOTFILES_BASH_COMPLETIONS_DIR ] && declare -r DOTFILES_BASH_COMPLETIONS_DIR="$HOME/.local/share/bash-completion/completions"
 
 # ----------------------------------------------------------------------
@@ -79,8 +81,12 @@ cmd_exists() {
 
 set_trap() {
 
-  trap -p "$1" | grep "$2" &>/dev/null ||
-    trap '$2' "$1"
+  local signal="${1:?Missing signal name}"
+  local handler="${2:?Missing handler function}"
+
+  if ! trap -p "$signal" | grep -q "$handler"; then
+    trap "$handler" "$signal"
+  fi
 
 }
 
@@ -183,7 +189,7 @@ sync_dotfiles() {
 
     # get updates from remote
     git fetch
-    git pull
+    git pull --set-upstream origin "$CURRENT_BRANCH"
     git submodule sync --recursive
     git submodule update --init --recursive
   fi
@@ -367,10 +373,6 @@ cleanup() {
     print_info print_success print_warning print_result \
     show_spinner prompt utils_cleanup; do
     unset -f "$fn"
-  done
-
-  for var in TOPIC_INIT_FILE TOPIC_SETUP_FILE; do
-    unset "$var" 2>/dev/null
   done
 
 }

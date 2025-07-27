@@ -44,5 +44,3 @@ main() {
   install_dependencies
 
 }
-
-execute "main" "Setting up vscodium ..."

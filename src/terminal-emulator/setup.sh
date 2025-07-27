@@ -5,7 +5,7 @@
 # ----------------------------------------------------------------------
 
 choose_emulator() {
-  source "$TOPIC_DIR/alacritty/$TOPIC_SETUP_FILE"
+  execute "source $TOPIC_DIR/alacritty/$TOPIC_SETUP_FILE && main" "Setting up alacritty ..."
 }
 
 # ----------------------------------------------------------------------

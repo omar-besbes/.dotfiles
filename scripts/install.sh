@@ -4,21 +4,7 @@
 # | Init                                                               |
 # ----------------------------------------------------------------------
 
-#
-# WARNING
-# =======
-#
-# This section was written in this way to make sure that it can be run
-# remotely or locally with the same behaviour.
-#
-# Please do not change anything here unless you know very very well
-# what you are doing.
-#
-# =======
-#
-
-
-mkdir -p "$DOTFILES_ROOT_DIR"
+mkdir -p "$DOTFILES_ROOT_DIR" || exit 1
 cd "$DOTFILES_ROOT_DIR" || exit 1
 
 source "$DOTFILES_ROOT_DIR/scripts/utils.sh"
@@ -77,7 +63,7 @@ install_cli() {
 
   cat <<'EOF' > "$HOME/.local/bin/dotfiles"
 #!/bin/bash
-$DOTFILES_ROOT_DIR/dotfiles.sh "$@"
+$HOME/.dotfiles/dotfiles.sh "$@"
 EOF
 
   chmod +x "$HOME/.local/bin"
@@ -100,6 +86,8 @@ main() {
 	setup_topics $DOTFILES_SOURCE_DIR
 
   install_cli
+
+  print_info DONE
 
 }
 

@@ -5,7 +5,7 @@
 # ----------------------------------------------------------------------
 
 choose_browser() {
-  source "$TOPIC_DIR/chromium/$TOPIC_SETUP_FILE"
+  execute "source $TOPIC_DIR/chromium/$TOPIC_SETUP_FILE && main" "Setting up chromium ..."
 }
 
 # ----------------------------------------------------------------------
