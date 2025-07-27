@@ -21,6 +21,17 @@ install_dependencies() {
 	# install curl
 	execute "sudo apt-get install -y curl" "Installing curl ..."
 
+  # install gum
+  if ! cmd_exists gum; then
+    sudo install -m 0755 -d /etc/apt/keyrings
+    execute '
+      curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor --yes -o /etc/apt/keyrings/charm.gpg
+      echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
+      sudo apt-get update
+      sudo apt-get install -y gum
+    ' "Installing gum ..."
+  fi
+
 	# isntall necessary compression and extraction tools
 	execute "sudo apt-get install -y bzip2 gzip zip xz-utils tar" "Installing extraction/compression tools ..."
 
@@ -37,10 +48,6 @@ install_dependencies() {
 		execute "curl -fsSL https://deno.land/install.sh | sh -s -- --no-modify-path -y" "Installing deno ..."
 		deno completions bash >"$DOTFILES_BASH_COMPLETIONS_DIR/deno.sh"
 	fi
-
-	# install nvm
-	! cmd_exists nvm &&
-		execute "PROFILE=/dev/null bash -c 'curl -fSL -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash'" "Installing nvm ..."
 
 	# install shellcheck
 	execute "sudo apt-get install -y shellcheck" "Installing shellcheck ..."
