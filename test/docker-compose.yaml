@@ -2,12 +2,14 @@ services:
   local:
     build:
       context: ..
-      dockerfile: test/Dockerfile
+      dockerfile: test/local.Dockerfile
+    environment:
+      CI: true
     command: >
       /bin/bash -c "
       $$HOME/.dotfiles/dotfiles.sh install
       && . $$HOME/.bashrc
-      && $$HOME/.dotfiles/test/test.sh
+      && dotfiles test
       "
     cap_add:
       - SYS_ADMIN
@@ -18,15 +20,16 @@ services:
   remote:
     build:
       context: ..
-      dockerfile: test/Dockerfile
+      dockerfile: test/remote.Dockerfile
     command: >
       /bin/bash -c "
       bash <(curl -fSL# $$RAW_CONTENT_URL/dotfiles.sh) install
       && . $$HOME/.bashrc
-      && ./test/test.sh
+      && $$HOME/.dotfiles/test/test.sh
       "
     environment:
       RAW_CONTENT_URL: ${RAW_CONTENT_URL}
+      CI: true
     cap_add:
       - SYS_ADMIN
     devices:

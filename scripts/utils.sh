@@ -6,23 +6,23 @@
 
 set -euo pipefail
 
-[ ! -v DOTFILES_GITHUB_ORIGIN ]        && declare -r DOTFILES_GITHUB_ORIGIN="https://github.com/omar-besbes/.dotfiles"
-[ ! -v DOTFILES_ROOT_DIR_NAME ]        && declare -r DOTFILES_ROOT_DIR_NAME=".dotfiles"
-[ ! -v DOTFILES_ROOT_DIR ]             && declare -r DOTFILES_ROOT_DIR="$HOME/$DOTFILES_ROOT_DIR_NAME"
-[ ! -v DOTFILES_SOURCE_DIR_NAME ]      && declare -r DOTFILES_SOURCE_DIR_NAME="src"
-[ ! -v DOTFILES_SOURCE_DIR ]           && declare -r DOTFILES_SOURCE_DIR="$DOTFILES_ROOT_DIR/$DOTFILES_SOURCE_DIR_NAME"
-[ ! -v DOTFILES_SCRIPTS_DIR_NAME ]     && declare -r DOTFILES_SCRIPTS_DIR_NAME="scripts"
-[ ! -v DOTFILES_SCRIPTS_DIR ]          && declare -r DOTFILES_SCRIPTS_DIR="$DOTFILES_ROOT_DIR/$DOTFILES_SCRIPTS_DIR_NAME"
-[ ! -v DOTFILES_BACKUP_DIR_NAME ]      && declare -r DOTFILES_BACKUP_DIR_NAME="backup"
-[ ! -v DOTFILES_BACKUP_DIR ]           && declare -r DOTFILES_BACKUP_DIR="$DOTFILES_ROOT_DIR/$DOTFILES_BACKUP_DIR_NAME"
-[ ! -v DOTFILES_BASH_COMPLETIONS_DIR ] && declare -r DOTFILES_BASH_COMPLETIONS_DIR="$HOME/.local/share/bash-completion/completions"
+[ ! -v DOTFILES_GITHUB_HTTPS_ORIGIN ]  && declare -gr DOTFILES_GITHUB_HTTPS_ORIGIN="https://github.com/omar-besbes/.dotfiles"
+[ ! -v DOTFILES_GITHUB_SSH_ORIGIN ]    && declare -gr DOTFILES_GITHUB_SSH_ORIGIN="git@github.com:omar-besbes/.dotfiles.git"
+[ ! -v DOTFILES_ROOT_DIR ]             && declare -gr DOTFILES_ROOT_DIR="$HOME/.dotfiles"
+[ ! -v DOTFILES_SOURCE_DIR ]           && declare -gr DOTFILES_SOURCE_DIR="$DOTFILES_ROOT_DIR/src"
+[ ! -v DOTFILES_SCRIPTS_DIR ]          && declare -gr DOTFILES_SCRIPTS_DIR="$DOTFILES_ROOT_DIR/scripts"
+[ ! -v DOTFILES_BACKUP_DIR ]           && declare -gr DOTFILES_BACKUP_DIR="$DOTFILES_ROOT_DIR/backup"
+[ ! -v DOTFILES_BASH_COMPLETIONS_DIR ] && declare -gr DOTFILES_BASH_COMPLETIONS_DIR="$HOME/.local/share/bash-completion/completions"
+
+mkdir -p $DOTFILES_ROOT_DIR             || exit 1
+mkdir -p $DOTFILES_BASH_COMPLETIONS_DIR || exit 1
 
 # ----------------------------------------------------------------------
 # | Topics                                                             |
 # ----------------------------------------------------------------------
 
-[ ! -v TOPIC_INIT_FILE ] && declare TOPIC_INIT_FILE="init.sh"
-[ ! -v TOPIC_SETUP_FILE ] && declare TOPIC_SETUP_FILE="setup.sh"
+[ ! -v TOPIC_INIT_FILE ]  && declare -gr TOPIC_INIT_FILE="init.sh"
+[ ! -v TOPIC_SETUP_FILE ] && declare -gr TOPIC_SETUP_FILE="setup.sh"
 
 load_topics() {
 
@@ -161,25 +161,31 @@ execute() {
 
 }
 
+is_ci() {
+  [ -n "${CI:-}" ] || sudo grep -qE '(docker|lxc)' /proc/1/cgroup
+}
+
 sync_dotfiles() {
 
-  if ! git rev-parse --is-inside-work-tree &>/dev/null; then
+  if ! git -C "$DOTFILES_ROOT_DIR" rev-parse --is-inside-work-tree &>/dev/null; then
     # ======================================= #
     # case: FIRST TIME INSTALL                #
     # ======================================= #
 
     print_info "   [ℹ️] No DOTFILES where detected, beginning a remote install ..."
 
-    # if directory contains anything, move it to /backups/.dotfiles except /backups, of course
-    [ ! -z $(ls -A "$DOTFILES_ROOT_DIR") ] &&
-      mkdir "$DOTFILES_ROOT_DIR/backups/.dotfiles" &&
-      find "$DOTFILES_ROOT_DIR" -maxdepth 1 -mindepth 1 -not -name "backups"
-    find "$DOTFILES_ROOT_DIR" -maxdepth 1 -mindepth 1 -not -name "backups" -exec mv -t "$ROOT_DIR/backups/.dotfiles" {} +
+    # if directory contains anything, move it to `$DOTFILES_ROOT_DIR/backups` except `backups`, of course
+    if [ "$(ls -A "$DOTFILES_ROOT_DIR")" ]; then
+      local backup_dir="$DOTFILES_ROOT_DIR/backups/$(date +"%Y%m%d-%H%M%S")"
+      mkdir -p "$backup_dir"
+      find "$DOTFILES_ROOT_DIR" -maxdepth 1 -mindepth 1 -not -name "backups" -exec mv -t "$backup_dir" {} +
+    fi
 
     # clone repository recursively
-    git clone -b main "$DOTFILES_GITHUB_ORIGIN" "$DOTFILES_ROOT_DIR"
+    git clone -b main "$DOTFILES_GITHUB_HTTPS_ORIGIN" "$DOTFILES_ROOT_DIR"
     git submodule sync --recursive
     git submodule update --init --recursive
+    git remote set-url --push origin "$DOTFILES_GITHUB_SSH_ORIGIN"
   else
     # ======================================= #
     # case: DOTFILES ALREADY INSTALLED        #
@@ -219,6 +225,7 @@ symlink_files() {
     fi
 
     # Create symlink
+    mkdir -p $(dirname "$TARGET_FILE")
     ln -fs $SOURCE_FILE $TARGET_FILE
     print_success "$TARGET_FILE → $SOURCE_FILE"
 
@@ -260,7 +267,7 @@ print_in_blue() {
 }
 
 print_error() {
-  print_in_red "   [✖] $1 $2\n"
+  print_in_red "   [✖] $1 ${2:-}\n"
 }
 
 print_error_stream() {
@@ -374,5 +381,7 @@ cleanup() {
     show_spinner prompt utils_cleanup; do
     unset -f "$fn"
   done
+
+  set +euo pipefail
 
 }

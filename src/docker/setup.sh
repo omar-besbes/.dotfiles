@@ -27,14 +27,16 @@ install_dependencies() {
   # Install packages
   sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-  # Setup rootless docker mode
-  sudo groupadd -f docker
-  sudo usermod -aG docker $(whoami)
-  newgrp docker
+  if ! is_ci; then
+    # Setup rootless docker mode
+    sudo groupadd -f docker
+    sudo usermod -aG docker $(whoami)
+    newgrp docker
 
-  # Configure docker to start on boot
-  sudo systemctl enable docker.service
-  sudo systemctl enable containerd.service
+    # Configure docker to start on boot
+    sudo systemctl enable docker.service
+    sudo systemctl enable containerd.service
+  fi
 
 }
 

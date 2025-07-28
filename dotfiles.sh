@@ -1,6 +1,19 @@
 #!/bin/bash
 set -euo pipefail
 
+#
+# WARNING
+# =======
+#
+# This script was written in this way to make sure that it can be run
+# remotely or locally with the same behaviour.
+#
+# Please do not change anything here unless you know very very well
+# what you are doing.
+#
+# =======
+#
+
 # ----------------------------------------------------------------------
 # | Usage                                                              |
 # ----------------------------------------------------------------------
@@ -23,19 +36,19 @@ EOF
 # ----------------------------------------------------------------------
 
 run_command() {
+
   case "${1:-}" in
     install)
-      (source scripts/install.sh)
-      source ~/.bashrc
+      (source_or_fetch scripts/install.sh)
       ;;
     backup)
-      (source scripts/backup.sh)
+      (source_or_fetch scripts/backup.sh)
       ;;
     restore)
-      (source scripts/restore.sh)
+      (source_or_fetch scripts/restore.sh)
       ;;
     test)
-      (source test/test.sh)
+      (source_or_fetch test/test.sh)
       ;;
     interactive)
       if command -v gum &>/dev/null; then
@@ -50,13 +63,27 @@ run_command() {
       exit 1
       ;;
   esac
+
+}
+
+# ----------------------------------------------------------------------
+# | Source or Fetch                                                    |
+# ----------------------------------------------------------------------
+
+source_or_fetch() {
+  local path="${1?}"
+  if [ -f "$DOTFILES_ROOT_DIR/$path" ]; then
+    source "$DOTFILES_ROOT_DIR/$path"
+  else
+    source <(curl -fsSL "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/$path")
+  fi
 }
 
 # ----------------------------------------------------------------------
 # | Check Command                                                      |
 # ----------------------------------------------------------------------
 
-if [ "${1:-}" = "install" ] || [ "${1:-}" = "backup" ] || [ "${1:-}" = "restore" ] || [ "${1:-}" = "test" ]; then
+if [[ "${1:-}" =~ ^(install|backup|restore|test)$ ]]; then
   cmd="$1"
 elif [ -z "${1:-}" ] && command -v gum &>/dev/null; then
   cmd="interactive"
@@ -69,29 +96,14 @@ fi
 # | Init                                                               |
 # ----------------------------------------------------------------------
 
-#
-# WARNING
-# =======
-#
-# This section was written in this way to make sure that it can be run
-# remotely or locally with the same behaviour.
-#
-# Please do not change anything here unless you know very very well
-# what you are doing.
-#
-# =======
-#
-
+[ ! -v DOTFILES_ROOT_DIR ] &&
+  declare -r DOTFILES_ROOT_DIR="$HOME/.dotfiles"
 [ ! -v CURRENT_BRANCH ] &&
-  declare -r CURRENT_BRANCH=$(git branch --show-current 2>/dev/null || echo "main")
+  declare -r CURRENT_BRANCH=$(git -C "$DOTFILES_ROOT_DIR" branch --show-current 2>/dev/null || echo "main")
 [ ! -v DOTFILES_GITHUB_RAW_CONTENT_ORIGIN ] &&
   declare -r DOTFILES_GITHUB_RAW_CONTENT_ORIGIN="https://raw.githubusercontent.com/omar-besbes/.dotfiles/$CURRENT_BRANCH"
 
-if [ -n "${DOTFILES_ROOT_DIR:-}" ] && [ -f "$DOTFILES_ROOT_DIR/scripts/utils.sh" ]; then
-    source "$DOTFILES_ROOT_DIR/scripts/utils.sh"
-else
-    source <(curl -fsSL "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/utils.sh")
-fi
+source_or_fetch scripts/utils.sh
 
 # ----------------------------------------------------------------------
 # | Main                                                               |

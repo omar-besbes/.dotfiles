@@ -4,16 +4,17 @@
 # | Init                                                               |
 # ----------------------------------------------------------------------
 
-mkdir -p "$DOTFILES_ROOT_DIR" || exit 1
+[ ! -v DOTFILES_ROOT_DIR ] && source "$HOME/.dotfiles/scripts/utils.sh"
 cd "$DOTFILES_ROOT_DIR" || exit 1
-
-source "$DOTFILES_ROOT_DIR/scripts/utils.sh"
 
 # ----------------------------------------------------------------------
 # | Global Dependencies                                                |
 # ----------------------------------------------------------------------
 
 install_dependencies() {
+
+  # update dependencies list
+  execute "sudo apt-get update" "Updating ..."
 
 	# install git
 	execute "sudo apt-get install -y git" "Installing git ..."
@@ -46,6 +47,7 @@ install_dependencies() {
 	# install deno
 	if ! cmd_exists deno; then
 		execute "curl -fsSL https://deno.land/install.sh | sh -s -- --no-modify-path -y" "Installing deno ..."
+		source "$HOME/.deno/env"
 		deno completions bash >"$DOTFILES_BASH_COMPLETIONS_DIR/deno.sh"
 	fi
 
@@ -56,7 +58,7 @@ install_dependencies() {
 	execute "sudo apt-get install -y xclip" "Installing xclip ..."
 
 	# install gcc, g++ & some other tools
-	execute "sudo apt-get install -y ca-certificates fontconfig build-essential software-properties-common" "Installing essential tools ..."
+	execute "sudo apt-get install -y ca-certificates fontconfig build-essential" "Installing essential tools ..."
 
 }
 
@@ -73,7 +75,7 @@ install_cli() {
 $HOME/.dotfiles/dotfiles.sh "$@"
 EOF
 
-  chmod +x "$HOME/.local/bin"
+  chmod +x $HOME/.local/bin/*
 
 }
 

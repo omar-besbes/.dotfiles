@@ -42,6 +42,4 @@ main() {
   # Setup bash sub-topics
   setup_topics $TOPIC_DIR
 
-  mkdir -p "$DOTFILES_BASH_COMPLETIONS_DIR"
-
 }

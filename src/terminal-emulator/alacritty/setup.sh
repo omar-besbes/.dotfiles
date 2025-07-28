@@ -14,11 +14,11 @@ install_dependencies() {
   local -r ALACRITTY_DIR="alacritty"
   git clone $ALACRITTY_GITHUB_ORIGIN $ALACRITTY_DIR
   cd $ALACRITTY_DIR
-  sudo apt-get install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
+  sudo apt-get install -y cmake g++ pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 desktop-file-utils
   cargo build --release
 
   # verify if alacirtty is well installed
-  if [ -v infocmp alacritty ]; then
+  if ! infocmp alacritty >/dev/null 2>&1; then
     sudo tic -xe alacritty,alacritty-direct extra/alacritty.info
   fi
 
@@ -44,7 +44,7 @@ install_dependencies() {
   local -r ALACRITTY_THEMES_DIR="$HOME/.config/alacritty/themes"
   local -r ALACRITTY_THEMES_GITHUB_ORIGIN="https://github.com/alacritty/alacritty-theme"
   mkdir -p $ALACRITTY_THEMES_DIR
-  git clone $ALACRITTY_THEMES_GITHUB_ORIGIN $ALACRITTY_TEHMES_DIR
+  git clone $ALACRITTY_THEMES_GITHUB_ORIGIN $ALACRITTY_THEMES_DIR
 
   # clean up
   cd -

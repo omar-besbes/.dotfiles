@@ -7,6 +7,7 @@ RUN	apt-get update && \
 	git \
 	sudo \
 	curl \
+	gnupg \
 	fuse
 
 ENV SHELL=bash

@@ -16,10 +16,12 @@ install_nerd_fonts() {
   # Function to download and install a font
   install_font() {
     local font_name=$1
-    if ! fc-list | grep -q "$font_name"; then
+    if ! ls -A "$FONT_DIR/$font_name" &>/dev/null; then
       curl -fSLJO# "$NERD_FONTS_GITHUB_ORIGIN/releases/latest/download/${font_name}.zip"
       unzip -qo "$font_name.zip" -d "$FONT_DIR/$font_name"
       rm -f "$font_name.zip"
+    else
+      print_info "$font_name is already installed. Skipping."
     fi
   }
 
