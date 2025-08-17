@@ -71,7 +71,7 @@ ask_for_sudo() {
     sudo -n true
     sleep 60
     kill -0 "$$" || exit
-  done &>/dev/null &
+  done &>/dev/null & disown
 
 }
 
