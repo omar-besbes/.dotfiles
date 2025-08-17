@@ -182,7 +182,8 @@ sync_dotfiles() {
     fi
 
     # clone repository recursively
-    git clone -b main "$DOTFILES_GITHUB_HTTPS_ORIGIN" "$DOTFILES_ROOT_DIR"
+    [ ! -v CURRENT_BRANCH ] && CURRENT_BRANCH="main"
+    git clone -b "$CURRENT_BRANCH" "$DOTFILES_GITHUB_HTTPS_ORIGIN" "$DOTFILES_ROOT_DIR"
     git submodule sync --recursive
     git submodule update --init --recursive
     git remote set-url --push origin "$DOTFILES_GITHUB_SSH_ORIGIN"

@@ -18,6 +18,7 @@ jobs:
     env:
       COMPOSE_FILE: "test/docker-compose.yaml"
       RAW_CONTENT_URL: "https://raw.githubusercontent.com/${{ github.repository }}/${{ github.head_ref || github.ref_name }}"
+      CURRENT_BRANCH: "${{ github.head_ref || github.ref_name }}"
 
     steps:
       - name: Checkout code
