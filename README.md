@@ -35,7 +35,7 @@ Only `bash`, `apt`, `sudo` and `curl` are required. The script will install ever
 
 Run this:
 ```sh
-bash -c 'source <(curl -fSL# https://raw.githubusercontent.com/omar-besbes/.dotfiles/main/dotfiles.sh)' && . ~/.bashrc
+bash <(curl -fSL# https://raw.githubusercontent.com/omar-besbes/.dotfiles/main/dotfiles.sh) install && . ~/.bashrc
 ```
 
 
