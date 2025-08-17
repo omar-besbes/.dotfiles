@@ -27,6 +27,35 @@ install_dependencies() {
 }
 
 # ----------------------------------------------------------------------
+# | Symlinks                                                           |
+# ----------------------------------------------------------------------
+
+create_symlinks() {
+
+  local -r VSCODE_CONFIG_DIR="$HOME/.config/Code/User"
+  mkdir -p $VSCODE_CONFIG_DIR
+
+  local -a FILES_TO_SYMLINK=(
+    "$TOPIC_DIR/keybindings.json"
+    "$TOPIC_DIR/settings.json"
+  )
+  local -a TARGET_PATHS=(
+    "$VSCODE_CONFIG_DIR/keybindings.json"
+    "$VSCODE_CONFIG_DIR/settings.json"
+  )
+  symlink_files FILES_TO_SYMLINK[@] TARGET_PATHS[@]
+
+}
+
+# ----------------------------------------------------------------------
+# | Post Install                                                       |
+# ----------------------------------------------------------------------
+
+post_install() {
+  code --install-extension github.github-vscode-theme
+}
+
+# ----------------------------------------------------------------------
 # | Main                                                               |
 # ----------------------------------------------------------------------
 
@@ -42,5 +71,9 @@ main() {
   ask_for_sudo
 
   install_dependencies
+
+  create_symlinks
+
+  post_install
 
 }

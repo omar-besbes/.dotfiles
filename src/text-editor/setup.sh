@@ -4,7 +4,7 @@
 # | Choose text editor                                                 |
 # ----------------------------------------------------------------------
 
-choose_editor() {
+setup_editors() {
 
   execute "source $TOPIC_DIR/neovim/$TOPIC_SETUP_FILE && main" "Setting up neovim ..."
   execute "source $TOPIC_DIR/vscode/$TOPIC_SETUP_FILE && main" "Setting up vscode ..."
