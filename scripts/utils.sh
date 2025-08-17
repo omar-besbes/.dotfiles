@@ -182,11 +182,10 @@ sync_dotfiles() {
     fi
 
     # clone repository recursively
-    [ ! -v CURRENT_BRANCH ] && CURRENT_BRANCH="main"
     git clone -b "$CURRENT_BRANCH" "$DOTFILES_GITHUB_HTTPS_ORIGIN" "$DOTFILES_ROOT_DIR"
-    git submodule sync --recursive
-    git submodule update --init --recursive
-    git remote set-url --push origin "$DOTFILES_GITHUB_SSH_ORIGIN"
+    git -C "$DOTFILES_ROOT_DIR" submodule sync --recursive
+    git -C "$DOTFILES_ROOT_DIR" submodule update --init --recursive
+    git -C "$DOTFILES_ROOT_DIR" remote set-url --push origin "$DOTFILES_GITHUB_SSH_ORIGIN"
   else
     # ======================================= #
     # case: DOTFILES ALREADY INSTALLED        #
@@ -195,10 +194,16 @@ sync_dotfiles() {
     print_info "   [ℹ️] Updating DOTFILES ..."
 
     # get updates from remote
-    git fetch
-    git pull --set-upstream origin "$CURRENT_BRANCH"
-    git submodule sync --recursive
-    git submodule update --init --recursive
+    git -C "$DOTFILES_ROOT_DIR" fetch
+
+    if ! is_ci && git -C "$DOTFILES_ROOT_DIR" rev-parse --abbrev-ref HEAD | grep -q '^HEAD$'; then
+      print_warning "DOTFILES repo is in detached HEAD. Please switch to a branch and re-run to get the latest updates."
+    else
+      if is_ci; then git -C "$DOTFILES_ROOT_DIR" switch -t "origin/$CURRENT_BRANCH"; fi
+      git -C "$DOTFILES_ROOT_DIR" pull --ff-only --set-upstream origin "$CURRENT_BRANCH"
+      git -C "$DOTFILES_ROOT_DIR" submodule sync --recursive
+      git -C "$DOTFILES_ROOT_DIR" submodule update --init --recursive
+    fi
   fi
 
 }

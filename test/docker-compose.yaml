@@ -4,6 +4,7 @@ services:
       context: ..
       dockerfile: test/local.Dockerfile
     environment:
+      CURRENT_BRANCH: ${CURRENT_BRANCH}
       CI: true
     command: >
       /bin/bash -c "
