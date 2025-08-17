@@ -1,37 +1,24 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------
-# | Init                                                               |
-# ----------------------------------------------------------------------
-
-declare DIR="$(dirname "${BASH_SOURCE[0]}")"
-declare ROOT_DIR="$(realpath "$DIR/../..")"
-declare TOPIC_NAME="shell"
-declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
-
-source "$ROOT_DIR/scripts/utils.sh"
-source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
-source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
-
-# ----------------------------------------------------------------------
 # | Symlinks                                                           |
 # ----------------------------------------------------------------------
 
 create_symlinks() {
 
-	local -a FILES_TO_SYMLINK=(
-		"$TOPIC_DIR/bash_logout"
-		"$TOPIC_DIR/bash_profile"
-		"$TOPIC_DIR/bashrc"
-		"$TOPIC_DIR/inputrc"
-	)
-	local -r TARGET_PATHS=(
-		"$HOME/.bash_logout"
-		"$HOME/.bash_profile"
-		"$HOME/.bashrc"
-		"$HOME/.inputrc"
-	)
-	symlink_files FILES_TO_SYMLINK[@] TARGET_PATHS[@]
+  local -a FILES_TO_SYMLINK=(
+    "$TOPIC_DIR/bash_logout"
+    "$TOPIC_DIR/bash_profile"
+    "$TOPIC_DIR/bashrc"
+    "$TOPIC_DIR/inputrc"
+  )
+  local -r TARGET_PATHS=(
+    "$HOME/.bash_logout"
+    "$HOME/.bash_profile"
+    "$HOME/.bashrc"
+    "$HOME/.inputrc"
+  )
+  symlink_files FILES_TO_SYMLINK[@] TARGET_PATHS[@]
 
 }
 
@@ -41,11 +28,18 @@ create_symlinks() {
 
 main() {
 
-	ask_for_sudo
+  local DIR="$(dirname "${BASH_SOURCE[0]}")"
+  local ROOT_DIR="$(realpath "$DIR/../..")"
+  local TOPIC_NAME="shell"
+  local TOPIC_DIR="$ROOT_DIR/src/$TOPIC_NAME"
 
-	create_symlinks
+  [ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
 
-	# Setup bash sub-topics
-	setup_topics $TOPIC_DIR
+  ask_for_sudo
+
+  create_symlinks
+
+  # Setup bash sub-topics
+  setup_topics $TOPIC_DIR
 
 }

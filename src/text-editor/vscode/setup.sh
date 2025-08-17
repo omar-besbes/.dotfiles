@@ -1,18 +1,6 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------
-# | Init                                                               |
-# ----------------------------------------------------------------------
-
-declare DIR="$(dirname "${BASH_SOURCE[0]}")"
-declare ROOT_DIR="$(realpath "$DIR/../../..")"
-declare TOPIC_NAME="text-editor/vscode"
-declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
-
-source "$ROOT_DIR/scripts/utils.sh"
-source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
-
-# ----------------------------------------------------------------------
 # | Dependencies                                                       |
 # ----------------------------------------------------------------------
 
@@ -44,10 +32,15 @@ install_dependencies() {
 
 main() {
 
+  local DIR="$(dirname "${BASH_SOURCE[0]}")"
+  local ROOT_DIR="$(realpath "$DIR/../../..")"
+  local TOPIC_NAME="text-editor/vscode"
+  local TOPIC_DIR="$ROOT_DIR/src/$TOPIC_NAME"
+
+  [ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
+
   ask_for_sudo
 
   install_dependencies
 
 }
-
-execute "main" "Setting up vscode ..."

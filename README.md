@@ -35,7 +35,7 @@ Only `bash`, `apt`, `sudo` and `curl` are required. The script will install ever
 
 Run this:
 ```sh
-bash -c 'source <(curl -fSL# https://raw.githubusercontent.com/omar-besbes/.dotfiles/main/bootstrap.sh)' && . ~/.bashrc
+bash -c 'source <(curl -fSL# https://raw.githubusercontent.com/omar-besbes/.dotfiles/main/dotfiles.sh)' && . ~/.bashrc
 ```
 
 
@@ -57,7 +57,19 @@ When bootstrap is run, it does a few things:
 ## Contents
 
 ### Root (/)
-* bootstrap.sh - Calls all `setup.sh` scripts
+* dotfiles.sh - Dotfiles CLI
+
+### Scripts (scripts/)
+The `/scripts` directory contains executable shell scripts (including the dotfiles script) and symlinks to executable shell scripts.
+This directory is added to the path.
+* install.sh - Calls all `setup.sh` scripts
+* backup.sh - Calls all `backup.sh` scripts
+* restore.sh - Calls all `restore.sh` scripts
+* utils.sh – Contains helper functions for:
+  - printing progress messages
+  - calling all `init.sh` or `setup.sh` scripts in a directory
+  - symlinking files
+  - synchronizing the current dotfiles repository with the remote
 
 ### Source (src/)
 The `/src` directory contains all topics configurations.
@@ -90,11 +102,6 @@ All other folders inside `src` without `setup.sh` are ignored and are not consid
 ### Kubectl (src/kubectl/)
 * setup.sh - Installs [kubectl](https://kubernetes.io).
 
-### Neovim (src/neovim/)
-* setup.sh - Symlinks `~/.config/nvim` to `src/neovim/nvim`.
-* nvim/ - My neovim config as a git submodule. Checkout the
-  [repository](https://github.com/omar-besbes/nvim-config).
-
 ### Shell (src/shell/)
 * setup.sh - Symlinks all fish files to their corresponding location in `~` and calls all sub-`setup.sh`.
 * bash_logout - Cleans up on shell logout (.bash_logout).
@@ -117,20 +124,25 @@ All other folders inside `src` without `setup.sh` are ignored and are not consid
   * init.sh - Sets the `LS_COLORS` environment variable on shell startup using vivid.
   * setup.sh - Installs [vivid](https://github.com/sharkdp/vivid).
 
+### Spotify (src/spotify/)
+* setup.sh - Installs [spotify](https://spotify.com).
+
 ### Terminal emulator (src/terminal-emulator/)
 * setup.sh - Calls alacritty's `setup.sh`.
 * alacritty/
   * setup.sh - Installs [alacritty](https://alacritty.org) and symlinks `~/.config/alacritty/alacritty.yml` to `alacritty.yml`.
   * alacritty.yml - Contains alacritty config.
 
-### Helper Scripts (scripts/)
-The `/scripts` directory contains executable shell scripts (including the dotfiles script) and symlinks to executable shell scripts.
-This directory is added to the path.
-* utils.sh - Contains helper functions for printing progress messages.
-* load_topics.sh - Contains helper function for calling all `init.sh` scripts in a directory.
-* setup_topics.sh - Contains helper function for calling all `setup.sh` scripts in a directory.
-* symlink_files.sh - Contains helper function for symlinking files.
-* sync_files.sh - Contains helper function for synchronizing current dotfiles repository with remote.
+### Text Editor (src/text-editor/)
+
+* setup.sh - Calls each editor's `setup.sh`.
+* neovim/
+  * setup.sh - Symlinks `~/.config/nvim` to `src/text-editors/neovim/nvim`.
+  * nvim/ - My Neovim config as a git submodule. Checkout the [repository](https://github.com/omar-besbes/nvim-config).
+* vscode/
+  * setup.sh - Installs [Visual Studio Code](https://code.visualstudio.com).
+* vscodium/
+  * setup.sh - Installs [VSCodium](https://vscodium.com).
 
 ### Tests (test/)
 The `/test` directory contains tests.
@@ -155,6 +167,7 @@ The `/backups` directory gets created when necessary. Any files in `~/` that wou
 - [x] Remote install
 - [x] Fonts
 - [x] Web browser
+- [x] CLI
 - [ ] Automatic bookmarks import in browser
 - [ ] Move all config files in `/backups` before setup (only a small part is moved)
 - [ ] Uninstall script

@@ -1,6 +1,8 @@
 /.github
 /backup
+/backups
 /bin
+/.bin
 .dockerignore
 .env
 /src/neovim/nvim

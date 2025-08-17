@@ -1,15 +1,15 @@
-version: "3.8"
-
 services:
   local:
     build:
       context: ..
-      dockerfile: test/Dockerfile
+      dockerfile: test/local.Dockerfile
+    environment:
+      CURRENT_BRANCH: ${CURRENT_BRANCH}
+      CI: true
     command: >
       /bin/bash -c "
-      $$HOME/.dotfiles/bootstrap.sh
-      && . $$HOME/.bashrc
-      && $$HOME/.dotfiles/test/test.sh
+      $$HOME/.dotfiles/dotfiles.sh install
+      && $$HOME/.dotfiles/dotfiles.sh test
       "
     cap_add:
       - SYS_ADMIN
@@ -20,15 +20,16 @@ services:
   remote:
     build:
       context: ..
-      dockerfile: test/Dockerfile
+      dockerfile: test/remote.Dockerfile
     command: >
       /bin/bash -c "
-      source <(curl -fSL# $$RAW_CONTENT_URL/bootstrap.sh)
-      && . $$HOME/.bashrc
-      && ./test/test.sh
+      bash <(curl -fSL# $$RAW_CONTENT_URL/dotfiles.sh) install
+      && $$HOME/.dotfiles/dotfiles.sh test
       "
     environment:
       RAW_CONTENT_URL: ${RAW_CONTENT_URL}
+      CURRENT_BRANCH: ${CURRENT_BRANCH}
+      CI: true
     cap_add:
       - SYS_ADMIN
     devices:
