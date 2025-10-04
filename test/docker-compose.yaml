@@ -3,6 +3,8 @@ services:
     build:
       context: ..
       dockerfile: test/local.Dockerfile
+    environment:
+      CURRENT_BRANCH: ${CURRENT_BRANCH}
     command: >
       /bin/bash -c "
       $$HOME/.dotfiles/dotfiles.sh install
@@ -19,9 +21,12 @@ services:
     build:
       context: ..
       dockerfile: test/remote.Dockerfile
+    environment:
+      CURRENT_BRANCH: ${CURRENT_BRANCH}
     command: >
       /bin/bash -c "
-      bash <(curl -fSL# $$RAW_CONTENT_URL/dotfiles.sh) install
+      URL="https://raw.githubusercontent.com/omar-besbes/.dotfiles/$$CURRENT_BRANCH"
+      && bash <(curl -fSL# $$URL/dotfiles.sh) install
       && source $$HOME/.bashrc
       && $$HOME/.dotfiles/dotfiles.sh test
       "
