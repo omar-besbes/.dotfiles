@@ -2,12 +2,14 @@ services:
   local:
     build:
       context: ..
-      dockerfile: test/Dockerfile
+      dockerfile: test/local.Dockerfile
+    environment:
+      CURRENT_BRANCH: ${CURRENT_BRANCH}
     command: >
       /bin/bash -c "
-      $$HOME/.dotfiles/bootstrap.sh
-      && . $$HOME/.dotfiles/src/shell/core/env.sh
-      && . $$HOME/.dotfiles/test/test.sh
+      $$HOME/.dotfiles/dotfiles.sh install
+      && source $$HOME/.bashrc
+      && $$HOME/.dotfiles/dotfiles.sh test
       "
     cap_add:
       - SYS_ADMIN
@@ -18,15 +20,16 @@ services:
   remote:
     build:
       context: ..
-      dockerfile: test/Dockerfile
+      dockerfile: test/remote.Dockerfile
+    environment:
+      CURRENT_BRANCH: ${CURRENT_BRANCH}
     command: >
       /bin/bash -c "
-      source <(curl -fSL# $$RAW_CONTENT_URL/bootstrap.sh)
-      && . $$HOME/.dotfiles/src/shell/core/env.sh
-      && . $$HOME/.dotfiles/test/test.sh
+      URL="https://raw.githubusercontent.com/omar-besbes/.dotfiles/$$CURRENT_BRANCH"
+      && bash <(curl -fSL# $$URL/dotfiles.sh) install
+      && source $$HOME/.bashrc
+      && $$HOME/.dotfiles/dotfiles.sh test
       "
-    environment:
-      RAW_CONTENT_URL: ${RAW_CONTENT_URL}
     cap_add:
       - SYS_ADMIN
     devices:

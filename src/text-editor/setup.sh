@@ -1,26 +1,13 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------
-# | Init                                                               |
-# ----------------------------------------------------------------------
-
-declare DIR="$(dirname "${BASH_SOURCE[0]}")"
-declare ROOT_DIR="$(realpath "$DIR/../..")"
-declare TOPIC_NAME="text-editor"
-declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
-
-source "$ROOT_DIR/scripts/utils.sh"
-source "$DOTFILES_SCRIPTS_DIR/setup_topics.sh"
-
-# ----------------------------------------------------------------------
-# | Setup text editors                                                 |
+# | Choose text editor                                                 |
 # ----------------------------------------------------------------------
 
 setup_editors() {
 
-  bash -c "source $TOPIC_DIR/neovim/$TOPIC_SETUP_FILE"
-  bash -c "source $TOPIC_DIR/vscode/$TOPIC_SETUP_FILE"
-  # bash -c "source $TOPIC_DIR/vscodium/$TOPIC_SETUP_FILE"
+  execute "source $TOPIC_DIR/neovim/$TOPIC_SETUP_FILE && main" "Setting up neovim ..."
+  execute "source $TOPIC_DIR/vscode/$TOPIC_SETUP_FILE && main" "Setting up vscode ..."
 
 }
 
@@ -29,5 +16,14 @@ setup_editors() {
 # ----------------------------------------------------------------------
 
 main() {
-	setup_editors
+
+  local DIR="$(dirname "${BASH_SOURCE[0]}")"
+  local ROOT_DIR="$(realpath "$DIR/../..")"
+  local TOPIC_NAME="text-editor"
+  local TOPIC_DIR="$ROOT_DIR/src/$TOPIC_NAME"
+
+  [ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
+
+  setup_editors
+
 }
