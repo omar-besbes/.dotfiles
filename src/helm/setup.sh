@@ -8,15 +8,16 @@ install_dependencies() {
 
   cmd_exists helm && return
 
-  # Add kubectl's official GPG key:
-  curl https://baltocdn.com/helm/signing.asc |
-    sudo gpg --dearmor -o /etc/apt/keyrings/helm.gpg
   sudo apt-get install apt-transport-https --yes
+
+  # Add kubectl's official GPG key:
+  curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey |
+    sudo gpg --dearmor -o /etc/apt/keyrings/helm.gpg
 
   # Add the repository to Apt sources:
   echo \
     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/helm.gpg] \
-        https://baltocdn.com/helm/stable/debian/ all main" |
+        https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" |
     sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
   sudo apt-get update
 
