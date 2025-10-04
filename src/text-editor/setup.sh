@@ -24,6 +24,6 @@ main() {
 
   [ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
 
-  choose_editor
+  setup_editors
 
 }

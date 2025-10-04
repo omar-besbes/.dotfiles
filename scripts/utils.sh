@@ -162,7 +162,7 @@ execute() {
 }
 
 is_ci() {
-  [ -n "${CI:-}" ] || sudo grep -qE '(docker|lxc)' /proc/1/cgroup
+  [ -n "${CI:-}" ]
 }
 
 sync_dotfiles() {
