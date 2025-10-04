@@ -6,6 +6,7 @@ services:
     command: >
       /bin/bash -c "
       $$HOME/.dotfiles/dotfiles.sh install
+      && source $$HOME/.bashrc
       && $$HOME/.dotfiles/dotfiles.sh test
       "
     cap_add:
@@ -21,6 +22,7 @@ services:
     command: >
       /bin/bash -c "
       bash <(curl -fSL# $$RAW_CONTENT_URL/dotfiles.sh) install
+      && source $$HOME/.bashrc
       && $$HOME/.dotfiles/dotfiles.sh test
       "
     cap_add:

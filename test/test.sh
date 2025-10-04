@@ -25,7 +25,7 @@ declare -a COMMANDS_TO_VERIFY=(
 	"code"
 	"spotify"
   "deno"
-  "nvm"
+  "rustup"
   "cargo"
 )
 

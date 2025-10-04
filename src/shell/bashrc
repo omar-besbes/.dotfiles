@@ -5,14 +5,18 @@
 # for examples
 
 # ----------------------------------------------------------------------
-# | Init                                                               |
+# | Interactive setup                                                  |
 # ----------------------------------------------------------------------
 
-# If not running interactively, don't do anything
-case $- in
-*i*) ;;
-*) return ;;
-esac
+interactive_setup() {
+
+  # If not running interactively, don't do anything
+  case $- in
+  *i*) ;;
+  *) return ;;
+  esac
+
+}
 
 # ----------------------------------------------------------------------
 # | Main                                                               |
@@ -24,6 +28,11 @@ main() {
   local ROOT_DIR="$(realpath "$DIR/../..")"
 
   [ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
+
+  # Only run interactive setup if not in CI
+  if ! is_ci; then
+    interactive_setup
+  fi
 
   local TOPIC_NAME="shell"
   local TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
