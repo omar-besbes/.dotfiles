@@ -1,18 +1,6 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------
-# | Init                                                               |
-# ----------------------------------------------------------------------
-
-declare DIR="$(dirname "${BASH_SOURCE[0]}")"
-declare ROOT_DIR="$(realpath "$DIR/../../..")"
-declare TOPIC_NAME="text-editor/vscode"
-declare TOPIC_DIR="$DOTFILES_SOURCE_DIR/$TOPIC_NAME"
-
-source "$ROOT_DIR/scripts/utils.sh"
-source "$DOTFILES_SCRIPTS_DIR/symlink_files.sh"
-
-# ----------------------------------------------------------------------
 # | Dependencies                                                       |
 # ----------------------------------------------------------------------
 
@@ -39,15 +27,43 @@ install_dependencies() {
 }
 
 # ----------------------------------------------------------------------
+# | Symlinks                                                           |
+# ----------------------------------------------------------------------
+
+create_symlinks() {
+
+  local -r VSCODE_CONFIG_DIR="$HOME/.config/Code/User"
+  mkdir -p $VSCODE_CONFIG_DIR
+
+  local -a FILES_TO_SYMLINK=(
+    "$TOPIC_DIR/keybindings.json"
+    "$TOPIC_DIR/settings.json"
+  )
+  local -a TARGET_PATHS=(
+    "$VSCODE_CONFIG_DIR/keybindings.json"
+    "$VSCODE_CONFIG_DIR/settings.json"
+  )
+  symlink_files FILES_TO_SYMLINK[@] TARGET_PATHS[@]
+
+}
+
+# ----------------------------------------------------------------------
 # | Main                                                               |
 # ----------------------------------------------------------------------
 
 main() {
 
+  local DIR="$(dirname "${BASH_SOURCE[0]}")"
+  local ROOT_DIR="$(realpath "$DIR/../../..")"
+  local TOPIC_NAME="text-editor/vscode"
+  local TOPIC_DIR="$ROOT_DIR/src/$TOPIC_NAME"
+
+  [ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
+
   ask_for_sudo
 
   install_dependencies
 
-}
+  create_symlinks
 
-execute "main" "Setting up vscode ..."
+}

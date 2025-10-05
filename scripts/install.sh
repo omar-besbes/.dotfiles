@@ -4,37 +4,8 @@
 # | Init                                                               |
 # ----------------------------------------------------------------------
 
-#
-# WARNING
-# =======
-#
-# This section was written in this way to make sure that it can be run
-# remotely or locally with the same behaviour.
-#
-# Please do not change anything here unless you know very well well
-# what you are doing.
-#
-# =======
-#
-
-[ ! -v DOTFILES_ROOT_DIR ] && declare -r DOTFILES_ROOT_DIR="$HOME/.dotfiles"
-
-mkdir -p "$DOTFILES_ROOT_DIR"
+[ ! -v DOTFILES_ROOT_DIR ] && source "$HOME/.dotfiles/scripts/utils.sh"
 cd "$DOTFILES_ROOT_DIR" || exit 1
-
-[ ! -v CURRENT_BRANCH ] &&
-	declare -r CURRENT_BRANCH=$(git branch --show-current 2>/dev/null || echo "main")
-[ ! -v DOTFILES_GITHUB_RAW_CONTENT_ORIGIN ] &&
-	declare -r DOTFILES_GITHUB_RAW_CONTENT_ORIGIN="https://raw.githubusercontent.com/omar-besbes/.dotfiles/$CURRENT_BRANCH"
-
-source "$DOTFILES_ROOT_DIR/scripts/utils.sh" &>/dev/null ||
-	source <(curl -fsSL "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/utils.sh")
-source "$DOTFILES_ROOT_DIR/scripts/setup_topics.sh" &>/dev/null ||
-	source <(curl -fsSL "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/setup_topics.sh")
-source "$DOTFILES_ROOT_DIR/scripts/sync_files.sh" &>/dev/null ||
-	source <(curl -fsSL "$DOTFILES_GITHUB_RAW_CONTENT_ORIGIN/scripts/sync_files.sh")
-
-mkdir -p "$DOTFILES_BASH_COMPLETIONS_DIR"
 
 # ----------------------------------------------------------------------
 # | Global Dependencies                                                |
@@ -42,11 +13,25 @@ mkdir -p "$DOTFILES_BASH_COMPLETIONS_DIR"
 
 install_dependencies() {
 
+  # update dependencies list
+  execute "sudo apt-get update" "Updating ..."
+
 	# install git
 	execute "sudo apt-get install -y git" "Installing git ..."
 
 	# install curl
 	execute "sudo apt-get install -y curl" "Installing curl ..."
+
+  # install gum
+  if ! cmd_exists gum; then
+    sudo install -m 0755 -d /etc/apt/keyrings
+    execute '
+      curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor --yes -o /etc/apt/keyrings/charm.gpg
+      echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
+      sudo apt-get update
+      sudo apt-get install -y gum
+    ' "Installing gum ..."
+  fi
 
 	# isntall necessary compression and extraction tools
 	execute "sudo apt-get install -y bzip2 gzip zip xz-utils tar" "Installing extraction/compression tools ..."
@@ -62,12 +47,9 @@ install_dependencies() {
 	# install deno
 	if ! cmd_exists deno; then
 		execute "curl -fsSL https://deno.land/install.sh | sh -s -- --no-modify-path -y" "Installing deno ..."
+		source "$HOME/.deno/env"
 		deno completions bash >"$DOTFILES_BASH_COMPLETIONS_DIR/deno.sh"
 	fi
-
-	# install nvm & node
-	! cmd_exists nvm &&
-		execute "PROFILE=/dev/null bash -c 'curl -fSL -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash'" "Installing nvm ..."
 
 	# install shellcheck
 	execute "sudo apt-get install -y shellcheck" "Installing shellcheck ..."
@@ -76,7 +58,24 @@ install_dependencies() {
 	execute "sudo apt-get install -y xclip" "Installing xclip ..."
 
 	# install gcc, g++ & some other tools
-	execute "sudo apt-get install -y ca-certificates fontconfig build-essential software-properties-common" "Installing essential tools ..."
+	execute "sudo apt-get install -y ca-certificates fontconfig build-essential" "Installing essential tools ..."
+
+}
+
+# ----------------------------------------------------------------------
+# | Install CLI                                                        |
+# ----------------------------------------------------------------------
+
+install_cli() {
+
+  mkdir -p "$HOME/.local/bin"
+
+  cat <<'EOF' > "$HOME/.local/bin/dotfiles"
+#!/bin/bash
+$HOME/.dotfiles/dotfiles.sh "$@"
+EOF
+
+  chmod +x $HOME/.local/bin/*
 
 }
 
@@ -94,6 +93,10 @@ main() {
 
 	# begin installing configs
 	setup_topics $DOTFILES_SOURCE_DIR
+
+  install_cli
+
+  print_info DONE
 
 }
 
