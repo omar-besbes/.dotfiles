@@ -1,30 +1,26 @@
 name: Build remastered ISO
 
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
   workflow_dispatch:
     inputs:
       iso_image_url:
-        description: 'URL of the Debian ISO'
+        description: "URL of the Debian ISO"
         type: string
         required: false
       arch:
-        description: 'Architecture of the ISO image to generate'
+        description: "Architecture of the ISO image to generate"
         type: choice
         options: [amd64]
         required: true
         default: amd64
       type:
-        description: 'Type of the installation image'
+        description: "Type of the installation image"
         type: choice
         options: [netinst, dvd]
         required: true
-        default: dvd
+        default: netinst
       branch:
-        description: 'The branch of debian to use'
+        description: "The branch of debian to use"
         type: choice
         options: [stable, testing, sid]
         required: true
@@ -118,7 +114,7 @@ jobs:
           NEW_ISO: ${{ env.REMASTERED_ISO_IMAGE }}
           MBR_TEMPLATE: /usr/lib/ISOLINUX/isohdpfx.bin
           # Note: FS_NAME must be at most 32 characters long
-          FS_NAME: 'Debian ${{ github.event.inputs.branch }} preseed ${{ github.event.inputs.arch }}'
+          FS_NAME: "Debian ${{ github.event.inputs.branch }} preseed ${{ github.event.inputs.arch }}"
         run: |
           # Extract MBR template file to disk
           sudo dd if=${{ env.ORIGINAL_ISO }} bs=1 count=432 of=${{ env.MBR_TEMPLATE }}
@@ -138,10 +134,25 @@ jobs:
             -no-emul-boot -isohybrid-gpt-basdat -isohybrid-apm-hfsplus \
             ${{ env.NEW_FILES }}
 
+      - name: Encrypt ISO artifact
+        env:
+          ISO_IMAGE: ${{ env.REMASTERED_ISO_IMAGE }}
+          ENCRYPTED_ISO_IMAGE: ${{ env.REMASTERED_ISO_IMAGE }}.gpg
+        run: |
+          echo ${{ secrets.GPG_PUBLIC_KEY }} | gpg --batch --yes --import -
+          gpg --batch --yes --no-tty --quiet \
+            --trust-model always \
+            --compress-level 0 \
+            --recipient ${{ secrets.GPG_RECIPIENT_FINGERPRINT }} \
+            --output  ${{ env.ENCRYPTED_ISO_IMAGE }} \
+            --encrypt ${{ env.ISO_IMAGE }}
+
       - name: Upload ISO artifact
         uses: actions/upload-artifact@v4
         with:
           name: remastered-iso
-          path: ${{ env.REMASTERED_ISO_IMAGE }}
+          path: ${{ env.REMASTERED_ISO_IMAGE }}.gpg
           if-no-files-found: warn
-          retention-days: 7
+          overwrite: true
+          compression-level: 0
+          retention-days: 1
