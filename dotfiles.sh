@@ -27,6 +27,7 @@ Commands:
   backup       Run all backup.sh scripts
   restore      Run all restore.sh scripts
   test         Run test suite in containers
+  iso          Build ISO via GitHub Actions
   help         Show this message
 EOF
 }
@@ -50,9 +51,12 @@ run_command() {
     test)
       (source_or_fetch test/test.sh)
       ;;
+    iso)
+      (source_or_fetch scripts/iso.sh)
+      ;;
     interactive)
       if command -v gum &>/dev/null; then
-        run_command $(gum choose "install" "backup" "restore" "test")
+        run_command $(gum choose "install" "backup" "restore" "test" "iso")
       else
         usage
         exit 1
@@ -83,7 +87,7 @@ source_or_fetch() {
 # | Check Command                                                      |
 # ----------------------------------------------------------------------
 
-if [[ "${1:-}" =~ ^(install|backup|restore|test)$ ]]; then
+if [[ "${1:-}" =~ ^(install|backup|restore|test|iso)$ ]]; then
   cmd="$1"
 elif [ -z "${1:-}" ] && command -v gum &>/dev/null; then
   cmd="interactive"
