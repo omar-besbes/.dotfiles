@@ -13,7 +13,6 @@ ISO_ARCH="amd64"
 ISO_TYPE="netinst"
 DEBIAN_BRANCH="stable"
 ARTIFACT_NAME="remastered-iso"
-GIT_BRANCH=${GIT_BRANCH:-"$(git -C $DOTFILES_ROOT_DIR branch --show-current 2>/dev/null || echo 'main')"}
 
 # ----------------------------------------------------------------------
 # | Dependencies                                                       |
@@ -74,7 +73,7 @@ iso_build() {
   ' "Generating & Installing GPG keys in environment secrets ..."
 
   execute '
-    inputs=( -f arch="$ISO_ARCH" -f type="$ISO_TYPE" -f branch="$DEBIAN_BRANCH" -f ref="$GIT_BRANCH" )
+    inputs=( -f arch="$ISO_ARCH" -f type="$ISO_TYPE" -f branch="$DEBIAN_BRANCH" )
     gh workflow run "$WORKFLOW_NAME" -R "$REPO" "${inputs[@]}"
   ' "Dispatching workflow ..."
 
