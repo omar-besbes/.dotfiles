@@ -78,10 +78,26 @@ jobs:
         run: |
           envsubst < ${{ env.PRESEED_FILE_TEMPLATE }} > ${{ env.PRESEED_FILE }}
 
-      - name: Modify initrd and add preseed file
+      - name: Modify initrd and add preseed file (text installer)
         env:
           INSTALL_DIR: ${{ env.ISO_FILES_DIR }}/install.amd
         run: |
+          set -euo pipefail
+          INITRD="${{ env.INSTALL_DIR }}/initrd.gz"
+          [ -f "$INITRD" ] || { echo "ERROR: $INITRD not found"; exit 1; }
+          chmod +w -R ${{ env.INSTALL_DIR }}
+          gunzip ${{ env.INSTALL_DIR }}/initrd.gz
+          echo ${{ env.PRESEED_FILE }} | cpio -H newc -o -A -F ${{ env.INSTALL_DIR }}/initrd
+          gzip ${{ env.INSTALL_DIR }}/initrd
+          chmod -w -R ${{ env.INSTALL_DIR }}
+
+      - name: Modify initrd and add preseed file (graphical installer)
+        env:
+          INSTALL_DIR: ${{ env.ISO_FILES_DIR }}/install.amd/gtk
+        run: |
+          set -euo pipefail
+          INITRD="${{ env.INSTALL_DIR }}/initrd.gz"
+          [ -f "$INITRD" ] || { echo "ERROR: $INITRD not found"; exit 1; }
           chmod +w -R ${{ env.INSTALL_DIR }}
           gunzip ${{ env.INSTALL_DIR }}/initrd.gz
           echo ${{ env.PRESEED_FILE }} | cpio -H newc -o -A -F ${{ env.INSTALL_DIR }}/initrd
