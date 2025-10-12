@@ -139,7 +139,7 @@ jobs:
           ISO_IMAGE: ${{ env.REMASTERED_ISO_IMAGE }}
           ENCRYPTED_ISO_IMAGE: ${{ env.REMASTERED_ISO_IMAGE }}.gpg
         run: |
-          echo ${{ secrets.GPG_PUBLIC_KEY }} | gpg --batch --yes --import -
+          printf '%s' '${{ secrets.GPG_PUBLIC_KEY }}' | gpg --batch --yes --import -
           gpg --batch --yes --no-tty --quiet \
             --trust-model always \
             --compress-level 0 \
