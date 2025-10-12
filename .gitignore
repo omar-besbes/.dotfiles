@@ -3,5 +3,5 @@
 .env
 /backup
 /backups
-.secrets
 .vars
+.secrets
