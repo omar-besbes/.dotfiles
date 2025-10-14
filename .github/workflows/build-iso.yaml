@@ -37,7 +37,7 @@ jobs:
       ORIGINAL_ISO_IMAGE: debian.iso
       PRESEED_FILE_TEMPLATE: preseed.cfg.template
       PRESEED_FILE: preseed.cfg
-      ISO_FILES_DIR: isofiles
+      ISO_FILES_DIR: /media/debian
 
     steps:
       - name: Checkout repository
@@ -61,9 +61,9 @@ jobs:
 
       - name: Extract ISO files
         run: |
-          mkdir ${{ env.ISO_FILES_DIR }}
-          sudo xorriso -osirrox on -indev ${{ env.ORIGINAL_ISO_IMAGE }} -extract / /media/debian
-          cp -rT /media/debian ${{ env.ISO_FILES_DIR }}
+          mkdir -p ${{ env.ISO_FILES_DIR }}
+          sudo xorriso -osirrox on -indev ${{ env.ORIGINAL_ISO_IMAGE }} -extract / ${{ env.ISO_FILES_DIR }}
+          sudo chown -R $USER:$USER ${{ env.ISO_FILES_DIR }}
 
       - name: Generate preseed file
         env:
