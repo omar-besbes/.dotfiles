@@ -68,7 +68,6 @@ iso_build() {
     gpg --batch --quiet --passphrase "" --quick-generate-key "$id" rsa4096 encrypt 1d
     FINGERPRINT=$(gpg --batch --with-colons --fingerprint "$id" | grep -m1 "^fpr:" | cut -d: -f10)
     gpg --armor --export             "$FINGERPRINT" > "$tmpdir/pub.asc"
-    gpg --armor --export-secret-keys "$FINGERPRINT" > "$tmpdir/priv.asc"
     gh secret set GPG_PUBLIC_KEY            -R "$REPO" -e "$ENV_NAME" < "$tmpdir/pub.asc"
     gh secret set GPG_RECIPIENT_FINGERPRINT -R "$REPO" -e "$ENV_NAME" -b "$FINGERPRINT"
   ' "Generating & Installing GPG keys in environment secrets ..."
@@ -91,7 +90,6 @@ iso_build() {
   ' "Waiting for the run to finish ..."
 
   execute '
-    gpg --import "$tmpdir/priv.asc" >/dev/null
     gpg --output "remastered.iso" --decrypt "$ARTIFACT_FILENAME.gpg"
   ' "Decrypting ISO ..."
 
