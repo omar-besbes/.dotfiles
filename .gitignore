@@ -5,3 +5,4 @@
 /backups
 .vars
 .secrets
+*.iso
