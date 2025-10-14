@@ -13,6 +13,7 @@ ISO_ARCH="amd64"
 ISO_TYPE="netinst"
 DEBIAN_BRANCH="stable"
 ARTIFACT_NAME="remastered-iso"
+ARTIFACT_FILENAME="preseed-debian-$DEBIAN_BRANCH-$ISO_TYPE-$ISO_ARCH.iso"
 
 # ----------------------------------------------------------------------
 # | Dependencies                                                       |
@@ -91,13 +92,13 @@ iso_build() {
 
   execute '
     gpg --import "$tmpdir/priv.asc" >/dev/null
-    gpg --output "remastered.iso" --decrypt "$ARTIFACT_NAME"
+    gpg --output "remastered.iso" --decrypt "$ARTIFACT_FILENAME.gpg"
   ' "Decrypting ISO ..."
 
   execute '
-    gh secret delete GPG_PUBLIC_KEY            -R "$REPO" -e "$ENV_NAME" --yes || true
-    gh secret delete GPG_RECIPIENT_FINGERPRINT -R "$REPO" -e "$ENV_NAME" --yes || true
-  ' "Cleaning up GitHub secrets ..."
+    rm "$ARTIFACT_FILENAME.gpg"
+    gpg --batch --yes --delete-secret-and-public-key "$FINGERPRINT"
+  ' "Cleaning up ..."
 
 }
 
