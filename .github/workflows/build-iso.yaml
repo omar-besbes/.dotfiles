@@ -61,7 +61,7 @@ jobs:
 
       - name: Extract ISO files
         run: |
-          mkdir -p ${{ env.ISO_FILES_DIR }}
+          sudo mkdir -p ${{ env.ISO_FILES_DIR }}
           sudo xorriso -osirrox on -indev ${{ env.ORIGINAL_ISO_IMAGE }} -extract / ${{ env.ISO_FILES_DIR }}
           sudo chown -R $USER:$USER ${{ env.ISO_FILES_DIR }}
 
