@@ -62,7 +62,11 @@ jobs:
       - name: Extract ISO files
         run: |
           sudo mkdir -p ${{ env.ISO_FILES_DIR }}
-          sudo xorriso -osirrox on -indev ${{ env.ORIGINAL_ISO_IMAGE }} -extract / ${{ env.ISO_FILES_DIR }}
+          sudo xorriso \
+            -osirrox on \
+            -hardlinks on \
+            -indev ${{ env.ORIGINAL_ISO_IMAGE }} \
+            -extract / ${{ env.ISO_FILES_DIR }}
           sudo chown -R $USER:$USER ${{ env.ISO_FILES_DIR }}
 
       - name: Generate preseed file
