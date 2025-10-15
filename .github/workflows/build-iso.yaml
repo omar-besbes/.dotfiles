@@ -76,6 +76,7 @@ jobs:
           USER_FULLNAME: ${{ vars.USER_FULLNAME }}
           USERNAME: ${{ vars.USERNAME }}
           USER_PASSWORD_HASH: ${{ secrets.USER_PASSWORD_HASH }}
+          ARCH: ${{ github.event.inputs.arch }}
         run: |
           envsubst < ${{ env.PRESEED_FILE_TEMPLATE }} > ${{ env.PRESEED_FILE }}
 
@@ -118,16 +119,16 @@ jobs:
           # Enable theme in EFI GRUB config if present
           GRUB_CFG_EFI="${{ env.ISO_FILES_DIR }}/boot/grub/grub.cfg"
           if [ -f "$GRUB_CFG_EFI" ]; then
-            if ! grep -q "set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt" "$GRUB_CFG_EFI"; then
-              sudo sed -i  '1i set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt' "$GRUB_CFG_EFI"
+            if ! grep -q     "set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt" "$GRUB_CFG_EFI"; then
+              sudo sed -i '1i set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt' "$GRUB_CFG_EFI"
             fi
           fi
 
           # Enable theme in BIOS GRUB config if present
           GRUB_CFG_BIOS="${{ env.ISO_FILES_DIR }}/boot/grub/x86_64-efi/grub.cfg"
           if [ -f "$GRUB_CFG_BIOS" ]; then
-            if ! grep -q "set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt" "$GRUB_CFG_BIOS"; then
-              sudo sed -i  '1i set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt' "$GRUB_CFG_BIOS"
+            if ! grep -q     "set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt" "$GRUB_CFG_BIOS"; then
+              sudo sed -i '1i set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt' "$GRUB_CFG_BIOS"
             fi
           fi
 

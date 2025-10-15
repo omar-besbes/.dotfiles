@@ -88,7 +88,7 @@ d-i apt-setup/contrib boolean true
 tasksel tasksel/first multiselect standard, gnome-desktop
 
 # Individual additional packages to install
-d-i pkgsel/include string sudo build-essential git whois ca-certificates apt-transport-https net-tools dnsutils
+d-i pkgsel/include string sudo build-essential git whois ca-certificates apt-transport-https net-tools dnsutils linux-headers-${ARCH} nvidia-kernel-dkms nvidia-driver firmware-misc-nonfree
 # Whether to upgrade packages after debootstrap.
 # Allowed values: none, safe-upgrade, full-upgrade
 d-i pkgsel/upgrade select full-upgrade
