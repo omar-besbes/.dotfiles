@@ -112,14 +112,14 @@ jobs:
           THEME_DST: ${{ env.ISO_FILES_DIR }}/boot/grub/themes/${{ env.THEME_NAME }}
         run: |
           set -euo pipefail
-          mkdir -p "${{ env.THEME_DST }}" 
-          cp -a "${{ env.THEME_SRC }}"/* "${{ env.THEME_DST }}"
+          sudo mkdir -p "${{ env.THEME_DST }}" 
+          sudo cp -a "${{ env.THEME_SRC }}"/* "${{ env.THEME_DST }}"
 
           # Enable theme in EFI GRUB config if present
           GRUB_CFG_EFI="${{ env.ISO_FILES_DIR }}/boot/grub/grub.cfg"
           if [ -f "$GRUB_CFG_EFI" ]; then
             if ! grep -q "set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt" "$GRUB_CFG_EFI"; then
-              sed -i  '1i set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt' "$GRUB_CFG_EFI"
+              sudo sed -i  '1i set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt' "$GRUB_CFG_EFI"
             fi
           fi
 
@@ -127,7 +127,7 @@ jobs:
           GRUB_CFG_BIOS="${{ env.ISO_FILES_DIR }}/boot/grub/x86_64-efi/grub.cfg"
           if [ -f "$GRUB_CFG_BIOS" ]; then
             if ! grep -q "set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt" "$GRUB_CFG_BIOS"; then
-              sed -i  '1i set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt' "$GRUB_CFG_BIOS"
+              sudo sed -i  '1i set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt' "$GRUB_CFG_BIOS"
             fi
           fi
 
