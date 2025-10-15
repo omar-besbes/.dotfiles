@@ -31,6 +31,9 @@ shopt -s cdspell
 # Correct spelling errors during tab-completion
 shopt -s dirspell direxpand
 
+# Automatically change to the directory if only one match is found
+shopt -s autocd
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
