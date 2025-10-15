@@ -76,6 +76,7 @@ jobs:
           USER_FULLNAME: ${{ vars.USER_FULLNAME }}
           USERNAME: ${{ vars.USERNAME }}
           USER_PASSWORD_HASH: ${{ secrets.USER_PASSWORD_HASH }}
+          ARCH: ${{ github.event.inputs.arch }}
         run: |
           envsubst < ${{ env.PRESEED_FILE_TEMPLATE }} > ${{ env.PRESEED_FILE }}
 
