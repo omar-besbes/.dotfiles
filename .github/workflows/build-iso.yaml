@@ -46,6 +46,7 @@ jobs:
           sparse-checkout: |
             ${{ env.PRESEED_FILE_TEMPLATE }}
             ${{ env.ORIGINAL_ISO_IMAGE }}
+            grub/themes/elegant-mojave-float-left-dark
           sparse-checkout-cone-mode: false
 
       - name: Install dependencies
@@ -103,6 +104,32 @@ jobs:
           echo ${{ env.PRESEED_FILE }} | cpio -H newc -o -A -F ${{ env.INSTALL_DIR }}/initrd
           gzip ${{ env.INSTALL_DIR }}/initrd
           chmod -w -R ${{ env.INSTALL_DIR }}
+
+      - name: Add GRUB theme
+        env:
+          THEME_NAME: elegant-mojave-float-left-dark
+          THEME_SRC: grub/themes/${{ env.THEME_NAME }}
+          THEME_DST: ${{ env.ISO_FILES_DIR }}/boot/grub/themes/${{ env.THEME_NAME }}
+        run: |
+          set -euo pipefail
+          mkdir -p "${{ env.THEME_DST }}" 
+          cp -a "${{ env.THEME_SRC }}"/* "${{ env.THEME_DST }}"
+
+          # Enable theme in EFI GRUB config if present
+          GRUB_CFG_EFI="${{ env.ISO_FILES_DIR }}/boot/grub/grub.cfg"
+          if [ -f "$GRUB_CFG_EFI" ]; then
+            if ! grep -q "set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt" "$GRUB_CFG_EFI"; then
+              sed -i  '1i set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt' "$GRUB_CFG_EFI"
+            fi
+          fi
+
+          # Enable theme in BIOS GRUB config if present
+          GRUB_CFG_BIOS="${{ env.ISO_FILES_DIR }}/boot/grub/x86_64-efi/grub.cfg"
+          if [ -f "$GRUB_CFG_BIOS" ]; then
+            if ! grep -q "set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt" "$GRUB_CFG_BIOS"; then
+              sed -i  '1i set theme=/boot/grub/themes/${{ env.THEME_NAME }}/theme.txt' "$GRUB_CFG_BIOS"
+            fi
+          fi
 
       - name: Regenerate md5sum.txt
         working-directory: ${{ env.ISO_FILES_DIR }}
