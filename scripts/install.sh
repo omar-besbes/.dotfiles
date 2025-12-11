@@ -51,6 +51,17 @@ install_dependencies() {
 		deno completions bash >"$DOTFILES_BASH_COMPLETIONS_DIR/deno.sh"
 	fi
 
+	# install go
+	if ! cmd_exists go; then
+		GO_VERSION="1.25.5"
+		execute "
+		  curl -fsSL https://go.dev/dl/go$GO_VERSION.linux-amd64.tar.gz -o go.linux-amd64.tar.gz && 
+			sudo rm -rf /usr/local/go &&
+			sudo tar -C /usr/local -xzf go.linux-amd64.tar.gz &&
+			rm go.linux-amd64.tar.gz 
+		" "Installing go ..."
+	fi
+
 	# install shellcheck
 	execute "sudo apt-get install -y shellcheck" "Installing shellcheck ..."
 
