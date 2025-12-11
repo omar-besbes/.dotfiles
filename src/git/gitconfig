@@ -1,44 +1,143 @@
+# ============================================
+# User Identity & Signing
+# ============================================
 [user]
 	name = Omar Besbes
 	email = 86571415+omar-besbes@users.noreply.github.com
 	signingKey = ~/.ssh/github_sign.pub
-[init]
-	defaultBranch = development
-[commit]
-	gpgsign = true
+
 [gpg]
+	# Use SSH keys for signing instead of GPG
 	format = ssh
+
 [gpg "ssh"]
 	allowedsingersfile = ~/.ssh/allowed_signers
+
+[commit]
+	# Sign all commits automatically
+	gpgsign = true
+
+# ============================================
+# Core Settings
+# ============================================
+[init]
+	defaultBranch = main
+
 [core]
+	# Convert CRLF to LF on commit (for cross-platform compatibility)
 	autocrlf = input
+	# Make git case-sensitive for filenames
 	ignorecase = false
+	# Use neovim as the default editor
+	editor = nvim
+	# Load index in parallel to speed up operations
+	preloadindex = true
+
+# ============================================
+# Branch & Tag
+# ============================================
+[branch]
+	# Show most recently used branches first
+	sort = -committerdate
+
+[tag]
+	# Sort tags by version number (v1.2.3 < v1.10.0)
+	sort = version:refname
+
+[column]
+	# Display branch/tag lists in columns when terminal is wide enough
+	ui = auto
+
+# ============================================
+# Diff
+# ============================================
+[diff]
+	# Use histogram algorithm for better diffs (handles moved blocks well)
+	algorithm = histogram
+
+# ============================================
+# Blame
+# ============================================
+[blame]
+	# Highlight recent changes with different colors
+	coloring = highlightRecent
+	# Show relative dates (e.g., "2 days ago")
+	date = relative
+
+# ============================================
+# Merge & Rebase
+# ============================================
+[rerere]
+	# "Reuse Recorded Resolution" - remembers how you resolved merge conflicts
+	# and automatically applies the same resolution next time
+	enabled = true
+
+[rebase]
+	# Automatically stash/unstash uncommitted changes when rebasing
+	autoStash = true
+
+# ============================================
+# Fetch & Push
+# ============================================
+[fetch]
+	# Remove remote-tracking branches that no longer exist on remote
+	prune = true
+
 [push]
+	# Push current branch to a branch of the same name
 	default = current
+	# Automatically set up tracking for new branches
+	autoSetupRemote = true
+	# Push annotated tags along with commits
+	followTags = true
+
+# ============================================
+# Status
+# ============================================
+[status]
+	# Show stash count in git status
+	showStash = true
+
+# ============================================
+# Log Formatting
+# ============================================
 [pretty]
 	slog = format:%C(yellow)%h %Cred(%ad) %Cblue[%an] %Cgreen%d %Creset%s
+
+# ============================================
+# Aliases
+# ============================================
 [alias]
+	# Status shortcuts
 	s = status
 	st = status
+
+	# Branch operations
 	ck = checkout
 	new = checkout -b
-	rv = remote -v
-	cm = commit -m
-	unstage = restore --staged
-	uncommit = reset --soft HEAD~
-   unstash = stash pop
-	root = rev-parse --show-toplevel
-	last  = log -1
-	amend = commit --amend
-	filelog = log -u
-	fl = log -u
-
-	aliases = "!git config -l | grep alias | cut -f 2- -d '.'"
-	incoming = log HEAD..@{upstream}
-	outgoing = log @{upstream}..HEAD
-	structure = log --oneline --simplify-by-decoration --graph --all
-	l = log --pretty=slog --date=relative --graph
-	ll = log --pretty=slog --numstat --date=short
-	cfg = "!git --no-pager config -l"
 	br = branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:red)(%(committerdate:relative)) %(color:blue)[%(authorname)]' --sort=-committerdate
 
+	# Remote operations
+	rv = remote -v
+
+	# Commit operations
+	cm = commit -m
+	amend = commit --amend
+	unstage = restore --staged
+	uncommit = reset --soft HEAD~
+	unstash = stash pop
+
+	# Log operations
+	l = log --pretty=slog --date=relative --graph
+	ll = log --pretty=slog --numstat --date=short
+	last = log -1
+	filelog = log -u
+	fl = log -u
+	structure = log --oneline --simplify-by-decoration --graph --all
+	incoming = log HEAD..@{upstream}
+	outgoing = log @{upstream}..HEAD
+
+	# Utility
+	root = rev-parse --show-toplevel
+	aliases = "!git config -l | grep alias | cut -f 2- -d '.'"
+	cfg = "!git --no-pager config -l"

@@ -11,7 +11,7 @@ install_dependencies() {
   # TO BE UPDATED BEFORE 6 Feb 2026
   KEY_URL="https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg"
 
-  # Add Spotify's official GPG key:
+  # Add Spotify's official GPG key:
   curl -sS https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg |
     sudo gpg --dearmor --yes -o /etc/apt/keyrings/spotify.gpg
 
