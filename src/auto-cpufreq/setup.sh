@@ -23,9 +23,9 @@ install_dependencies() {
   sudo apt-get install -y thermald 
   
   git clone https://github.com/AdnanHodzic/auto-cpufreq.git
-  cd auto-cpufreq && sudo ./auto-cpufreq-installer
+  sudo auto-cpufreq/auto-cpufreq-installer
   sudo auto-cpufreq --install
-  cd - && rm -rf auto-cpufreq
+  rm -rf auto-cpufreq
 
 }
 
@@ -37,7 +37,7 @@ main() {
 
   local DIR="$(dirname "${BASH_SOURCE[0]}")"
   local ROOT_DIR="$(realpath "$DIR/../..")"
-  local TOPIC_NAME="git"
+  local TOPIC_NAME="auto-cpufreq"
   local TOPIC_DIR="$ROOT_DIR/src/$TOPIC_NAME"
 
   [ ! -v DOTFILES_ROOT_DIR ] && source "$ROOT_DIR/scripts/utils.sh"
