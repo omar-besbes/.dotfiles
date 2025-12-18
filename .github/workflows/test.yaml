@@ -16,7 +16,7 @@ jobs:
         image: [local, remote]
 
     env:
-      COMPOSE_FILE: "test/docker-compose.yaml"
+      COMPOSE_FILE: "test/compose.yaml"
       CURRENT_BRANCH: "${{ github.head_ref || github.ref_name }}"
       CI: true
 

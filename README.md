@@ -147,7 +147,7 @@ All other folders inside `src` without `setup.sh` are ignored and are not consid
 ### Tests (test/)
 The `/test` directory contains tests.
 * test.sh - Contains tests to be run inside the container.
-* docker-compose.yml - Contains a description of the test environments. 
+* compose.yml - Contains a description of the test environments. 
 There are 2 test environments: one that clones the repository and another that runs the install command in `README.md`.
 * Dockerfile - Contains instructions to build a docker image of the test environment.
 
