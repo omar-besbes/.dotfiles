@@ -103,6 +103,7 @@ main() {
 	execute "sync_dotfiles" "Synchronizing files with remote ..."
 
 	# begin installing configs
+	source src/auto-cpufreq/$TOPIC_SETUP_FILE && main
 	setup_topics $DOTFILES_SOURCE_DIR
 
   install_cli
