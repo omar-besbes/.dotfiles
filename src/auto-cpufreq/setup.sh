@@ -24,7 +24,7 @@ install_dependencies() {
   
   git clone https://github.com/AdnanHodzic/auto-cpufreq.git
   sudo auto-cpufreq/auto-cpufreq-installer --install
-  sudo auto-cpufreq --install
+  is_ci || sudo auto-cpufreq --install
   rm -rf auto-cpufreq
   
   print_info '   [ℹ️] Please run `sudo auto-cpufreq --install` when install finishes'
