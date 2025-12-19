@@ -2,7 +2,9 @@ services:
   local:
     build:
       context: ..
-      dockerfile: test/local.Dockerfile
+      dockerfile: test/Dockerfile
+      args:
+        SOURCE: local
     environment:
       CURRENT_BRANCH: ${CURRENT_BRANCH}
     command: >
@@ -20,7 +22,9 @@ services:
   remote:
     build:
       context: ..
-      dockerfile: test/remote.Dockerfile
+      dockerfile: test/Dockerfile
+      args:
+        SOURCE: remote
     environment:
       CURRENT_BRANCH: ${CURRENT_BRANCH}
     command: >

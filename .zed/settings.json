@@ -1,0 +1,7 @@
+{
+  "terminal": {
+    "env": {
+      "COMPOSE_FILE": "./test/compose.yaml"
+    }
+  }
+}

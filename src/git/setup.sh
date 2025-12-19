@@ -7,7 +7,7 @@
 create_symlinks() {
 
   local -a FILES_TO_SYMLINK=("$TOPIC_DIR/gitconfig")
-  local -r TARGET_PATHS=("$HOME/.gitconfig")
+  local -r TARGET_PATHS=("$HOME/.config/git/config")
   symlink_files FILES_TO_SYMLINK[@] TARGET_PATHS[@]
 
 }

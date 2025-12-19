@@ -27,6 +27,7 @@ declare -a COMMANDS_TO_VERIFY=(
   "deno"
   "rustup"
   "cargo"
+  "go"
 )
 
 check_commands_existence() {
