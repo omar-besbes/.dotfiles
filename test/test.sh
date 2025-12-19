@@ -28,7 +28,6 @@ declare -a COMMANDS_TO_VERIFY=(
   "rustup"
   "cargo"
   "go"
-  "auto-cpufreq"
 )
 
 check_commands_existence() {

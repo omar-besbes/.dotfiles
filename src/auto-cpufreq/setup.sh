@@ -22,10 +22,12 @@ install_dependencies() {
   sudo apt-get update
   sudo apt-get install -y thermald 
   
-  git clone https://github.com/AdnanHodzic/auto-cpufreq.git
-  sudo auto-cpufreq/auto-cpufreq-installer --install
-  is_ci || sudo auto-cpufreq --install
-  rm -rf auto-cpufreq
+  if !is_ci; then
+    git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+    sudo auto-cpufreq/auto-cpufreq-installer --install
+    sudo auto-cpufreq --install
+    rm -rf auto-cpufreq
+  fi
   
   print_info '   [ℹ️] Please run `sudo auto-cpufreq --install` when install finishes'
 
